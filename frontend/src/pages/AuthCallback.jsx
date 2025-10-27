@@ -1,37 +1,60 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 export default function AuthCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = searchParams.get('token');
-    const name = searchParams.get('name');
-    const error = searchParams.get('error');
-    
-    if (error) {
-      toast.error('Google login failed. Please try again.');
-      navigate('/login');
-      return;
-    }
-    
-    if (token) {
-      // Save token
-      localStorage.setItem('token', token);
+    const handleCallback = async () => {
+      const token = searchParams.get('token');
+      const name = searchParams.get('name');
+      const error = searchParams.get('error');
       
-      // Show welcome message
-      if (name) {
-        toast.success(`Welcome back, ${name}!`);
+      if (error) {
+        toast.error('Google login failed. Please try again.');
+        navigate('/login');
+        return;
       }
       
-      // Redirect to dashboard
-      navigate('/dashboard');
-    } else {
-      toast.error('Authentication failed');
-      navigate('/login');
-    }
+      if (token) {
+        try {
+          // Save token and set axios header
+          localStorage.setItem('token', token);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          
+          // Decode JWT to get user info
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          
+          // Create user object
+          const userData = {
+            id: payload.id,
+            email: payload.email,
+            full_name: name || 'User'
+          };
+          
+          // Save user data
+          localStorage.setItem('user', JSON.stringify(userData));
+          
+          // Show welcome message
+          toast.success(`Welcome back, ${name || 'User'}!`);
+          
+          // Redirect to dashboard
+          window.location.href = '/dashboard';
+        } catch (err) {
+          console.error('Error processing OAuth callback:', err);
+          toast.error('Authentication failed');
+          navigate('/login');
+        }
+      } else {
+        toast.error('Authentication failed');
+        navigate('/login');
+      }
+    };
+    
+    handleCallback();
   }, [searchParams, navigate]);
 
   return (

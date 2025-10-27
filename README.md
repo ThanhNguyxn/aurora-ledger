@@ -144,12 +144,6 @@ This project is deployed using free-tier cloud services:
 
 ---
 
-## 📖 Documentation
-
-- **[Architecture Guide](./ARCHITECTURE.md)** - Complete technical documentation
-- **[Test Report](./TEST-REPORT.md)** - System test results and verification
-
----
 
 ## 🤝 Contributing
 
