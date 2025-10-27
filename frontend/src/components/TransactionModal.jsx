@@ -16,10 +16,15 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
 
   useEffect(() => {
     if (transaction) {
+      // Format date properly
+      const date = transaction.transaction_date ? 
+        format(new Date(transaction.transaction_date), 'yyyy-MM-dd') : 
+        format(new Date(), 'yyyy-MM-dd');
+        
       setFormData({
         type: transaction.type,
         amount: transaction.amount,
-        transaction_date: transaction.transaction_date,
+        transaction_date: date,
         category_id: transaction.category_id || '',
         description: transaction.description || ''
       });
@@ -33,10 +38,20 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
     setLoading(true);
 
     try {
+      // Validate and format data
+      const amount = parseFloat(formData.amount);
+      if (isNaN(amount) || amount <= 0) {
+        toast.error('Please enter a valid amount');
+        setLoading(false);
+        return;
+      }
+
       const data = {
-        ...formData,
-        amount: parseFloat(formData.amount),
-        category_id: formData.category_id ? parseInt(formData.category_id) : null
+        type: formData.type,
+        amount: amount,
+        transaction_date: formData.transaction_date, // Already in yyyy-MM-dd format
+        category_id: formData.category_id ? parseInt(formData.category_id) : null,
+        description: formData.description || ''
       };
 
       if (transaction) {
