@@ -1,7 +1,7 @@
 import axios from 'axios';
 import pool from '../config/database.js';
 
-const API_KEY = '0fe9acb002e50ab852947697';
+const API_KEY = process.env.EXCHANGE_RATE_API_KEY || '0fe9acb002e50ab852947697';
 const BASE_URL = 'https://v6.exchangerate-api.com/v6';
 
 // Get exchange rate with caching
@@ -85,17 +85,39 @@ export function formatCurrency(amount, currency) {
     MYR: 'RM',
     IDR: 'Rp',
     PHP: '₱',
-    INR: '₹'
+    INR: '₹',
+    AUD: 'A$',
+    CAD: 'C$',
+    CHF: 'Fr',
+    HKD: 'HK$',
+    NZD: 'NZ$',
+    SEK: 'kr',
+    NOK: 'kr',
+    DKK: 'kr',
+    PLN: 'zł',
+    RUB: '₽',
+    BRL: 'R$',
+    MXN: '$',
+    ZAR: 'R',
+    TRY: '₺',
+    AED: 'د.إ',
+    SAR: 'ر.س'
   };
 
   const symbol = symbols[currency] || currency + ' ';
+  
+  // Currencies without decimal places
+  const noDecimalCurrencies = ['VND', 'JPY', 'KRW', 'IDR'];
+  
   const formattedAmount = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: currency === 'VND' || currency === 'JPY' ? 0 : 2,
-    maximumFractionDigits: currency === 'VND' || currency === 'JPY' ? 0 : 2
+    minimumFractionDigits: noDecimalCurrencies.includes(currency) ? 0 : 2,
+    maximumFractionDigits: noDecimalCurrencies.includes(currency) ? 0 : 2
   }).format(amount);
 
-  // VND, JPY put symbol after
-  if (currency === 'VND' || currency === 'JPY' || currency === 'KRW') {
+  // Currencies that put symbol after amount
+  const symbolAfterCurrencies = ['VND', 'JPY', 'KRW', 'IDR', 'SEK', 'NOK', 'DKK', 'PLN'];
+  
+  if (symbolAfterCurrencies.includes(currency)) {
     return `${formattedAmount} ${symbol}`;
   }
 

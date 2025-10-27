@@ -87,7 +87,7 @@ router.get('/user/preference', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT currency FROM users WHERE id = $1',
-      [req.user.userId]
+      [req.user.id]
     );
 
     if (result.rows.length === 0) {
@@ -120,7 +120,7 @@ router.put('/user/preference', authenticateToken, async (req, res) => {
 
     await pool.query(
       'UPDATE users SET currency = $1 WHERE id = $2',
-      [currency.toUpperCase(), req.user.userId]
+      [currency.toUpperCase(), req.user.id]
     );
 
     res.json({
