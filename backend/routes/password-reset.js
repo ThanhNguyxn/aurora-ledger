@@ -58,25 +58,27 @@ router.post('/forgot-password',
       console.log(`Expires: ${expiresAt.toISOString()}`);
       console.log('==============================================');
 
-      // Always return reset URL (email optional)
-      res.json({
-        message: 'Password reset link generated successfully',
-        resetUrl: resetUrl, // Always include for direct display
-        expiresIn: '1 hour'
-      });
+      // Try to send email
+      const emailSent = await sendPasswordResetEmail(user.email, resetUrl, user.full_name);
 
-      // Try to send email asynchronously (optional - doesn't block if fails)
-      sendPasswordResetEmail(user.email, resetUrl, user.full_name)
-        .then(sent => {
-          if (sent) {
-            console.log(`✅ Reset email sent to: ${user.email}`);
-          } else {
-            console.log(`⚠️ Email not configured - User will use on-screen link`);
-          }
-        })
-        .catch(err => {
-          console.error('Email send failed (non-critical):', err.message);
+      if (emailSent) {
+        console.log(`✅ Password reset email sent successfully to: ${user.email}`);
+        res.json({
+          message: 'Password reset email sent! Please check your inbox.',
+          emailSent: true
         });
+      } else {
+        // Email failed - log URL for manual sending
+        console.log('⚠️ Email not sent - SendGrid/Gmail not configured');
+        console.log(`📧 Manual reset URL for ${user.email}:`);
+        console.log(resetUrl);
+        console.log('==============================================');
+        
+        res.json({
+          message: 'Password reset requested. Please contact support for reset link.',
+          emailSent: false
+        });
+      }
 
     } catch (error) {
       console.error('Forgot password error:', error);

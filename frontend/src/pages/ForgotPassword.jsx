@@ -1,107 +1,72 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Mail, ArrowLeft, Copy, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Mail, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [resetUrl, setResetUrl] = useState('');
+  const [sent, setSent] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, {
         email,
       });
       
-      // Get reset URL from response (always available now)
-      const url = response.data.resetUrl || response.data.devResetUrl;
-      
-      if (url) {
-        setResetUrl(url);
-        toast.success('Password reset link generated!');
-      } else {
-        toast.error('Failed to generate reset link');
-      }
+      setSent(true);
+      toast.success('Password reset email sent! Please check your inbox.');
     } catch (error) {
-      const message = error.response?.data?.error || 'Failed to generate reset link';
+      const message = error.response?.data?.error || 'Failed to send reset email';
       toast.error(message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(resetUrl);
-    toast.success('Link copied to clipboard!');
-  };
-
-  const handleOpenLink = () => {
-    // Extract token from URL
-    const token = new URL(resetUrl).searchParams.get('token');
-    if (token) {
-      navigate(`/reset-password?token=${token}`);
-    }
-  };
-
-  if (resetUrl) {
+  if (sent) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-        <div className="max-w-2xl w-full">
-          <div className="card">
+        <div className="max-w-md w-full">
+          <div className="card text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="text-green-600" size={32} />
+              <Mail className="text-green-600" size={32} />
             </div>
-            <h2 className="text-2xl font-bold text-center mb-4">Password Reset Link Generated!</h2>
-            <p className="text-gray-600 text-center mb-6">
-              Click the button below to reset your password for <strong>{email}</strong>
+            <h2 className="text-2xl font-bold mb-2">Check Your Email</h2>
+            <p className="text-gray-600 mb-6">
+              We've sent a password reset link to <strong>{email}</strong>
             </p>
-
-            <div className="bg-gray-50 p-4 rounded-lg mb-4 border border-gray-200">
-              <p className="text-xs text-gray-500 mb-2">Your reset link:</p>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={resetUrl}
-                  readOnly
-                  className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded text-sm font-mono"
-                />
-                <button
-                  onClick={handleCopyLink}
-                  className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  title="Copy link"
-                >
-                  <Copy size={18} />
-                </button>
-              </div>
-              <p className="text-xs text-amber-600 mt-2">⏰ This link expires in 1 hour</p>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={handleOpenLink}
-                className="btn btn-primary w-full"
-              >
-                Reset Password Now
-              </button>
-              <Link
-                to="/login"
-                className="btn btn-secondary w-full text-center"
-              >
-                Back to Login
-              </Link>
-            </div>
-
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <p className="text-sm text-blue-800">
-                💡 <strong>Tip:</strong> You can also copy this link and open it later, but it will expire in 1 hour.
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+              <p className="text-sm text-amber-800">
+                <strong>📧 Didn't receive the email?</strong>
               </p>
+              <ul className="text-sm text-amber-700 mt-2 text-left space-y-1">
+                <li>• Check your <strong>spam/junk</strong> folder</li>
+                <li>• Wait a few minutes (can take up to 5 min)</li>
+                <li>• Make sure email is correct: <strong>{email}</strong></li>
+                <li>• Email expires in 1 hour</li>
+              </ul>
             </div>
+            <Link
+              to="/login"
+              className="btn btn-primary inline-flex items-center gap-2"
+            >
+              <ArrowLeft size={16} />
+              Back to Login
+            </Link>
+            <p className="text-sm text-gray-500 mt-4">
+              Still having issues?{' '}
+              <button
+                onClick={() => setSent(false)}
+                className="text-blue-600 hover:underline"
+              >
+                Try again
+              </button>
+            </p>
           </div>
         </div>
       </div>

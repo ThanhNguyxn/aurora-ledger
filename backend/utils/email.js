@@ -167,12 +167,19 @@ ${process.env.FRONTEND_URL}
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ Password reset email sent to: ${email}`);
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ Password reset email sent successfully`);
+    console.log(`   To: ${email}`);
+    console.log(`   Message ID: ${info.messageId}`);
+    console.log(`   Response: ${info.response}`);
     return true;
   } catch (error) {
-    console.error('❌ Error sending email:', error.message);
-    console.log('📧 Reset URL (fallback):', resetUrl);
+    console.error('❌ Error sending email:');
+    console.error(`   Error: ${error.message}`);
+    console.error(`   Code: ${error.code}`);
+    if (error.response) {
+      console.error(`   Response: ${error.response}`);
+    }
     return false;
   }
 };
