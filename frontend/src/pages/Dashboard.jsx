@@ -1,0 +1,212 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import api from '../lib/api';
+import { 
+  TrendingUp, 
+  TrendingDown, 
+  Wallet, 
+  ArrowRight,
+  Calendar 
+} from 'lucide-react';
+import { format, startOfMonth, endOfMonth } from 'date-fns';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import toast from 'react-hot-toast';
+
+const Dashboard = () => {
+  const [stats, setStats] = useState(null);
+  const [recentTransactions, setRecentTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const currentDate = new Date();
+  const monthStart = format(startOfMonth(currentDate), 'yyyy-MM-dd');
+  const monthEnd = format(endOfMonth(currentDate), 'yyyy-MM-dd');
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const [overviewRes, transactionsRes] = await Promise.all([
+        api.get(`/reports/overview?start_date=${monthStart}&end_date=${monthEnd}`),
+        api.get('/transactions?limit=5')
+      ]);
+
+      setStats(overviewRes.data);
+      setRecentTransactions(transactionsRes.data);
+    } catch (error) {
+      toast.error('Failed to load dashboard data');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  const balance = stats?.totals?.balance || 0;
+  const income = stats?.totals?.income || 0;
+  const expense = stats?.totals?.expense || 0;
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-600 mt-1">
+          Overview for {format(currentDate, 'MMMM yyyy')}
+        </p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="card border-l-4 border-blue-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Balance</p>
+              <p className={`text-2xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                ${Math.abs(balance).toFixed(2)}
+              </p>
+            </div>
+            <Wallet className="text-blue-500" size={32} />
+          </div>
+        </div>
+
+        <div className="card border-l-4 border-green-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Income</p>
+              <p className="text-2xl font-bold text-green-600">
+                ${income.toFixed(2)}
+              </p>
+            </div>
+            <TrendingUp className="text-green-500" size={32} />
+          </div>
+        </div>
+
+        <div className="card border-l-4 border-red-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Expenses</p>
+              <p className="text-2xl font-bold text-red-600">
+                ${expense.toFixed(2)}
+              </p>
+            </div>
+            <TrendingDown className="text-red-500" size={32} />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Expense Breakdown */}
+        <div className="card">
+          <h2 className="text-xl font-bold mb-4">Expense Breakdown</h2>
+          {stats?.byCategory?.expense?.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={stats.byCategory.expense}
+                  dataKey="total"
+                  nameKey="category_name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
+                >
+                  {stats.byCategory.expense.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.category_color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              No expense data for this month
+            </div>
+          )}
+        </div>
+
+        {/* Recent Transactions */}
+        <div className="card">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Recent Transactions</h2>
+            <Link to="/transactions" className="text-blue-600 hover:underline text-sm flex items-center gap-1">
+              View all <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div className="space-y-3">
+            {recentTransactions.length > 0 ? (
+              recentTransactions.map((transaction) => (
+                <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: transaction.category_color + '20' }}
+                    >
+                      <span className="text-xl">
+                        {transaction.type === 'income' ? '↑' : '↓'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="font-medium">{transaction.category_name || 'Uncategorized'}</p>
+                      <p className="text-sm text-gray-600">
+                        {format(new Date(transaction.transaction_date), 'MMM dd, yyyy')}
+                      </p>
+                    </div>
+                  </div>
+                  <p className={`font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No transactions yet
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Top Categories */}
+      {stats?.byCategory?.expense?.length > 0 && (
+        <div className="card">
+          <h2 className="text-xl font-bold mb-4">Top Spending Categories</h2>
+          <div className="space-y-3">
+            {stats.byCategory.expense.slice(0, 5).map((category) => {
+              const percentage = (category.total / expense * 100).toFixed(1);
+              return (
+                <div key={category.category_id}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-medium">{category.category_name}</span>
+                    <span className="text-gray-600">${category.total.toFixed(2)} ({percentage}%)</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="h-2 rounded-full"
+                      style={{
+                        width: `${percentage}%`,
+                        backgroundColor: category.category_color
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Dashboard;
+
