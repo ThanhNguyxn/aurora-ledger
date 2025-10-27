@@ -6,15 +6,24 @@ import { LogIn } from 'lucide-react';
 const Login = () => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
+    email: localStorage.getItem('rememberedEmail') || '',
     password: '',
   });
+  const [rememberMe, setRememberMe] = useState(!!localStorage.getItem('rememberedEmail'));
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await login(formData.email, formData.password);
+    
+    const success = await login(formData.email, formData.password);
+    
+    if (success && rememberMe) {
+      localStorage.setItem('rememberedEmail', formData.email);
+    } else if (!rememberMe) {
+      localStorage.removeItem('rememberedEmail');
+    }
+    
     setLoading(false);
   };
 
@@ -75,6 +84,19 @@ const Login = () => {
                 required
                 placeholder="••••••••"
               />
+            </div>
+
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                Remember me
+              </label>
             </div>
 
             <button

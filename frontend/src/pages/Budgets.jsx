@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import BudgetModal from '../components/BudgetModal';
 
 const Budgets = () => {
+  const { formatCurrency } = useCurrency();
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -124,16 +125,16 @@ const Budgets = () => {
           <div className="grid grid-cols-3 gap-4 mb-4">
             <div>
               <p className="text-sm text-gray-600">Total Budget</p>
-              <p className="text-2xl font-bold text-blue-600">${totalBudget.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-blue-600">{formatCurrency(totalBudget)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Total Spent</p>
-              <p className="text-2xl font-bold text-purple-600">${totalSpent.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-purple-600">{formatCurrency(totalSpent)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Remaining</p>
               <p className={`text-2xl font-bold ${totalBudget - totalSpent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ${(totalBudget - totalSpent).toFixed(2)}
+                {totalBudget - totalSpent >= 0 ? formatCurrency(totalBudget - totalSpent) : '-' + formatCurrency(Math.abs(totalBudget - totalSpent))}
               </p>
             </div>
           </div>
@@ -176,10 +177,10 @@ const Budgets = () => {
                       <div>
                         <h3 className="font-bold text-lg">{budget.category_name}</h3>
                         <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <span>Budget: ${amount.toFixed(2)}</span>
-                          <span>Spent: ${spent.toFixed(2)}</span>
+                          <span>Budget: {formatCurrency(amount)}</span>
+                          <span>Spent: {formatCurrency(spent)}</span>
                           <span className={remaining >= 0 ? 'text-green-600' : 'text-red-600'}>
-                            Remaining: ${remaining.toFixed(2)}
+                            Remaining: {remaining >= 0 ? formatCurrency(remaining) : '-' + formatCurrency(Math.abs(remaining))}
                           </span>
                         </div>
                       </div>
@@ -206,7 +207,7 @@ const Budgets = () => {
                       <span className="text-gray-600">{percentage.toFixed(1)}% used</span>
                       {percentage >= 100 && (
                         <span className="text-red-600 font-medium">
-                          Over budget by ${(spent - amount).toFixed(2)}
+                          Over budget by {formatCurrency(spent - amount)}
                         </span>
                       )}
                       {percentage >= 80 && percentage < 100 && (

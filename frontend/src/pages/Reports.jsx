@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
+import { useCurrency } from '../context/CurrencyContext';
 import { Calendar, Download, TrendingUp, TrendingDown } from 'lucide-react';
 import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import {
@@ -20,6 +21,7 @@ import {
 import toast from 'react-hot-toast';
 
 const Reports = () => {
+  const { formatCurrency } = useCurrency();
   const [dateRange, setDateRange] = useState({
     start_date: format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd'),
     end_date: format(endOfMonth(new Date()), 'yyyy-MM-dd')
@@ -133,7 +135,7 @@ const Reports = () => {
             <p className="text-sm text-gray-600">Total Income</p>
             <TrendingUp className="text-green-600" size={24} />
           </div>
-          <p className="text-3xl font-bold text-green-600">${income.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-green-600">{formatCurrency(income)}</p>
         </div>
 
         <div className="card bg-gradient-to-br from-red-50 to-red-100 border-red-200">
@@ -141,7 +143,7 @@ const Reports = () => {
             <p className="text-sm text-gray-600">Total Expenses</p>
             <TrendingDown className="text-red-600" size={24} />
           </div>
-          <p className="text-3xl font-bold text-red-600">${expense.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-red-600">{formatCurrency(expense)}</p>
         </div>
 
         <div className={`card bg-gradient-to-br ${balance >= 0 ? 'from-blue-50 to-blue-100 border-blue-200' : 'from-orange-50 to-orange-100 border-orange-200'}`}>
@@ -149,7 +151,7 @@ const Reports = () => {
             <p className="text-sm text-gray-600">Net Balance</p>
           </div>
           <p className={`text-3xl font-bold ${balance >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
-            {balance >= 0 ? '+' : '-'}${Math.abs(balance).toFixed(2)}
+            {balance >= 0 ? '+' + formatCurrency(balance) : '-' + formatCurrency(Math.abs(balance))}
           </p>
         </div>
       </div>
@@ -186,7 +188,7 @@ const Reports = () => {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    label={(entry) => `$${entry.total.toFixed(0)}`}
+                    label={(entry) => formatCurrency(entry.total)}
                   >
                     {overview.byCategory.income.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.category_color} />
@@ -205,7 +207,7 @@ const Reports = () => {
                       ></div>
                       <span>{cat.category_name}</span>
                     </div>
-                    <span className="font-medium">${cat.total.toFixed(2)}</span>
+                    <span className="font-medium">{formatCurrency(cat.total)}</span>
                   </div>
                 ))}
               </div>
@@ -248,7 +250,7 @@ const Reports = () => {
                           ></div>
                           <span>{cat.category_name}</span>
                         </div>
-                        <span className="font-medium">${cat.total.toFixed(2)} ({percentage}%)</span>
+                        <span className="font-medium">{formatCurrency(cat.total)} ({percentage}%)</span>
                       </div>
                     </div>
                   );

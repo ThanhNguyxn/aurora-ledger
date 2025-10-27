@@ -101,17 +101,39 @@ export function CurrencyProvider({ children }) {
       MYR: 'RM',
       IDR: 'Rp',
       PHP: '₱',
-      INR: '₹'
+      INR: '₹',
+      AUD: 'A$',
+      CAD: 'C$',
+      CHF: 'Fr',
+      HKD: 'HK$',
+      NZD: 'NZ$',
+      SEK: 'kr',
+      NOK: 'kr',
+      DKK: 'kr',
+      PLN: 'zł',
+      RUB: '₽',
+      BRL: 'R$',
+      MXN: '$',
+      ZAR: 'R',
+      TRY: '₺',
+      AED: 'د.إ',
+      SAR: 'ر.س'
     };
 
     const symbol = symbols[currencyCode] || currencyCode + ' ';
+    
+    // Currencies without decimal places
+    const noDecimalCurrencies = ['VND', 'JPY', 'KRW', 'IDR'];
+    
     const formattedAmount = new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: currencyCode === 'VND' || currencyCode === 'JPY' ? 0 : 2,
-      maximumFractionDigits: currencyCode === 'VND' || currencyCode === 'JPY' ? 0 : 2
-    }).format(amount);
+      minimumFractionDigits: noDecimalCurrencies.includes(currencyCode) ? 0 : 2,
+      maximumFractionDigits: noDecimalCurrencies.includes(currencyCode) ? 0 : 2
+    }).format(Math.abs(amount));
 
-    // VND, JPY, KRW put symbol after
-    if (currencyCode === 'VND' || currencyCode === 'JPY' || currencyCode === 'KRW') {
+    // Currencies that put symbol after amount
+    const symbolAfterCurrencies = ['VND', 'JPY', 'KRW', 'IDR', 'SEK', 'NOK', 'DKK', 'PLN'];
+    
+    if (symbolAfterCurrencies.includes(currencyCode)) {
       return `${formattedAmount} ${symbol}`;
     }
 

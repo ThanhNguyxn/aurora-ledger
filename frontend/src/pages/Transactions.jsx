@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
+import { useCurrency } from '../context/CurrencyContext';
 import { Plus, Pencil, Trash2, Filter, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
 
 const Transactions = () => {
+  const { formatCurrency } = useCurrency();
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -231,7 +233,7 @@ const Transactions = () => {
                           transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
                         }`}
                       >
-                        {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
+                        {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">

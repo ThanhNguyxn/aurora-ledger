@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
+import { useCurrency } from '../context/CurrencyContext';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -13,6 +14,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import toast from 'react-hot-toast';
 
 const Dashboard = () => {
+  const { formatCurrency } = useCurrency();
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,7 @@ const Dashboard = () => {
             <div>
               <p className="text-sm text-gray-600 mb-1">Balance</p>
               <p className={`text-2xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ${Math.abs(balance).toFixed(2)}
+                {balance >= 0 ? formatCurrency(balance) : '-' + formatCurrency(Math.abs(balance))}
               </p>
             </div>
             <Wallet className="text-blue-500" size={32} />
@@ -83,7 +85,7 @@ const Dashboard = () => {
             <div>
               <p className="text-sm text-gray-600 mb-1">Income</p>
               <p className="text-2xl font-bold text-green-600">
-                ${income.toFixed(2)}
+                {formatCurrency(income)}
               </p>
             </div>
             <TrendingUp className="text-green-500" size={32} />
@@ -95,7 +97,7 @@ const Dashboard = () => {
             <div>
               <p className="text-sm text-gray-600 mb-1">Expenses</p>
               <p className="text-2xl font-bold text-red-600">
-                ${expense.toFixed(2)}
+                {formatCurrency(expense)}
               </p>
             </div>
             <TrendingDown className="text-red-500" size={32} />
@@ -163,7 +165,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <p className={`font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
-                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
+                    {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                   </p>
                 </div>
               ))
@@ -187,7 +189,7 @@ const Dashboard = () => {
                 <div key={category.category_id}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium">{category.category_name}</span>
-                    <span className="text-gray-600">${category.total.toFixed(2)} ({percentage}%)</span>
+                    <span className="text-gray-600">{formatCurrency(category.total)} ({percentage}%)</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
