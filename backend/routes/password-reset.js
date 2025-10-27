@@ -58,27 +58,30 @@ router.post('/forgot-password',
       console.log(`Expires: ${expiresAt.toISOString()}`);
       console.log('==============================================');
 
-      // Try to send email
-      const emailSent = await sendPasswordResetEmail(user.email, resetUrl, user.full_name);
+      // Send response immediately (don't wait for email)
+      res.json({
+        message: 'If your email is registered, you will receive a reset link shortly.',
+        success: true
+      });
 
-      if (emailSent) {
-        console.log(`✅ Password reset email sent successfully to: ${user.email}`);
-        res.json({
-          message: 'Password reset email sent! Please check your inbox.',
-          emailSent: true
-        });
-      } else {
-        // Email failed - log URL for manual sending
-        console.log('⚠️ Email not sent - SendGrid/Gmail not configured');
-        console.log(`📧 Manual reset URL for ${user.email}:`);
-        console.log(resetUrl);
-        console.log('==============================================');
-        
-        res.json({
-          message: 'Password reset requested. Please contact support for reset link.',
-          emailSent: false
-        });
-      }
+      // Send email in background (non-blocking)
+      setImmediate(async () => {
+        try {
+          const emailSent = await sendPasswordResetEmail(user.email, resetUrl, user.full_name);
+          
+          if (emailSent) {
+            console.log(`✅ Password reset email delivered to: ${user.email}`);
+          } else {
+            console.log('⚠️ Email not configured - logging reset URL:');
+            console.log(`📧 Manual reset URL for ${user.email}:`);
+            console.log(resetUrl);
+            console.log('==============================================');
+          }
+        } catch (error) {
+          console.error('Email send error (non-critical):', error.message);
+          console.log(`📧 Fallback reset URL: ${resetUrl}`);
+        }
+      });
 
     } catch (error) {
       console.error('Forgot password error:', error);
