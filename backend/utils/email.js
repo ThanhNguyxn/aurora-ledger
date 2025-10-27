@@ -2,19 +2,34 @@ import nodemailer from 'nodemailer';
 
 // Create email transporter
 const createTransporter = () => {
-  // Check if email is configured
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-    console.warn('⚠️  Email not configured - EMAIL_USER and EMAIL_PASSWORD required');
-    return null;
+  // Check if SendGrid is configured
+  if (process.env.SENDGRID_API_KEY) {
+    console.log('📧 Using SendGrid for email delivery');
+    return nodemailer.createTransport({
+      host: 'smtp.sendgrid.net',
+      port: 587,
+      secure: false, // Use TLS
+      auth: {
+        user: 'apikey', // This is always 'apikey' for SendGrid
+        pass: process.env.SENDGRID_API_KEY,
+      },
+    });
   }
 
-  return nodemailer.createTransport({
-    service: 'gmail', // or 'smtp.gmail.com'
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD, // App password, not regular password
-    },
-  });
+  // Fallback to Gmail if configured
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
+    console.log('📧 Using Gmail for email delivery');
+    return nodemailer.createTransporter({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
+
+  console.warn('⚠️  Email not configured - Set SENDGRID_API_KEY or EMAIL_USER/EMAIL_PASSWORD');
+  return null;
 };
 
 // Send password reset email
@@ -168,10 +183,12 @@ export const sendWelcomeEmail = async (email, userName) => {
     return false;
   }
 
+  const fromEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@auroraledger.com';
+
   const mailOptions = {
     from: {
       name: 'Aurora Ledger',
-      address: process.env.EMAIL_USER,
+      address: fromEmail,
     },
     to: email,
     subject: 'Welcome to Aurora Ledger! 🎉',
