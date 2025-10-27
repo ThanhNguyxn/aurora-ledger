@@ -6,9 +6,6 @@ import pool from '../config/database.js';
 
 const router = express.Router();
 
-// Store reset tokens in memory (for production, use database or Redis)
-const resetTokens = new Map();
-
 // Request password reset
 router.post('/forgot-password',
   [body('email').isEmail().normalizeEmail()],
@@ -36,31 +33,37 @@ router.post('/forgot-password',
 
       // Generate reset token
       const resetToken = crypto.randomBytes(32).toString('hex');
-      const resetTokenExpiry = Date.now() + 3600000; // 1 hour
+      const expiresAt = new Date(Date.now() + 3600000); // 1 hour from now
 
-      // Store token (in production, save to database)
-      resetTokens.set(resetToken, {
-        userId: user.id,
-        email: user.email,
-        expiry: resetTokenExpiry
-      });
+      // Delete any existing reset tokens for this user
+      await pool.query(
+        'DELETE FROM password_resets WHERE user_id = $1',
+        [user.id]
+      );
 
-      // In production, send email here
-      // For now, we'll return the token in response (DEV ONLY!)
+      // Store token in database
+      await pool.query(
+        'INSERT INTO password_resets (user_id, token, expires_at) VALUES ($1, $2, $3)',
+        [user.id, resetToken, expiresAt]
+      );
+
+      // Generate reset URL
       const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
       console.log('==============================================');
       console.log('PASSWORD RESET REQUESTED');
       console.log(`Email: ${user.email}`);
+      console.log(`User ID: ${user.id}`);
       console.log(`Reset URL: ${resetUrl}`);
+      console.log(`Expires: ${expiresAt.toISOString()}`);
       console.log('==============================================');
 
       // TODO: Send email with nodemailer
-      // For now, return success
+      // For now, return success with URL in dev mode
       res.json({
         message: 'If your email is registered, you will receive a reset link.',
         // DEV ONLY - remove in production
-        devResetUrl: resetUrl
+        ...(process.env.NODE_ENV !== 'production' && { devResetUrl: resetUrl })
       });
 
     } catch (error) {
@@ -85,15 +88,25 @@ router.post('/reset-password',
 
       const { token, newPassword } = req.body;
 
-      // Verify token
-      const tokenData = resetTokens.get(token);
+      // Find and verify token from database
+      const tokenResult = await pool.query(
+        `SELECT pr.*, u.email 
+         FROM password_resets pr
+         JOIN users u ON pr.user_id = u.id
+         WHERE pr.token = $1`,
+        [token]
+      );
 
-      if (!tokenData) {
+      if (tokenResult.rows.length === 0) {
         return res.status(400).json({ error: 'Invalid or expired reset token' });
       }
 
-      if (Date.now() > tokenData.expiry) {
-        resetTokens.delete(token);
+      const tokenData = tokenResult.rows[0];
+
+      // Check if token has expired
+      if (new Date() > new Date(tokenData.expires_at)) {
+        // Delete expired token
+        await pool.query('DELETE FROM password_resets WHERE id = $1', [tokenData.id]);
         return res.status(400).json({ error: 'Reset token has expired' });
       }
 
@@ -103,13 +116,13 @@ router.post('/reset-password',
       // Update password
       await pool.query(
         'UPDATE users SET password = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
-        [hashedPassword, tokenData.userId]
+        [hashedPassword, tokenData.user_id]
       );
 
       // Delete used token
-      resetTokens.delete(token);
+      await pool.query('DELETE FROM password_resets WHERE id = $1', [tokenData.id]);
 
-      console.log(`Password reset successful for user ID: ${tokenData.userId}`);
+      console.log(`✅ Password reset successful for: ${tokenData.email} (User ID: ${tokenData.user_id})`);
 
       res.json({ message: 'Password reset successfully' });
 
