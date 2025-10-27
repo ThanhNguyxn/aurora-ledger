@@ -58,27 +58,24 @@ router.post('/forgot-password',
       console.log(`Expires: ${expiresAt.toISOString()}`);
       console.log('==============================================');
 
-      // Send response immediately (don't wait for email)
+      // Always return reset URL (email optional)
       res.json({
-        message: 'If your email is registered, you will receive a reset link.',
-        // DEV ONLY - always include URL for testing
-        ...(process.env.NODE_ENV !== 'production' && { 
-          devResetUrl: resetUrl,
-          note: 'Check your email or use this URL to reset password' 
-        })
+        message: 'Password reset link generated successfully',
+        resetUrl: resetUrl, // Always include for direct display
+        expiresIn: '1 hour'
       });
 
-      // Send email asynchronously (don't block response)
+      // Try to send email asynchronously (optional - doesn't block if fails)
       sendPasswordResetEmail(user.email, resetUrl, user.full_name)
         .then(sent => {
           if (sent) {
             console.log(`✅ Reset email sent to: ${user.email}`);
           } else {
-            console.log(`⚠️ Email not sent - check configuration`);
+            console.log(`⚠️ Email not configured - User will use on-screen link`);
           }
         })
         .catch(err => {
-          console.error('Error sending reset email:', err.message);
+          console.error('Email send failed (non-critical):', err.message);
         });
 
     } catch (error) {
