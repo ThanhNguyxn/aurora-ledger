@@ -22,13 +22,6 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const fillDemo = () => {
-    setFormData({
-      email: 'demo@auroraledger.com',
-      password: 'demo123',
-    });
-  };
-
   const handleGoogleLogin = () => {
     const backendUrl = import.meta.env.VITE_API_URL.replace('/api', '');
     window.location.href = `${backendUrl}/api/auth/google`;
@@ -67,8 +60,11 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+              <label className="block text-sm font-medium text-gray-700 mb-1 flex justify-between">
+                <span>Password</span>
+                <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline">
+                  Forgot password?
+                </Link>
               </label>
               <input
                 type="password"
@@ -87,14 +83,6 @@ const Login = () => {
               className="btn btn-primary w-full"
             >
               {loading ? 'Logging in...' : 'Login'}
-            </button>
-
-            <button
-              type="button"
-              onClick={fillDemo}
-              className="btn btn-secondary w-full"
-            >
-              Try Demo Account
             </button>
           </form>
 

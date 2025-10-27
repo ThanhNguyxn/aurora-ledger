@@ -9,6 +9,7 @@ import budgetRoutes from './routes/budgets.js';
 import reportRoutes from './routes/reports.js';
 import currencyRoutes from './routes/currency.js';
 import oauthRoutes from './routes/oauth.js';
+import passwordResetRoutes from './routes/password-reset.js';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', oauthRoutes);
+app.use('/api/auth', passwordResetRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);

@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Categories from './pages/Categories';
@@ -43,23 +46,27 @@ function PublicRoute({ children }) {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Toaster position="top-right" />
-        <Routes>
-          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-          <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-          <Route path="/auth/callback" element={<AuthCallback />} />
-          
-          <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
-            <Route index element={<Navigate to="/dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="budgets" element={<Budgets />} />
-            <Route path="reports" element={<Reports />} />
-          </Route>
-        </Routes>
-      </Router>
+      <CurrencyProvider>
+        <Router>
+          <Toaster position="top-right" />
+          <Routes>
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            
+            <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
+              <Route index element={<Navigate to="/dashboard" />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="budgets" element={<Budgets />} />
+              <Route path="reports" element={<Reports />} />
+            </Route>
+          </Routes>
+        </Router>
+      </CurrencyProvider>
     </AuthProvider>
   );
 }

@@ -1,5 +1,6 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import CurrencySelector from './CurrencySelector';
 import { 
   LayoutDashboard, 
   ArrowLeftRight, 
@@ -29,6 +30,9 @@ const Layout = () => {
             AuroraLedger
           </h1>
           <p className="text-sm text-gray-600 mt-1">{user?.email}</p>
+          <div className="mt-3">
+            <CurrencySelector />
+          </div>
         </div>
 
         <nav className="p-4">
