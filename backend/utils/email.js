@@ -42,10 +42,12 @@ export const sendPasswordResetEmail = async (email, resetUrl, userName = 'User')
     return false;
   }
 
+  const fromEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@auroraledger.com';
+
   const mailOptions = {
     from: {
       name: 'Aurora Ledger',
-      address: process.env.EMAIL_USER,
+      address: fromEmail,
     },
     to: email,
     subject: 'Password Reset Request - Aurora Ledger',
