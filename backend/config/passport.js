@@ -28,7 +28,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
           // Create new user
           const randomPassword = await bcrypt.hash(Math.random().toString(36), 10);
           const newUser = await pool.query(
-            'INSERT INTO users (name, email, password, currency) VALUES ($1, $2, $3, $4) RETURNING *',
+            'INSERT INTO users (full_name, email, password, currency) VALUES ($1, $2, $3, $4) RETURNING *',
             [name, email, randomPassword, 'USD']
           );
           

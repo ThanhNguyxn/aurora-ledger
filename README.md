@@ -1,16 +1,13 @@
-# 🌟 Aurora Ledger - Personal Finance Management
+# 🌟 Aurora Ledger
 
 <div align="center">
 
-![Aurora Ledger Banner](https://via.placeholder.com/800x200/4F46E5/FFFFFF?text=Aurora+Ledger+-+Smart+Personal+Finance)
+**Modern Personal Finance Management Application**
 
-**Modern, Simple, and Free Personal Finance Management Application**
-
-[🚀 Live Demo](#) • [📖 Documentation](#features) • [💻 Installation](#installation) • [🤝 Contributing](#contributing)
+Track expenses • Manage budgets • Analyze finances • Multi-currency support
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Live Demo](https://img.shields.io/badge/Demo-Online-blue.svg)](#)
 
 </div>
 
@@ -18,348 +15,184 @@
 
 ## 💡 About
 
-**Aurora Ledger** is a comprehensive web application designed to help you manage your personal finances effortlessly. With a beautiful, intuitive interface and powerful features, Aurora Ledger empowers you to:
+**Aurora Ledger** helps you take control of your personal finances with an intuitive, modern interface.
 
-- 📊 **Track Income & Expenses** - Record every financial transaction
-- 🎯 **Manage Budgets** - Set goals and control spending
-- 📈 **Analyze Finances** - Visualize your data through interactive charts
-- 💰 **Plan Financially** - Make smarter financial decisions
-- 🌍 **Multi-Currency Support** - Track finances in 29+ currencies
+### Key Features
 
-> **100% Free** • **Secure** • **Easy to Use** • **Access Anywhere**
-
----
-
-## ✨ Key Features
-
-### 🔐 Security & Privacy
-- **Secure Authentication** - JWT-based user authentication
-- **Password Encryption** - Bcrypt hashing for maximum security
-- **Private Data** - Each user's data is completely isolated
-- **HTTPS Support** - Secure connections for all data transfers
-
-### 💳 Transaction Management
-- ✅ **Quick Entry** - Add transactions in seconds
-- ✅ **Categorization** - Organize with custom categories
-- ✅ **Notes & Details** - Add descriptions to each transaction
-- ✅ **Search & Filter** - Find transactions easily
-- ✅ **Edit & Delete** - Full control over your data
-
-### 🌍 Multi-Currency Support
-- 💱 **29+ Currencies** - From USD, EUR, VND to AED, SAR, and more
-- 🔄 **Real-time Exchange Rates** - Automatic currency conversion
-- 📊 **Currency-aware Reports** - Accurate financial analytics
-- 🎨 **Beautiful UI** - Flag icons for easy currency identification
-
-**Supported Currencies:**
-- Americas: USD, CAD, BRL, MXN
-- Europe: EUR, GBP, CHF, SEK, NOK, DKK, PLN, RUB, TRY
-- Asia-Pacific: VND, JPY, CNY, KRW, THB, SGD, MYR, IDR, PHP, INR, HKD, AUD, NZD
-- Middle East: AED, SAR
-- Africa: ZAR
-
-### 📁 Custom Categories
-- 🎨 **Personalized Categories** - Create categories that fit your lifestyle
-- 🌈 **Color Coding** - Distinguish categories with colors
-- 📊 **Category Analytics** - See where your money goes
-
-### 💰 Smart Budgets
-- 🎯 **Monthly Budgets** - Set spending limits per category
-- 📉 **Progress Tracking** - Visual indicators of budget usage
-- ⚠️ **Auto Warnings** - Get notified when approaching limits
-- 💡 **Insights** - Learn from your spending patterns
-
-### 📊 Reports & Analytics
-- 📈 **Trend Charts** - Visualize income/expense trends
-- 🥧 **Pie Charts** - Spending distribution by category
-- 📅 **Custom Date Ranges** - Analyze any time period
-- 📥 **CSV Export** - Download your data for offline analysis
-
-### 🎨 User Experience
-- 🖥️ **Modern Design** - Clean and professional interface
-- 📱 **Fully Responsive** - Works perfectly on all devices
-- ⚡ **Fast & Smooth** - Optimized performance
-- 🌐 **PWA Ready** - Install as a mobile app
+- 📊 **Transaction Tracking** - Income & expense management with categories
+- 💰 **Budget Management** - Monthly budgets with automatic tracking
+- 📈 **Financial Reports** - Interactive charts and analytics
+- 🌍 **Multi-Currency** - 29+ currencies with real-time exchange rates
+- 🔐 **Secure & Private** - Encrypted data, JWT authentication
+- 🎨 **Beautiful UI** - Responsive design for all devices
 
 ---
 
-## 🚀 Tech Stack
+## 🌍 Supported Currencies
+
+**29 major currencies** with real-time exchange rates:
+
+### 🌎 Americas
+USD (US Dollar) • CAD (Canadian Dollar) • BRL (Brazilian Real) • MXN (Mexican Peso)
+
+### 🌍 Europe
+EUR (Euro) • GBP (British Pound) • CHF (Swiss Franc) • SEK (Swedish Krona) • NOK (Norwegian Krone) • DKK (Danish Krone) • PLN (Polish Zloty) • RUB (Russian Ruble) • TRY (Turkish Lira)
+
+### 🌏 Asia-Pacific
+VND (Vietnamese Dong) • JPY (Japanese Yen) • CNY (Chinese Yuan) • KRW (Korean Won) • THB (Thai Baht) • SGD (Singapore Dollar) • MYR (Malaysian Ringgit) • IDR (Indonesian Rupiah) • PHP (Philippine Peso) • INR (Indian Rupee) • HKD (Hong Kong Dollar) • AUD (Australian Dollar) • NZD (New Zealand Dollar)
+
+### 🌍 Middle East & Africa
+AED (UAE Dirham) • SAR (Saudi Riyal) • ZAR (South African Rand)
+
+---
+
+## 🛠️ Built With
 
 ### Frontend
-- **React 18** - Modern UI library
-- **Vite** - Lightning-fast build tool
-- **Tailwind CSS** - Utility-first CSS framework
-- **Recharts** - Beautiful and responsive charts
-- **Axios** - HTTP client for API calls
+- [React](https://reactjs.org/) - UI library
+- [Vite](https://vitejs.dev/) - Build tool
+- [Tailwind CSS](https://tailwindcss.com/) - Styling framework
+- [Recharts](https://recharts.org/) - Charts and data visualization
+- [React Router](https://reactrouter.com/) - Client-side routing
+- [Axios](https://axios-http.com/) - HTTP client
 
 ### Backend
-- **Node.js & Express** - RESTful API server
-- **PostgreSQL** - Robust relational database
-- **JWT** - Secure authentication
-- **Bcrypt** - Password hashing
-- **Passport.js** - OAuth authentication (Google)
+- [Node.js](https://nodejs.org/) - JavaScript runtime
+- [Express](https://expressjs.com/) - Web framework
+- [PostgreSQL](https://www.postgresql.org/) - Relational database
+- [JWT](https://jwt.io/) - Secure authentication
+- [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Password hashing
+- [Passport.js](https://www.passportjs.org/) - OAuth authentication
 
-### DevOps & Deployment
-Aurora Ledger can be deployed on various free platforms:
-
-**Frontend Hosting (Free Tier):**
-- ☁️ **[Vercel](https://vercel.com)** - Recommended for React apps
-- 🔷 **[Netlify](https://netlify.com)** - Easy deployment with CI/CD
-- 🎯 **[GitHub Pages](https://pages.github.com)** - Free for public repos
-- 🌐 **[Cloudflare Pages](https://pages.cloudflare.com)** - Global CDN
-
-**Backend Hosting (Free Tier):**
-- 🚀 **[Render](https://render.com)** - 750 hours/month free
-- 🔵 **[Railway](https://railway.app)** - $5 free credits/month
-- ⚡ **[Fly.io](https://fly.io)** - Generous free tier
-- 🟣 **[Cyclic](https://cyclic.sh)** - Serverless deployment
-
-**Database (Free Tier):**
-- 💾 **[Neon](https://neon.tech)** - Serverless PostgreSQL (Recommended)
-- 🐘 **[Supabase](https://supabase.com)** - PostgreSQL + extras
-- 🌊 **[ElephantSQL](https://elephantsql.com)** - 20MB free
-- 🎯 **[Aiven](https://aiven.io)** - 1 month free trial
+### APIs & Services
+- [ExchangeRate API](https://www.exchangerate-api.com/) - Real-time currency conversion
 
 ---
 
-## 💻 Installation
+## 🌐 Deployment Platforms
 
-### Quick Start (Users)
+This project is deployed using free-tier cloud services:
 
-👉 **Just visit:** [Aurora Ledger](#) and create your account!
+### Frontend Hosting
+- **[Vercel](https://vercel.com)** - Frontend hosting with global CDN
 
-### Development Setup
+### Backend Hosting
+- **[Render](https://render.com)** - Backend API server (750 hours/month free)
 
-#### Prerequisites
-- Node.js 18+ and npm
-- PostgreSQL database
-- Git
+### Database Hosting
+- **[Neon](https://neon.tech)** - Serverless PostgreSQL database
 
-#### 1. Clone the Repository
+### Alternative Free Platforms
 
-```bash
-git clone https://github.com/yourusername/aurora-ledger.git
-cd aurora-ledger
-```
+**Frontend:**
+- [Netlify](https://netlify.com) - Static site hosting
+- [Cloudflare Pages](https://pages.cloudflare.com) - Global edge network
+- [GitHub Pages](https://pages.github.com) - Free static hosting
 
-#### 2. Backend Setup
+**Backend:**
+- [Railway](https://railway.app) - $5 free credits monthly
+- [Fly.io](https://fly.io) - Global application platform
+- [Cyclic](https://cyclic.sh) - Serverless Node.js hosting
 
-```bash
-cd backend
-npm install
-
-# Create .env file
-cp env.example .env
-
-# Configure your .env file with:
-# - DATABASE_URL (PostgreSQL connection string)
-# - JWT_SECRET (random secret key)
-# - GOOGLE_CLIENT_ID (optional, for OAuth)
-# - GOOGLE_CLIENT_SECRET (optional, for OAuth)
-
-# Run database migrations
-npm run migrate
-
-# Start the server
-npm start
-```
-
-#### 3. Frontend Setup
-
-```bash
-cd frontend
-npm install
-
-# Create .env file
-cp env.example .env
-
-# Configure your .env file with:
-# - VITE_API_URL (your backend URL)
-
-# Start development server
-npm run dev
-```
-
-#### 4. Access the Application
-
-Open your browser and navigate to `http://localhost:5173`
+**Database:**
+- [Supabase](https://supabase.com) - PostgreSQL with additional features
+- [ElephantSQL](https://elephantsql.com) - Managed PostgreSQL
+- [Aiven](https://aiven.io) - Managed database services
 
 ---
 
-## 🌍 Deployment Guide
+## 📊 Features
 
-### Deploy to Vercel (Frontend) + Render (Backend) + Neon (Database)
+### Transaction Management
+✅ Add income and expense transactions  
+✅ Categorize with custom categories  
+✅ Add notes and descriptions  
+✅ Search and filter by date, type, category  
+✅ Edit and delete transactions  
 
-#### Step 1: Database (Neon)
-1. Create account at [neon.tech](https://neon.tech)
-2. Create new project
-3. Copy connection string
+### Budget Tracking
+✅ Set monthly budgets per category  
+✅ Visual progress indicators  
+✅ Automatic spending calculations  
+✅ Budget alerts at 80% and 100%  
+✅ Monthly and yearly views  
 
-#### Step 2: Backend (Render)
-1. Create account at [render.com](https://render.com)
-2. New Web Service → Connect your GitHub repo
-3. Configure:
-   - Build Command: `cd backend && npm install`
-   - Start Command: `cd backend && npm start`
-   - Add environment variables (DATABASE_URL, JWT_SECRET, etc.)
-4. Deploy
+### Financial Reports
+✅ Income vs Expense trends  
+✅ Spending by category (pie charts)  
+✅ Monthly comparison (bar charts)  
+✅ 6-month trend analysis  
+✅ Export data to CSV  
 
-#### Step 3: Frontend (Vercel)
-1. Create account at [vercel.com](https://vercel.com)
-2. Import your GitHub repository
-3. Configure:
-   - Framework Preset: Vite
-   - Root Directory: `frontend`
-   - Add environment variable: `VITE_API_URL` (your Render backend URL)
-4. Deploy
-
-🎉 Your app is now live!
-
----
-
-## 📱 Usage Guide
-
-### 1. Create an Account
-- Click "Sign Up"
-- Enter your name, email, and password
-- Start managing your finances!
-
-### 2. Add Transactions
-- Go to "Transactions" page
-- Click "+ Add Transaction"
-- Fill in amount, date, category, and notes
-- Save to track your spending
-
-### 3. Set Budgets
-- Navigate to "Budgets"
-- Choose a category
-- Set monthly spending limit
-- Monitor your progress
-
-### 4. View Reports
-- Check "Dashboard" for overview
-- Visit "Reports" for detailed analytics
-- Export data as CSV for backup
-
-### 5. Manage Categories
-- Customize in "Categories" page
-- Create categories that fit your lifestyle
-- Assign colors for easy identification
+### Multi-Currency
+✅ Choose from 29 currencies  
+✅ Real-time exchange rates  
+✅ Automatic conversion  
+✅ Currency-specific formatting  
+✅ 24-hour rate caching  
 
 ---
 
-## 🎯 Use Cases
+## 🔐 Security
 
-### 👤 Individuals
-- Control monthly spending
-- Save for specific goals
-- Understand spending patterns
-
-### 👨‍👩‍👧 Families
-- Manage household expenses
-- Track family budgets
-- Plan financial future together
-
-### 🎓 Students
-- Monitor pocket money
-- Track tuition and books
-- Learn financial management early
-
-### 💼 Freelancers
-- Track project income
-- Manage business expenses
-- Separate personal and business finances
+- 🔒 **Password Encryption** - Bcrypt hashing with 10 salt rounds
+- 🎫 **JWT Authentication** - Secure token-based authentication (7-day expiry)
+- 🛡️ **SQL Injection Protection** - Parameterized database queries
+- 🔐 **HTTPS Only** - SSL/TLS encryption for all connections
+- 👤 **Data Isolation** - Complete user data privacy
+- 🌐 **CORS Protection** - Restricted to allowed origins
 
 ---
 
-## 🛣️ Roadmap
+## 📖 Documentation
 
-- [ ] Mobile app (React Native)
-- [ ] Bank account integration
-- [ ] Recurring transactions
-- [ ] Shared budgets for families
-- [ ] AI-powered insights
-- [ ] Investment tracking
-- [ ] Bill reminders
-- [ ] Receipt scanning
+- **[Architecture Guide](./ARCHITECTURE.md)** - Complete technical documentation
+- **[Test Report](./TEST-REPORT.md)** - System test results and verification
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions from the community! Here's how you can help:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Ways to Contribute
-- 🐛 **Report Bugs** - Open an [Issue](../../issues)
-- 💡 **Suggest Features** - Share your ideas
-- 🔧 **Submit Code** - Create Pull Requests
-- 📖 **Improve Docs** - Help others understand
-- 🌍 **Translations** - Add language support
-
-### Development Process
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ---
 
-## 📄 License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## 🔗 Links
 
-- **Exchange Rate API** - [ExchangeRate-API](https://www.exchangerate-api.com/)
-- **Icons** - Country flags and currency symbols
-- **Community** - Thanks to all contributors!
-
----
-
-## 📞 Support
-
-### Need Help?
-
-- 📧 **Email:** support@auroraledger.com
-- 🐛 **Bug Reports:** [GitHub Issues](../../issues)
-- 💬 **Discussions:** [GitHub Discussions](../../discussions)
-- 📖 **Documentation:** [Wiki](../../wiki)
-
-### Community
-
-- ⭐ **Star** this repo if you find it helpful!
-- 👀 **Watch** for updates
-- 🔀 **Fork** to create your own version
+- **Live Demo**: [Coming Soon](#)
+- **Backend API**: https://aurora-ledger-backend.onrender.com
+- **Documentation**: [ARCHITECTURE.md](./ARCHITECTURE.md)
+- **Report Issues**: [GitHub Issues](../../issues)
 
 ---
 
-## 🔒 Security
+## 🙏 Credits
 
-Found a security vulnerability? Please email security@auroraledger.com instead of opening a public issue.
+Built with amazing open-source technologies:
 
----
-
-## 📊 Project Status
-
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/aurora-ledger)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/aurora-ledger)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/yourusername/aurora-ledger)
+- [React](https://reactjs.org/) • [Vite](https://vitejs.dev/) • [Tailwind CSS](https://tailwindcss.com/)
+- [Node.js](https://nodejs.org/) • [Express](https://expressjs.com/) • [PostgreSQL](https://www.postgresql.org/)
+- [Vercel](https://vercel.com/) • [Render](https://render.com/) • [Neon](https://neon.tech/)
+- [ExchangeRate API](https://www.exchangerate-api.com/)
 
 ---
 
 <div align="center">
 
-**Start Managing Your Finances Smartly Today!**
+**Made with ❤️ by Aurora Ledger Team**
 
-[🚀 Get Started](#installation) • [📖 Read Docs](#features) • [💬 Join Community](../../discussions)
-
----
-
-Made with ❤️ by Aurora Ledger Team
-
-⭐ If you find this helpful, give us a star on GitHub!
+⭐ Star this repo if you find it useful!
 
 </div>
