@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { body, validationResult } from 'express-validator';
 import pool from '../config/database.js';
+import { sendPasswordResetEmail } from '../utils/email.js';
 
 const router = express.Router();
 
@@ -54,16 +55,20 @@ router.post('/forgot-password',
       console.log('PASSWORD RESET REQUESTED');
       console.log(`Email: ${user.email}`);
       console.log(`User ID: ${user.id}`);
-      console.log(`Reset URL: ${resetUrl}`);
       console.log(`Expires: ${expiresAt.toISOString()}`);
       console.log('==============================================');
 
-      // TODO: Send email with nodemailer
-      // For now, return success with URL in dev mode
+      // Send email
+      const emailSent = await sendPasswordResetEmail(user.email, resetUrl, user.full_name);
+
+      // Response
       res.json({
         message: 'If your email is registered, you will receive a reset link.',
-        // DEV ONLY - remove in production
-        ...(process.env.NODE_ENV !== 'production' && { devResetUrl: resetUrl })
+        // DEV ONLY - include URL if email not configured
+        ...(!emailSent && process.env.NODE_ENV !== 'production' && { 
+          devResetUrl: resetUrl,
+          note: 'Email not configured - use this URL to reset password' 
+        })
       });
 
     } catch (error) {
