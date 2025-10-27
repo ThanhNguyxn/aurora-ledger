@@ -7,7 +7,7 @@
 Track expenses • Manage budgets • Analyze finances • Multi-currency support
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Live Demo](https://img.shields.io/badge/Demo-Online-blue.svg)](#)
+[![Live Demo](https://img.shields.io/badge/Demo-Online-blue.svg)](https://aurora-ledger.vercel.app)
 
 </div>
 
@@ -171,8 +171,8 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## 🔗 Links
 
-- **Live Demo**: [Coming Soon](#)
-- **Backend API**: https://aurora-ledger-backend.onrender.com
+- **Live Demo**: [https://aurora-ledger.vercel.app](https://aurora-ledger.vercel.app)
+- **Backend API**: [https://aurora-ledger-backend.onrender.com](https://aurora-ledger-backend.onrender.com)
 - **Documentation**: [ARCHITECTURE.md](./ARCHITECTURE.md)
 - **Report Issues**: [GitHub Issues](../../issues)
 
