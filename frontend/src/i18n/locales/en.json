@@ -48,7 +48,8 @@
     "topSpendingCategories": "Top Spending Categories",
     "noExpenseData": "No expense data for this month",
     "noTransactions": "No transactions yet",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "failedToLoad": "Failed to load dashboard data"
   },
   "transactions": {
     "title": "Transactions",

@@ -48,7 +48,8 @@
     "topSpendingCategories": "Danh mục chi tiêu nhiều nhất",
     "noExpenseData": "Không có dữ liệu chi tiêu tháng này",
     "noTransactions": "Chưa có giao dịch nào",
-    "viewAll": "Xem tất cả"
+    "viewAll": "Xem tất cả",
+    "failedToLoad": "Không thể tải dữ liệu tổng quan"
   },
   "transactions": {
     "title": "Giao dịch",

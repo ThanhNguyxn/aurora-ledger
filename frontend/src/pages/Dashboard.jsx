@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
 import { 
@@ -14,6 +15,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import toast from 'react-hot-toast';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
@@ -38,7 +40,7 @@ const Dashboard = () => {
       setStats(overviewRes.data);
       setRecentTransactions(transactionsRes.data);
     } catch (error) {
-      toast.error('Failed to load dashboard data');
+      toast.error(t('dashboard.failedToLoad') || 'Failed to load dashboard data');
       console.error(error);
     } finally {
       setLoading(false);
@@ -60,9 +62,9 @@ const Dashboard = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</h1>
         <p className="text-gray-600 mt-1">
-          Overview for {format(currentDate, 'MMMM yyyy')}
+          {t('dashboard.overviewFor')} {format(currentDate, 'MMMM yyyy')}
         </p>
       </div>
 
@@ -71,7 +73,7 @@ const Dashboard = () => {
         <div className="card border-l-4 border-blue-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Balance</p>
+              <p className="text-sm text-gray-600 mb-1">{t('dashboard.balance')}</p>
               <p className={`text-2xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {balance >= 0 ? formatCurrency(balance) : '-' + formatCurrency(Math.abs(balance))}
               </p>
@@ -83,7 +85,7 @@ const Dashboard = () => {
         <div className="card border-l-4 border-green-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Income</p>
+              <p className="text-sm text-gray-600 mb-1">{t('dashboard.income')}</p>
               <p className="text-2xl font-bold text-green-600">
                 {formatCurrency(income)}
               </p>
@@ -95,7 +97,7 @@ const Dashboard = () => {
         <div className="card border-l-4 border-red-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Expenses</p>
+              <p className="text-sm text-gray-600 mb-1">{t('dashboard.expenses')}</p>
               <p className="text-2xl font-bold text-red-600">
                 {formatCurrency(expense)}
               </p>
@@ -108,7 +110,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Expense Breakdown */}
         <div className="card">
-          <h2 className="text-xl font-bold mb-4">Expense Breakdown</h2>
+          <h2 className="text-xl font-bold mb-4">{t('dashboard.expenseBreakdown')}</h2>
           {stats?.byCategory?.expense?.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -131,7 +133,7 @@ const Dashboard = () => {
             </ResponsiveContainer>
           ) : (
             <div className="text-center py-12 text-gray-500">
-              No expense data for this month
+              {t('dashboard.noExpenseData')}
             </div>
           )}
         </div>
@@ -139,9 +141,9 @@ const Dashboard = () => {
         {/* Recent Transactions */}
         <div className="card">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Recent Transactions</h2>
+            <h2 className="text-xl font-bold">{t('dashboard.recentTransactions')}</h2>
             <Link to="/transactions" className="text-blue-600 hover:underline text-sm flex items-center gap-1">
-              View all <ArrowRight size={16} />
+              {t('dashboard.viewAll')} <ArrowRight size={16} />
             </Link>
           </div>
           <div className="space-y-3">
@@ -171,7 +173,7 @@ const Dashboard = () => {
               ))
             ) : (
               <div className="text-center py-8 text-gray-500">
-                No transactions yet
+                {t('dashboard.noTransactions')}
               </div>
             )}
           </div>
@@ -181,7 +183,7 @@ const Dashboard = () => {
       {/* Top Categories */}
       {stats?.byCategory?.expense?.length > 0 && (
         <div className="card">
-          <h2 className="text-xl font-bold mb-4">Top Spending Categories</h2>
+          <h2 className="text-xl font-bold mb-4">{t('dashboard.topSpendingCategories')}</h2>
           <div className="space-y-3">
             {stats.byCategory.expense.slice(0, 5).map((category) => {
               const percentage = (category.total / expense * 100).toFixed(1);
