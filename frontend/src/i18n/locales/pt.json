@@ -1,0 +1,12 @@
+{
+  "app": { "name": "AuroraLedger", "tagline": "Gerencie suas finanças com facilidade", "description": "Gestão Financeira Pessoal Moderna" },
+  "nav": { "dashboard": "Painel", "transactions": "Transações", "categories": "Categorias", "budgets": "Orçamentos", "reports": "Relatórios", "logout": "Sair" },
+  "auth": { "login": "Entrar", "register": "Registrar", "email": "E-mail", "password": "Senha", "confirmPassword": "Confirmar senha", "fullName": "Nome completo", "loginButton": "Entrar", "registerButton": "Criar conta", "continueWithGoogle": "Continuar com Google" },
+  "dashboard": { "title": "Painel", "balance": "Saldo", "income": "Receita", "expenses": "Despesas" },
+  "transactions": { "title": "Transações", "addTransaction": "Adicionar transação", "income": "Receita", "expense": "Despesa", "amount": "Quantia", "maxAmount": "Máximo: 999,999,999,999.99" },
+  "categories": { "title": "Categorias", "addCategory": "Adicionar categoria", "income": "Receita", "expense": "Despesa" },
+  "budgets": { "title": "Orçamentos", "setBudget": "Definir orçamento", "maxAmount": "Máximo: 999,999,999,999.99" },
+  "reports": { "title": "Relatórios e Análises" },
+  "common": { "loading": "Carregando...", "save": "Salvar", "cancel": "Cancelar", "delete": "Excluir", "edit": "Editar" }
+}
+

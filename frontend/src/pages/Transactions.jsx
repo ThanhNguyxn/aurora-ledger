@@ -53,7 +53,7 @@ const Transactions = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this transaction?')) return;
+    if (!window.confirm('Are you sure you want to delete this transaction?')) return;
 
     try {
       await api.delete(`/transactions/${id}`);

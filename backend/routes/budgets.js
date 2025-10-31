@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
 router.post('/',
   [
     body('category_id').isInt(),
-    body('amount').isFloat({ min: 0 }),
+    body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
     body('month').isInt({ min: 1, max: 12 }),
     body('year').isInt({ min: 2000 })
   ],

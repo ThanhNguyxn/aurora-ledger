@@ -1,0 +1,12 @@
+{
+  "app": { "name": "AuroraLedger", "tagline": "Gérez vos finances facilement", "description": "Gestion Financière Personnelle Moderne" },
+  "nav": { "dashboard": "Tableau de bord", "transactions": "Transactions", "categories": "Catégories", "budgets": "Budgets", "reports": "Rapports", "logout": "Déconnexion" },
+  "auth": { "login": "Connexion", "register": "S'inscrire", "email": "Email", "password": "Mot de passe", "confirmPassword": "Confirmer le mot de passe", "fullName": "Nom complet", "forgotPassword": "Mot de passe oublié?", "rememberMe": "Se souvenir de moi", "loginButton": "Se connecter", "registerButton": "Créer un compte", "continueWithGoogle": "Continuer avec Google", "dontHaveAccount": "Pas de compte?", "alreadyHaveAccount": "Déjà un compte?" },
+  "dashboard": { "title": "Tableau de bord", "overviewFor": "Vue d'ensemble pour", "balance": "Solde", "income": "Revenus", "expenses": "Dépenses", "expenseBreakdown": "Répartition des dépenses", "recentTransactions": "Transactions récentes", "topSpendingCategories": "Principales catégories de dépenses", "viewAll": "Voir tout" },
+  "transactions": { "title": "Transactions", "addTransaction": "Ajouter une transaction", "income": "Revenu", "expense": "Dépense", "amount": "Montant", "date": "Date", "category": "Catégorie", "description": "Description", "maxAmount": "Maximum: 999,999,999,999.99" },
+  "categories": { "title": "Catégories", "addCategory": "Ajouter une catégorie", "income": "Revenu", "expense": "Dépense", "name": "Nom", "type": "Type", "color": "Couleur" },
+  "budgets": { "title": "Budgets", "setBudget": "Définir le budget", "month": "Mois", "year": "Année", "totalBudget": "Budget total", "totalSpent": "Total dépensé", "remaining": "Restant", "maxAmount": "Maximum: 999,999,999,999.99" },
+  "reports": { "title": "Rapports et analyses", "totalIncome": "Revenus totaux", "totalExpenses": "Dépenses totales", "netBalance": "Solde net" },
+  "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer", "edit": "Modifier", "close": "Fermer" }
+}
+

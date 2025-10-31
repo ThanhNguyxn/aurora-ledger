@@ -1,0 +1,12 @@
+{
+  "app": { "name": "AuroraLedger", "tagline": "簡単に財務を管理", "description": "モダンな個人財務管理" },
+  "nav": { "dashboard": "ダッシュボード", "transactions": "取引", "categories": "カテゴリ", "budgets": "予算", "reports": "レポート", "logout": "ログアウト" },
+  "auth": { "login": "ログイン", "register": "登録", "email": "メール", "password": "パスワード", "confirmPassword": "パスワード確認", "fullName": "フルネーム", "loginButton": "ログイン", "registerButton": "アカウント作成", "continueWithGoogle": "Googleで続ける" },
+  "dashboard": { "title": "ダッシュボード", "balance": "残高", "income": "収入", "expenses": "支出" },
+  "transactions": { "title": "取引", "addTransaction": "取引を追加", "income": "収入", "expense": "支出", "amount": "金額", "maxAmount": "最大: 999,999,999,999.99" },
+  "categories": { "title": "カテゴリ", "addCategory": "カテゴリを追加", "income": "収入", "expense": "支出" },
+  "budgets": { "title": "予算", "setBudget": "予算を設定", "maxAmount": "最大: 999,999,999,999.99" },
+  "reports": { "title": "レポートと分析" },
+  "common": { "loading": "読み込み中...", "save": "保存", "cancel": "キャンセル", "delete": "削除", "edit": "編集" }
+}
+

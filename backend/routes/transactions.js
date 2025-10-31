@@ -78,7 +78,7 @@ router.get('/:id', async (req, res) => {
 router.post('/',
   [
     body('type').isIn(['income', 'expense']),
-    body('amount').isFloat({ min: 0.01 }),
+    body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
     body('transaction_date').isDate(),
     body('category_id').optional().isInt(),
     body('description').optional().trim()
@@ -122,7 +122,7 @@ router.post('/',
 router.put('/:id',
   [
     body('type').optional().isIn(['income', 'expense']),
-    body('amount').optional().isFloat({ min: 0.01 }),
+    body('amount').optional().isFloat({ min: 0.01, max: 999999999999.99 }),
     body('transaction_date').optional().isDate(),
     body('category_id').optional().isInt(),
     body('description').optional().trim()

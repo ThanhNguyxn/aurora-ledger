@@ -1,0 +1,12 @@
+{
+  "app": { "name": "AuroraLedger", "tagline": "Verwalten Sie Ihre Finanzen einfach", "description": "Moderne persönliche Finanzverwaltung" },
+  "nav": { "dashboard": "Dashboard", "transactions": "Transaktionen", "categories": "Kategorien", "budgets": "Budgets", "reports": "Berichte", "logout": "Abmelden" },
+  "auth": { "login": "Anmelden", "register": "Registrieren", "email": "E-Mail", "password": "Passwort", "confirmPassword": "Passwort bestätigen", "fullName": "Vollständiger Name", "loginButton": "Anmelden", "registerButton": "Konto erstellen", "continueWithGoogle": "Mit Google fortfahren" },
+  "dashboard": { "title": "Dashboard", "balance": "Saldo", "income": "Einkommen", "expenses": "Ausgaben" },
+  "transactions": { "title": "Transaktionen", "addTransaction": "Transaktion hinzufügen", "income": "Einkommen", "expense": "Ausgabe", "amount": "Betrag", "maxAmount": "Maximum: 999,999,999,999.99" },
+  "categories": { "title": "Kategorien", "addCategory": "Kategorie hinzufügen", "income": "Einkommen", "expense": "Ausgabe" },
+  "budgets": { "title": "Budgets", "setBudget": "Budget festlegen", "maxAmount": "Maximum: 999,999,999,999.99" },
+  "reports": { "title": "Berichte und Analysen" },
+  "common": { "loading": "Wird geladen...", "save": "Speichern", "cancel": "Abbrechen", "delete": "Löschen", "edit": "Bearbeiten" }
+}
+

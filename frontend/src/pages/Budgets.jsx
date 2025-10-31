@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import api from '../lib/api';
+import { useCurrency } from '../context/CurrencyContext';
 import { Plus, Trash2, TrendingDown, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BudgetModal from '../components/BudgetModal';
@@ -12,11 +13,7 @@ const Budgets = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  useEffect(() => {
-    fetchBudgets();
-  }, [selectedMonth, selectedYear]);
-
-  const fetchBudgets = async () => {
+  const fetchBudgets = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/budgets?month=${selectedMonth}&year=${selectedYear}`);
@@ -27,10 +24,14 @@ const Budgets = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedMonth, selectedYear]);
+
+  useEffect(() => {
+    fetchBudgets();
+  }, [fetchBudgets]);
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this budget?')) return;
+    if (!window.confirm('Are you sure you want to delete this budget?')) return;
 
     try {
       await api.delete(`/budgets/${id}`);
@@ -72,19 +73,19 @@ const Budgets = () => {
   const overallPercentage = totalBudget > 0 ? (totalSpent / totalBudget * 100) : 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Budgets</h1>
-        <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold">Budgets</h1>
+        <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
           <Plus size={20} />
-          Set Budget
+          <span>Set Budget</span>
         </button>
       </div>
 
       {/* Month/Year Selector */}
       <div className="card">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Month
             </label>
@@ -100,7 +101,7 @@ const Budgets = () => {
               ))}
             </select>
           </div>
-          <div className="flex-1">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Year
             </label>
@@ -122,18 +123,18 @@ const Budgets = () => {
       {budgets.length > 0 && (
         <div className="card bg-gradient-to-r from-blue-50 to-purple-50">
           <h2 className="text-lg font-bold mb-4">Overall Budget</h2>
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <div>
               <p className="text-sm text-gray-600">Total Budget</p>
-              <p className="text-2xl font-bold text-blue-600">{formatCurrency(totalBudget)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600 break-all">{formatCurrency(totalBudget)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Total Spent</p>
-              <p className="text-2xl font-bold text-purple-600">{formatCurrency(totalSpent)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-purple-600 break-all">{formatCurrency(totalSpent)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Remaining</p>
-              <p className={`text-2xl font-bold ${totalBudget - totalSpent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <p className={`text-xl sm:text-2xl font-bold break-all ${totalBudget - totalSpent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {totalBudget - totalSpent >= 0 ? formatCurrency(totalBudget - totalSpent) : '-' + formatCurrency(Math.abs(totalBudget - totalSpent))}
               </p>
             </div>
@@ -165,31 +166,32 @@ const Budgets = () => {
               const percentage = (spent / amount * 100);
 
               return (
-                <div key={budget.id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
+                <div key={budget.id} className="p-3 sm:p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-3">
+                    <div className="flex items-start gap-3 flex-1 w-full">
                       <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold"
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
                         style={{ backgroundColor: budget.category_color }}
                       >
                         {budget.category_name?.charAt(0)}
                       </div>
-                      <div>
-                        <h3 className="font-bold text-lg">{budget.category_name}</h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <span>Budget: {formatCurrency(amount)}</span>
-                          <span>Spent: {formatCurrency(spent)}</span>
-                          <span className={remaining >= 0 ? 'text-green-600' : 'text-red-600'}>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-base sm:text-lg truncate">{budget.category_name}</h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 mt-1">
+                          <span className="truncate">Budget: {formatCurrency(amount)}</span>
+                          <span className="truncate">Spent: {formatCurrency(spent)}</span>
+                          <span className={`truncate ${remaining >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             Remaining: {remaining >= 0 ? formatCurrency(remaining) : '-' + formatCurrency(Math.abs(remaining))}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 self-end sm:self-start">
                       {getStatusIcon(percentage)}
                       <button
                         onClick={() => handleDelete(budget.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded"
+                        title="Delete budget"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -197,16 +199,16 @@ const Budgets = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
                       <div
-                        className={`h-3 rounded-full transition-all ${getProgressColor(percentage)}`}
+                        className={`h-2 sm:h-3 rounded-full transition-all ${getProgressColor(percentage)}`}
                         style={{ width: `${Math.min(percentage, 100)}%` }}
                       ></div>
                     </div>
-                    <div className="flex justify-between text-sm">
+                    <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2 text-xs sm:text-sm">
                       <span className="text-gray-600">{percentage.toFixed(1)}% used</span>
                       {percentage >= 100 && (
-                        <span className="text-red-600 font-medium">
+                        <span className="text-red-600 font-medium truncate">
                           Over budget by {formatCurrency(spent - amount)}
                         </span>
                       )}

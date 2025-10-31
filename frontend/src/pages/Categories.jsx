@@ -29,7 +29,7 @@ const Categories = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure? This will affect related transactions.')) return;
+    if (!window.confirm('Are you sure? This will affect related transactions.')) return;
 
     try {
       await api.delete(`/categories/${id}`);

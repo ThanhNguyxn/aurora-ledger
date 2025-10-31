@@ -1,0 +1,12 @@
+{
+  "app": { "name": "AuroraLedger", "tagline": "Управляйте своими финансами легко", "description": "Современное управление личными финансами" },
+  "nav": { "dashboard": "Панель", "transactions": "Транзакции", "categories": "Категории", "budgets": "Бюджеты", "reports": "Отчеты", "logout": "Выйти" },
+  "auth": { "login": "Войти", "register": "Регистрация", "email": "Эл. почта", "password": "Пароль", "confirmPassword": "Подтвердить пароль", "fullName": "Полное имя", "loginButton": "Войти", "registerButton": "Создать аккаунт", "continueWithGoogle": "Продолжить с Google" },
+  "dashboard": { "title": "Панель", "balance": "Баланс", "income": "Доход", "expenses": "Расходы" },
+  "transactions": { "title": "Транзакции", "addTransaction": "Добавить транзакцию", "income": "Доход", "expense": "Расход", "amount": "Сумма", "maxAmount": "Максимум: 999,999,999,999.99" },
+  "categories": { "title": "Категории", "addCategory": "Добавить категорию", "income": "Доход", "expense": "Расход" },
+  "budgets": { "title": "Бюджеты", "setBudget": "Установить бюджет", "maxAmount": "Максимум: 999,999,999,999.99" },
+  "reports": { "title": "Отчеты и аналитика" },
+  "common": { "loading": "Загрузка...", "save": "Сохранить", "cancel": "Отмена", "delete": "Удалить", "edit": "Редактировать" }
+}
+

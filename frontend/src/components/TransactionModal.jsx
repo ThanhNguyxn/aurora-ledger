@@ -133,12 +133,14 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
               name="amount"
               value={formData.amount}
               onChange={handleChange}
-              step="0.01"
+              step="any"
               min="0.01"
+              max="999999999999.99"
               className="input"
               required
               placeholder="0.00"
             />
+            <p className="text-xs text-gray-500 mt-1">Maximum: 999,999,999,999.99</p>
           </div>
 
           <div>

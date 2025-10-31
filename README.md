@@ -167,7 +167,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 - **Live Demo**: [https://aurora-ledger.vercel.app](https://aurora-ledger.vercel.app)
 - **Backend API**: [https://aurora-ledger-backend.onrender.com](https://aurora-ledger-backend.onrender.com)
-- **Documentation**: [ARCHITECTURE.md](./ARCHITECTURE.md)
 - **Report Issues**: [GitHub Issues](../../issues)
 
 ---

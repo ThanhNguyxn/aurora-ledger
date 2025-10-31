@@ -1,0 +1,12 @@
+{
+  "app": { "name": "AuroraLedger", "tagline": "轻松管理您的财务", "description": "现代个人财务管理" },
+  "nav": { "dashboard": "仪表板", "transactions": "交易", "categories": "类别", "budgets": "预算", "reports": "报告", "logout": "登出" },
+  "auth": { "login": "登录", "register": "注册", "email": "电子邮件", "password": "密码", "confirmPassword": "确认密码", "fullName": "全名", "loginButton": "登录", "registerButton": "创建账户", "continueWithGoogle": "使用Google继续" },
+  "dashboard": { "title": "仪表板", "balance": "余额", "income": "收入", "expenses": "支出" },
+  "transactions": { "title": "交易", "addTransaction": "添加交易", "income": "收入", "expense": "支出", "amount": "金额", "maxAmount": "最大: 999,999,999,999.99" },
+  "categories": { "title": "类别", "addCategory": "添加类别", "income": "收入", "expense": "支出" },
+  "budgets": { "title": "预算", "setBudget": "设置预算", "maxAmount": "最大: 999,999,999,999.99" },
+  "reports": { "title": "报告和分析" },
+  "common": { "loading": "加载中...", "save": "保存", "cancel": "取消", "delete": "删除", "edit": "编辑" }
+}
+

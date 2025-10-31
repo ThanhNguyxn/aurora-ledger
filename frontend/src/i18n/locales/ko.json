@@ -1,0 +1,12 @@
+{
+  "app": { "name": "AuroraLedger", "tagline": "쉽게 재정 관리", "description": "현대적인 개인 재무 관리" },
+  "nav": { "dashboard": "대시보드", "transactions": "거래", "categories": "카테고리", "budgets": "예산", "reports": "보고서", "logout": "로그아웃" },
+  "auth": { "login": "로그인", "register": "등록", "email": "이메일", "password": "비밀번호", "confirmPassword": "비밀번호 확인", "fullName": "전체 이름", "loginButton": "로그인", "registerButton": "계정 만들기", "continueWithGoogle": "Google로 계속" },
+  "dashboard": { "title": "대시보드", "balance": "잔액", "income": "수입", "expenses": "지출" },
+  "transactions": { "title": "거래", "addTransaction": "거래 추가", "income": "수입", "expense": "지출", "amount": "금액", "maxAmount": "최대: 999,999,999,999.99" },
+  "categories": { "title": "카테고리", "addCategory": "카테고리 추가", "income": "수입", "expense": "지출" },
+  "budgets": { "title": "예산", "setBudget": "예산 설정", "maxAmount": "최대: 999,999,999,999.99" },
+  "reports": { "title": "보고서 및 분석" },
+  "common": { "loading": "로딩 중...", "save": "저장", "cancel": "취소", "delete": "삭제", "edit": "편집" }
+}
+

@@ -8,6 +8,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "migrate": "node scripts/migrate.js",
+    "migrate:amount": "node scripts/migrate-amount-limit.js",
     "seed": "node scripts/seed.js"
   },
   "keywords": [
