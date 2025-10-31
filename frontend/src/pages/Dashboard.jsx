@@ -110,27 +110,46 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Expense Breakdown */}
         <div className="card">
-          <h2 className="text-xl font-bold mb-4">{t('dashboard.expenseBreakdown')}</h2>
+          <h2 className="text-lg sm:text-xl font-bold mb-4">{t('dashboard.expenseBreakdown')}</h2>
           {stats?.byCategory?.expense?.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={stats.byCategory.expense}
-                  dataKey="total"
-                  nameKey="category_name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  label
-                >
-                  {stats.byCategory.expense.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.category_color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            <>
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart>
+                  <Pie
+                    data={stats.byCategory.expense}
+                    dataKey="total"
+                    nameKey="category_name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={90}
+                    innerRadius={40}
+                    paddingAngle={2}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    labelLine={true}
+                  >
+                    {stats.byCategory.expense.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.category_color} stroke="#fff" strokeWidth={2} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value) => formatCurrency(value)}
+                    contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="mt-4 grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
+                {stats.byCategory.expense.map((cat, index) => (
+                  <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
+                    <div
+                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: cat.category_color }}
+                    ></div>
+                    <span className="truncate">{cat.category_name}</span>
+                    <span className="font-medium text-gray-600 ml-auto">{formatCurrency(cat.total)}</span>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
             <div className="text-center py-12 text-gray-500">
               {t('dashboard.noExpenseData')}
