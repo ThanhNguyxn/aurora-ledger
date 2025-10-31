@@ -65,53 +65,53 @@ const Categories = () => {
   const expenseCount = categories.filter(cat => cat.type === 'expense').length;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Categories</h1>
-        <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold">Categories</h1>
+        <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
           <Plus size={20} />
-          Add Category
+          <span>Add Category</span>
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="card bg-blue-50 border-blue-200">
-          <p className="text-sm text-gray-600">Total Categories</p>
-          <p className="text-3xl font-bold text-blue-600">{categories.length}</p>
+          <p className="text-xs sm:text-sm text-gray-600">Total Categories</p>
+          <p className="text-2xl sm:text-3xl font-bold text-blue-600">{categories.length}</p>
         </div>
         <div className="card bg-green-50 border-green-200">
-          <p className="text-sm text-gray-600">Income Categories</p>
-          <p className="text-3xl font-bold text-green-600">{incomeCount}</p>
+          <p className="text-xs sm:text-sm text-gray-600">Income Categories</p>
+          <p className="text-2xl sm:text-3xl font-bold text-green-600">{incomeCount}</p>
         </div>
         <div className="card bg-red-50 border-red-200">
-          <p className="text-sm text-gray-600">Expense Categories</p>
-          <p className="text-3xl font-bold text-red-600">{expenseCount}</p>
+          <p className="text-xs sm:text-sm text-gray-600">Expense Categories</p>
+          <p className="text-2xl sm:text-3xl font-bold text-red-600">{expenseCount}</p>
         </div>
       </div>
 
       {/* Filter */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setFilter('all')}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
+          className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base transition-colors ${
+            filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
           All ({categories.length})
         </button>
         <button
           onClick={() => setFilter('income')}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            filter === 'income' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700'
+          className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base transition-colors ${
+            filter === 'income' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
           Income ({incomeCount})
         </button>
         <button
           onClick={() => setFilter('expense')}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            filter === 'expense' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700'
+          className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base transition-colors ${
+            filter === 'expense' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
           Expense ({expenseCount})
@@ -125,25 +125,25 @@ const Categories = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : filteredCategories.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {filteredCategories.map((category) => (
               <div
                 key={category.id}
-                className="p-4 border-2 rounded-lg hover:shadow-md transition-shadow"
+                className="p-3 sm:p-4 border-2 rounded-lg hover:shadow-md transition-all"
                 style={{ borderColor: category.color }}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                     <div
-                      className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 text-lg sm:text-xl"
                       style={{ backgroundColor: category.color }}
                     >
-                      {category.name.charAt(0)}
+                      {category.name.charAt(0).toUpperCase()}
                     </div>
-                    <div>
-                      <h3 className="font-bold">{category.name}</h3>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-bold text-sm sm:text-base truncate">{category.name}</h3>
                       <span
-                        className={`text-xs px-2 py-1 rounded ${
+                        className={`text-xs px-2 py-0.5 sm:py-1 rounded inline-block mt-1 ${
                           category.type === 'income'
                             ? 'bg-green-100 text-green-800'
                             : 'bg-red-100 text-red-800'
@@ -153,16 +153,18 @@ const Categories = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex flex-col sm:flex-row gap-1">
                     <button
                       onClick={() => handleEdit(category)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                      className="p-1.5 sm:p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Edit category"
                     >
                       <Pencil size={16} />
                     </button>
                     <button
                       onClick={() => handleDelete(category.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded"
+                      className="p-1.5 sm:p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Delete category"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -173,7 +175,12 @@ const Categories = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            No categories found
+            <p className="mb-4">No {filter !== 'all' ? filter : ''} categories found</p>
+            {filter === 'all' && (
+              <button onClick={handleAdd} className="btn btn-primary">
+                Create Your First Category
+              </button>
+            )}
           </div>
         )}
       </div>

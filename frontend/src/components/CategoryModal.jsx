@@ -6,7 +6,8 @@ import toast from 'react-hot-toast';
 const COLORS = [
   '#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6',
   '#EC4899', '#06B6D4', '#14B8A6', '#F97316', '#84CC16',
-  '#6366F1', '#A855F7', '#EC4899', '#F43F5E', '#64748B'
+  '#6366F1', '#A855F7', '#F43F5E', '#64748B', '#FF69B4',
+  '#FF6347', '#FFD700', '#00CED1', '#9370DB', '#20B2AA'
 ];
 
 const CategoryModal = ({ category, onClose }) => {
@@ -57,12 +58,16 @@ const CategoryModal = ({ category, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">
-            {category ? 'Edit Category' : 'Add Category'}
+      <div className="bg-white rounded-lg max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold">
+            {category ? 'Edit Category' : 'Add New Category'}
           </h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded">
+          <button 
+            onClick={onClose} 
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
+            title="Close"
+          >
             <X size={20} />
           </button>
         </div>
@@ -120,21 +125,25 @@ const CategoryModal = ({ category, onClose }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Color
+              Color <span className="text-xs text-gray-500">(Choose your favorite)</span>
             </label>
-            <div className="grid grid-cols-8 gap-2">
+            <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
               {COLORS.map((color) => (
                 <button
                   key={color}
                   type="button"
                   onClick={() => setFormData({ ...formData, color })}
-                  className={`w-8 h-8 rounded-full ${
-                    formData.color === color ? 'ring-2 ring-offset-2 ring-blue-600' : ''
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full transition-all hover:scale-110 ${
+                    formData.color === color ? 'ring-2 ring-offset-2 ring-blue-600 scale-110' : ''
                   }`}
                   style={{ backgroundColor: color }}
+                  title={color}
                 />
               ))}
             </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Selected: <span className="font-mono">{formData.color}</span>
+            </p>
           </div>
 
           <div className="flex gap-3 pt-4">
