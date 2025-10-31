@@ -55,7 +55,10 @@ const Layout = () => {
           <h1 className="hidden lg:block text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             {t('app.name')}
           </h1>
-          <p className="text-sm text-gray-600 mt-1 truncate">{user?.email}</p>
+          <div className="mt-1">
+            <p className="text-sm font-semibold text-gray-800 truncate">{user?.full_name || 'User'}</p>
+            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+          </div>
           <div className="mt-3 space-y-2">
             <CurrencySelector />
             <LanguageSelector />
