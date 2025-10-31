@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
 const ResetPassword = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -87,21 +89,21 @@ const ResetPassword = () => {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            AuroraLedger
+            {t('app.name')}
           </h1>
-          <p className="text-gray-600">Create a new password</p>
+          <p className="text-gray-600">{t('auth.resetPassword')}</p>
         </div>
 
         <div className="card">
           <div className="flex items-center gap-2 mb-6">
             <Lock className="text-blue-600" />
-            <h2 className="text-2xl font-bold">Reset Password</h2>
+            <h2 className="text-2xl font-bold">{t('auth.resetPassword')}</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                New Password
+                {t('auth.newPassword')}
               </label>
               <input
                 type="password"
@@ -120,7 +122,7 @@ const ResetPassword = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password
+                {t('auth.confirmPassword')}
               </label>
               <input
                 type="password"
@@ -138,7 +140,7 @@ const ResetPassword = () => {
               disabled={loading}
               className="btn btn-primary w-full"
             >
-              {loading ? 'Resetting...' : 'Reset Password'}
+              {loading ? t('common.loading') : t('auth.resetPasswordButton')}
             </button>
           </form>
         </div>

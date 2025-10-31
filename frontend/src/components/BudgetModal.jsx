@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
 
 const BudgetModal = ({ month, year, onClose }) => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     category_id: '',
@@ -38,10 +40,10 @@ const BudgetModal = ({ month, year, onClose }) => {
       };
 
       await api.post('/budgets', data);
-      toast.success('Budget set successfully');
+      toast.success(t('budgets.budgetSet'));
       onClose();
     } catch (error) {
-      toast.error('Failed to set budget');
+      toast.error(t('budgets.failedToSet'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -54,10 +56,10 @@ const BudgetModal = ({ month, year, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Set Budget</h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded">
+      <div className="bg-white rounded-lg max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold">{t('budgets.setBudget')}</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded transition-colors" title="Close">
             <X size={20} />
           </button>
         </div>
@@ -65,7 +67,7 @@ const BudgetModal = ({ month, year, onClose }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="bg-blue-50 p-3 rounded-lg">
             <p className="text-sm text-gray-600">
-              Setting budget for{' '}
+              {t('budgets.settingBudgetFor')}{' '}
               <span className="font-bold">
                 {new Date(year, month - 1, 1).toLocaleString('default', { month: 'long' })} {year}
               </span>
@@ -74,7 +76,7 @@ const BudgetModal = ({ month, year, onClose }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
+              {t('transactions.category')}
             </label>
             <select
               name="category_id"
@@ -83,7 +85,7 @@ const BudgetModal = ({ month, year, onClose }) => {
               className="input"
               required
             >
-              <option value="">Select a category</option>
+              <option value="">{t('budgets.selectCategory')}</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
@@ -91,13 +93,13 @@ const BudgetModal = ({ month, year, onClose }) => {
               ))}
             </select>
             <p className="text-xs text-gray-500 mt-1">
-              Only expense categories can have budgets
+              {t('budgets.onlyExpenseCategories')}
             </p>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Budget Amount
+              {t('budgets.budgetAmount')}
             </label>
             <input
               type="number"
@@ -111,7 +113,7 @@ const BudgetModal = ({ month, year, onClose }) => {
               required
               placeholder="0.00"
             />
-            <p className="text-xs text-gray-500 mt-1">Maximum: 999,999,999,999.99</p>
+            <p className="text-xs text-gray-500 mt-1">{t('budgets.maxAmount')}</p>
           </div>
 
           <div className="flex gap-3 pt-4">
@@ -120,14 +122,14 @@ const BudgetModal = ({ month, year, onClose }) => {
               onClick={onClose}
               className="btn btn-secondary flex-1"
             >
-              Cancel
+              {t('budgets.cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="btn btn-primary flex-1"
             >
-              {loading ? 'Saving...' : 'Set Budget'}
+              {loading ? t('categories.saving') : t('budgets.setBudget')}
             </button>
           </div>
         </form>

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { UserPlus } from 'lucide-react';
 
 const Register = () => {
+  const { t } = useTranslation();
   const { register } = useAuth();
   const [formData, setFormData] = useState({
     full_name: '',
@@ -47,15 +49,15 @@ const Register = () => {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            AuroraLedger
+            {t('app.name')}
           </h1>
-          <p className="text-gray-600">Start managing your finances today</p>
+          <p className="text-gray-600">{t('app.tagline')}</p>
         </div>
 
         <div className="card">
           <div className="flex items-center gap-2 mb-6">
             <UserPlus className="text-blue-600" />
-            <h2 className="text-2xl font-bold">Create Account</h2>
+            <h2 className="text-2xl font-bold">{t('auth.register')}</h2>
           </div>
 
           {error && (
@@ -67,7 +69,7 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name
+                {t('auth.fullName')}
               </label>
               <input
                 type="text"
@@ -82,7 +84,7 @@ const Register = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
+                {t('auth.email')}
               </label>
               <input
                 type="email"
@@ -97,7 +99,7 @@ const Register = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 type="password"
@@ -112,7 +114,7 @@ const Register = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password
+                {t('auth.confirmPassword')}
               </label>
               <input
                 type="password"
@@ -130,7 +132,7 @@ const Register = () => {
               disabled={loading}
               className="btn btn-primary w-full"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? t('auth.creatingAccount') : t('auth.registerButton')}
             </button>
           </form>
 
@@ -139,7 +141,7 @@ const Register = () => {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+              <span className="px-2 bg-white text-gray-500">{t('auth.orContinueWith')}</span>
             </div>
           </div>
 
@@ -154,13 +156,13 @@ const Register = () => {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            Continue with Google
+            {t('auth.continueWithGoogle')}
           </button>
 
           <p className="mt-6 text-center text-sm text-gray-600">
-            Already have an account?{' '}
+            {t('auth.alreadyHaveAccount')}{' '}
             <Link to="/login" className="text-blue-600 hover:underline font-medium">
-              Login here
+              {t('auth.loginHere')}
             </Link>
           </p>
         </div>

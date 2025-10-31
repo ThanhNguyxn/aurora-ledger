@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
 import { Plus, Pencil, Trash2, Filter, Download } from 'lucide-react';
@@ -7,6 +8,7 @@ import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
 
 const Transactions = () => {
+  const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -36,7 +38,7 @@ const Transactions = () => {
       const response = await api.get(`/transactions?${params}`);
       setTransactions(response.data);
     } catch (error) {
-      toast.error('Failed to load transactions');
+      toast.error(t('transactions.failedToLoad'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -53,14 +55,14 @@ const Transactions = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this transaction?')) return;
+    if (!window.confirm(t('transactions.deleteConfirm'))) return;
 
     try {
       await api.delete(`/transactions/${id}`);
-      toast.success('Transaction deleted');
+      toast.success(t('transactions.transactionDeleted'));
       fetchTransactions();
     } catch (error) {
-      toast.error('Failed to delete transaction');
+      toast.error(t('transactions.failedToDelete'));
       console.error(error);
     }
   };
@@ -100,25 +102,26 @@ const Transactions = () => {
       link.click();
       link.remove();
       
-      toast.success('Transactions exported');
+      toast.success(t('transactions.exportedSuccess') || 'Transactions exported');
     } catch (error) {
-      toast.error('Failed to export');
+      toast.error(t('transactions.failedToExport') || 'Failed to export');
       console.error(error);
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Transactions</h1>
-        <div className="flex gap-3">
-          <button onClick={handleExport} className="btn btn-secondary flex items-center gap-2">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('transactions.title')}</h1>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+          <button onClick={handleExport} className="btn btn-secondary flex items-center justify-center gap-2">
             <Download size={20} />
-            Export CSV
+            <span className="hidden sm:inline">{t('transactions.exportCSV')}</span>
+            <span className="sm:hidden">Export</span>
           </button>
-          <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2">
+          <button onClick={handleAdd} className="btn btn-primary flex items-center justify-center gap-2">
             <Plus size={20} />
-            Add Transaction
+            <span>{t('transactions.addTransaction')}</span>
           </button>
         </div>
       </div>
@@ -127,17 +130,17 @@ const Transactions = () => {
       <div className="card">
         <div className="flex items-center gap-2 mb-4">
           <Filter size={20} className="text-gray-600" />
-          <h2 className="text-lg font-semibold">Filters</h2>
+          <h2 className="text-base sm:text-lg font-semibold">{t('transactions.filters')}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <select
             value={filters.type}
             onChange={(e) => setFilters({ ...filters, type: e.target.value })}
             className="input"
           >
-            <option value="">All Types</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="">{t('transactions.allTypes')}</option>
+            <option value="income">{t('transactions.income')}</option>
+            <option value="expense">{t('transactions.expense')}</option>
           </select>
 
           <select
@@ -145,7 +148,7 @@ const Transactions = () => {
             onChange={(e) => setFilters({ ...filters, category_id: e.target.value })}
             className="input"
           >
-            <option value="">All Categories</option>
+            <option value="">{t('transactions.allCategories')}</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
@@ -158,7 +161,7 @@ const Transactions = () => {
             value={filters.start_date}
             onChange={(e) => setFilters({ ...filters, start_date: e.target.value })}
             className="input"
-            placeholder="Start Date"
+            placeholder={t('transactions.startDate')}
           />
 
           <input
@@ -166,7 +169,7 @@ const Transactions = () => {
             value={filters.end_date}
             onChange={(e) => setFilters({ ...filters, end_date: e.target.value })}
             className="input"
-            placeholder="End Date"
+            placeholder={t('transactions.endDate')}
           />
         </div>
         {(filters.type || filters.category_id || filters.start_date || filters.end_date) && (
@@ -174,7 +177,7 @@ const Transactions = () => {
             onClick={() => setFilters({ type: '', category_id: '', start_date: '', end_date: '' })}
             className="mt-3 text-sm text-blue-600 hover:underline"
           >
-            Clear filters
+            {t('transactions.clearFilters')}
           </button>
         )}
       </div>
@@ -190,12 +193,12 @@ const Transactions = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4">Date</th>
-                  <th className="text-left py-3 px-4">Category</th>
-                  <th className="text-left py-3 px-4">Description</th>
-                  <th className="text-left py-3 px-4">Type</th>
-                  <th className="text-right py-3 px-4">Amount</th>
-                  <th className="text-right py-3 px-4">Actions</th>
+                  <th className="text-left py-3 px-4 text-sm sm:text-base">{t('transactions.date')}</th>
+                  <th className="text-left py-3 px-4 text-sm sm:text-base">{t('transactions.category')}</th>
+                  <th className="text-left py-3 px-4 text-sm sm:text-base hidden sm:table-cell">{t('transactions.description')}</th>
+                  <th className="text-left py-3 px-4 text-sm sm:text-base">{t('transactions.type')}</th>
+                  <th className="text-right py-3 px-4 text-sm sm:text-base">{t('transactions.amount')}</th>
+                  <th className="text-right py-3 px-4 text-sm sm:text-base">{t('transactions.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -213,7 +216,7 @@ const Transactions = () => {
                         {transaction.category_name || 'Uncategorized'}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-600">
+                    <td className="py-3 px-4 text-gray-600 hidden sm:table-cell">
                       {transaction.description || '-'}
                     </td>
                     <td className="py-3 px-4">
@@ -259,7 +262,7 @@ const Transactions = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            No transactions found
+            {t('transactions.noTransactions')}
           </div>
         )}
       </div>

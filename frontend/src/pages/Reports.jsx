@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
 import { Calendar, Download, TrendingUp, TrendingDown } from 'lucide-react';
@@ -21,6 +22,7 @@ import {
 import toast from 'react-hot-toast';
 
 const Reports = () => {
+  const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
   const [dateRange, setDateRange] = useState({
     start_date: format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd'),
@@ -45,7 +47,7 @@ const Reports = () => {
       setOverview(overviewRes.data);
       setTrends(trendsRes.data);
     } catch (error) {
-      toast.error('Failed to load reports');
+      toast.error(t('reports.failedToLoad'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -67,9 +69,9 @@ const Reports = () => {
       link.click();
       link.remove();
       
-      toast.success('Report exported');
+      toast.success(t('reports.reportExported'));
     } catch (error) {
-      toast.error('Failed to export');
+      toast.error(t('reports.failedToExport'));
       console.error(error);
     }
   };
@@ -87,12 +89,12 @@ const Reports = () => {
   const balance = overview?.totals?.balance || 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Reports & Analytics</h1>
-        <button onClick={handleExport} className="btn btn-primary flex items-center gap-2">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('reports.title')}</h1>
+        <button onClick={handleExport} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto justify-center">
           <Download size={20} />
-          Export CSV
+          <span>{t('reports.exportCSV')}</span>
         </button>
       </div>
 
@@ -100,12 +102,12 @@ const Reports = () => {
       <div className="card">
         <div className="flex items-center gap-2 mb-4">
           <Calendar size={20} className="text-gray-600" />
-          <h2 className="text-lg font-semibold">Date Range</h2>
+          <h2 className="text-base sm:text-lg font-semibold">{t('reports.dateRange')}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Start Date
+              {t('reports.startDate')}
             </label>
             <input
               type="date"
@@ -116,7 +118,7 @@ const Reports = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              End Date
+              {t('reports.endDate')}
             </label>
             <input
               type="date"
@@ -129,28 +131,28 @@ const Reports = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
         <div className="card bg-gradient-to-br from-green-50 to-green-100 border-green-200">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600">Total Income</p>
-            <TrendingUp className="text-green-600" size={24} />
+            <p className="text-xs sm:text-sm text-gray-600">{t('reports.totalIncome')}</p>
+            <TrendingUp className="text-green-600" size={20} />
           </div>
-          <p className="text-3xl font-bold text-green-600">{formatCurrency(income)}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-green-600 break-all">{formatCurrency(income)}</p>
         </div>
 
         <div className="card bg-gradient-to-br from-red-50 to-red-100 border-red-200">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600">Total Expenses</p>
-            <TrendingDown className="text-red-600" size={24} />
+            <p className="text-xs sm:text-sm text-gray-600">{t('reports.totalExpenses')}</p>
+            <TrendingDown className="text-red-600" size={20} />
           </div>
-          <p className="text-3xl font-bold text-red-600">{formatCurrency(expense)}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-red-600 break-all">{formatCurrency(expense)}</p>
         </div>
 
         <div className={`card bg-gradient-to-br ${balance >= 0 ? 'from-blue-50 to-blue-100 border-blue-200' : 'from-orange-50 to-orange-100 border-orange-200'}`}>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600">Net Balance</p>
+            <p className="text-xs sm:text-sm text-gray-600">{t('reports.netBalance')}</p>
           </div>
-          <p className={`text-3xl font-bold ${balance >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
+          <p className={`text-2xl sm:text-3xl font-bold break-all ${balance >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
             {balance >= 0 ? '+' + formatCurrency(balance) : '-' + formatCurrency(Math.abs(balance))}
           </p>
         </div>
@@ -158,7 +160,7 @@ const Reports = () => {
 
       {/* Monthly Trends */}
       <div className="card">
-        <h2 className="text-xl font-bold mb-4">Monthly Trends (Last 6 Months)</h2>
+        <h2 className="text-lg sm:text-xl font-bold mb-4">{t('reports.monthlyTrends')}</h2>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={trends}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -173,10 +175,10 @@ const Reports = () => {
         </ResponsiveContainer>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Income Breakdown */}
         <div className="card">
-          <h2 className="text-xl font-bold mb-4">Income by Category</h2>
+          <h2 className="text-lg sm:text-xl font-bold mb-4">{t('reports.incomeByCategory')}</h2>
           {overview?.byCategory?.income?.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={250}>
@@ -214,14 +216,14 @@ const Reports = () => {
             </>
           ) : (
             <div className="text-center py-12 text-gray-500">
-              No income data
+              {t('reports.noIncomeData')}
             </div>
           )}
         </div>
 
         {/* Expense Breakdown */}
         <div className="card">
-          <h2 className="text-xl font-bold mb-4">Expenses by Category</h2>
+          <h2 className="text-lg sm:text-xl font-bold mb-4">{t('reports.expensesByCategory')}</h2>
           {overview?.byCategory?.expense?.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={250}>
@@ -259,7 +261,7 @@ const Reports = () => {
             </>
           ) : (
             <div className="text-center py-12 text-gray-500">
-              No expense data
+              {t('reports.noExpenseData')}
             </div>
           )}
         </div>

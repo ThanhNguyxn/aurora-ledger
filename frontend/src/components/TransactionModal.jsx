@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 
 const TransactionModal = ({ transaction, categories, onClose }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     type: 'expense',
     amount: '',
@@ -56,15 +58,15 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
 
       if (transaction) {
         await api.put(`/transactions/${transaction.id}`, data);
-        toast.success('Transaction updated');
+        toast.success(t('transactions.transactionUpdated'));
       } else {
         await api.post('/transactions', data);
-        toast.success('Transaction created');
+        toast.success(t('transactions.transactionCreated'));
       }
 
       onClose();
     } catch (error) {
-      toast.error(transaction ? 'Failed to update transaction' : 'Failed to create transaction');
+      toast.error(transaction ? t('transactions.failedToUpdate') : t('transactions.failedToCreate'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -83,12 +85,12 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">
-            {transaction ? 'Edit Transaction' : 'Add Transaction'}
+      <div className="bg-white rounded-lg max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold">
+            {transaction ? t('transactions.editTransaction') : t('transactions.addTransaction')}
           </h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded">
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded transition-colors" title="Close">
             <X size={20} />
           </button>
         </div>
@@ -96,7 +98,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Type
+              {t('transactions.type')}
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -108,7 +110,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                Income
+                {t('transactions.income')}
               </button>
               <button
                 type="button"
@@ -119,14 +121,14 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                Expense
+                {t('transactions.expense')}
               </button>
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Amount
+              {t('transactions.amount')}
             </label>
             <input
               type="number"
@@ -140,12 +142,12 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
               required
               placeholder="0.00"
             />
-            <p className="text-xs text-gray-500 mt-1">Maximum: 999,999,999,999.99</p>
+            <p className="text-xs text-gray-500 mt-1">{t('transactions.maxAmount')}</p>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date
+              {t('transactions.date')}
             </label>
             <input
               type="date"
@@ -159,7 +161,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
+              {t('transactions.category')}
             </label>
             <select
               name="category_id"
@@ -167,7 +169,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
               onChange={handleChange}
               className="input"
             >
-              <option value="">Uncategorized</option>
+              <option value="">{t('transactions.uncategorized')}</option>
               {filteredCategories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
@@ -178,7 +180,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description (Optional)
+              {t('transactions.description')} ({t('transactions.optional')})
             </label>
             <textarea
               name="description"
@@ -186,7 +188,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
               onChange={handleChange}
               className="input"
               rows="3"
-              placeholder="Add a note..."
+              placeholder={t('transactions.addNote')}
             ></textarea>
           </div>
 
@@ -196,14 +198,14 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
               onClick={onClose}
               className="btn btn-secondary flex-1"
             >
-              Cancel
+              {t('transactions.cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="btn btn-primary flex-1"
             >
-              {loading ? 'Saving...' : (transaction ? 'Update' : 'Create')}
+              {loading ? t('transactions.saving') : (transaction ? t('transactions.update') : t('transactions.create'))}
             </button>
           </div>
         </form>

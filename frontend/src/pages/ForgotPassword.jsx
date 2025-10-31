@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Mail, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
 const ForgotPassword = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -78,15 +80,15 @@ const ForgotPassword = () => {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            AuroraLedger
+            {t('app.name')}
           </h1>
-          <p className="text-gray-600">Reset your password</p>
+          <p className="text-gray-600">{t('auth.resetPassword')}</p>
         </div>
 
         <div className="card">
           <div className="flex items-center gap-2 mb-6">
             <Mail className="text-blue-600" />
-            <h2 className="text-2xl font-bold">Forgot Password</h2>
+            <h2 className="text-2xl font-bold">{t('auth.forgotPassword')}</h2>
           </div>
 
           <p className="text-gray-600 mb-6">
@@ -96,7 +98,7 @@ const ForgotPassword = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
+                {t('auth.email')}
               </label>
               <input
                 type="email"
@@ -113,7 +115,7 @@ const ForgotPassword = () => {
               disabled={loading}
               className="btn btn-primary w-full"
             >
-              {loading ? 'Sending...' : 'Send Reset Link'}
+              {loading ? t('common.loading') : t('auth.sendResetLink')}
             </button>
           </form>
 
@@ -123,7 +125,7 @@ const ForgotPassword = () => {
               className="text-sm text-blue-600 hover:underline inline-flex items-center gap-1"
             >
               <ArrowLeft size={14} />
-              Back to Login
+              {t('auth.backToLogin')}
             </Link>
           </div>
         </div>

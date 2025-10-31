@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
 import { Plus, Trash2, TrendingDown, AlertTriangle } from 'lucide-react';
@@ -6,6 +7,7 @@ import toast from 'react-hot-toast';
 import BudgetModal from '../components/BudgetModal';
 
 const Budgets = () => {
+  const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ const Budgets = () => {
       const response = await api.get(`/budgets?month=${selectedMonth}&year=${selectedYear}`);
       setBudgets(response.data);
     } catch (error) {
-      toast.error('Failed to load budgets');
+      toast.error(t('budgets.failedToLoad'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -31,14 +33,14 @@ const Budgets = () => {
   }, [fetchBudgets]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this budget?')) return;
+    if (!window.confirm(t('budgets.deleteConfirm'))) return;
 
     try {
       await api.delete(`/budgets/${id}`);
-      toast.success('Budget deleted');
+      toast.success(t('budgets.budgetDeleted'));
       fetchBudgets();
     } catch (error) {
-      toast.error('Failed to delete budget');
+      toast.error(t('budgets.failedToDelete'));
       console.error(error);
     }
   };
@@ -75,10 +77,10 @@ const Budgets = () => {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h1 className="text-2xl sm:text-3xl font-bold">Budgets</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('budgets.title')}</h1>
         <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
           <Plus size={20} />
-          <span>Set Budget</span>
+          <span>{t('budgets.setBudget')}</span>
         </button>
       </div>
 
@@ -87,7 +89,7 @@ const Budgets = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Month
+              {t('budgets.month')}
             </label>
             <select
               value={selectedMonth}
@@ -103,7 +105,7 @@ const Budgets = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Year
+              {t('budgets.year')}
             </label>
             <select
               value={selectedYear}
@@ -122,18 +124,18 @@ const Budgets = () => {
       {/* Overall Progress */}
       {budgets.length > 0 && (
         <div className="card bg-gradient-to-r from-blue-50 to-purple-50">
-          <h2 className="text-lg font-bold mb-4">Overall Budget</h2>
+          <h2 className="text-lg font-bold mb-4">{t('budgets.overallBudget')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <div>
-              <p className="text-sm text-gray-600">Total Budget</p>
+              <p className="text-sm text-gray-600">{t('budgets.totalBudget')}</p>
               <p className="text-xl sm:text-2xl font-bold text-blue-600 break-all">{formatCurrency(totalBudget)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Total Spent</p>
+              <p className="text-sm text-gray-600">{t('budgets.totalSpent')}</p>
               <p className="text-xl sm:text-2xl font-bold text-purple-600 break-all">{formatCurrency(totalSpent)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Remaining</p>
+              <p className="text-sm text-gray-600">{t('budgets.remaining')}</p>
               <p className={`text-xl sm:text-2xl font-bold break-all ${totalBudget - totalSpent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {totalBudget - totalSpent >= 0 ? formatCurrency(totalBudget - totalSpent) : '-' + formatCurrency(Math.abs(totalBudget - totalSpent))}
               </p>
@@ -146,7 +148,7 @@ const Budgets = () => {
             ></div>
           </div>
           <p className="text-sm text-gray-600 mt-2 text-center">
-            {overallPercentage.toFixed(1)}% of total budget used
+            {overallPercentage.toFixed(1)}% {t('budgets.used')}
           </p>
         </div>
       )}
@@ -178,10 +180,10 @@ const Budgets = () => {
                       <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-base sm:text-lg truncate">{budget.category_name}</h3>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 mt-1">
-                          <span className="truncate">Budget: {formatCurrency(amount)}</span>
-                          <span className="truncate">Spent: {formatCurrency(spent)}</span>
+                          <span className="truncate">{t('budgets.totalBudget')}: {formatCurrency(amount)}</span>
+                          <span className="truncate">{t('budgets.totalSpent')}: {formatCurrency(spent)}</span>
                           <span className={`truncate ${remaining >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                            Remaining: {remaining >= 0 ? formatCurrency(remaining) : '-' + formatCurrency(Math.abs(remaining))}
+                            {t('budgets.remaining')}: {remaining >= 0 ? formatCurrency(remaining) : '-' + formatCurrency(Math.abs(remaining))}
                           </span>
                         </div>
                       </div>
@@ -206,15 +208,15 @@ const Budgets = () => {
                       ></div>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2 text-xs sm:text-sm">
-                      <span className="text-gray-600">{percentage.toFixed(1)}% used</span>
+                      <span className="text-gray-600">{percentage.toFixed(1)}% {t('budgets.used')}</span>
                       {percentage >= 100 && (
                         <span className="text-red-600 font-medium truncate">
-                          Over budget by {formatCurrency(spent - amount)}
+                          {t('budgets.overBudgetBy')} {formatCurrency(spent - amount)}
                         </span>
                       )}
                       {percentage >= 80 && percentage < 100 && (
                         <span className="text-yellow-600 font-medium">
-                          Approaching limit
+                          {t('budgets.approachingLimit')}
                         </span>
                       )}
                     </div>
@@ -225,9 +227,9 @@ const Budgets = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            <p className="mb-4">No budgets set for this month</p>
+            <p className="mb-4">{t('budgets.noBudgets')}</p>
             <button onClick={handleAdd} className="btn btn-primary">
-              Set Your First Budget
+              {t('budgets.setFirstBudget')}
             </button>
           </div>
         )}

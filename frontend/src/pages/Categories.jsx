@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import CategoryModal from '../components/CategoryModal';
 
 const Categories = () => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -21,7 +23,7 @@ const Categories = () => {
       const response = await api.get('/categories');
       setCategories(response.data);
     } catch (error) {
-      toast.error('Failed to load categories');
+      toast.error(t('categories.failedToLoad'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -29,14 +31,14 @@ const Categories = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure? This will affect related transactions.')) return;
+    if (!window.confirm(t('categories.deleteConfirm'))) return;
 
     try {
       await api.delete(`/categories/${id}`);
-      toast.success('Category deleted');
+      toast.success(t('categories.categoryDeleted'));
       fetchCategories();
     } catch (error) {
-      toast.error('Failed to delete category');
+      toast.error(t('categories.failedToDelete'));
       console.error(error);
     }
   };
@@ -67,25 +69,25 @@ const Categories = () => {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h1 className="text-2xl sm:text-3xl font-bold">Categories</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('categories.title')}</h1>
         <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
           <Plus size={20} />
-          <span>Add Category</span>
+          <span>{t('categories.addCategory')}</span>
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="card bg-blue-50 border-blue-200">
-          <p className="text-xs sm:text-sm text-gray-600">Total Categories</p>
+          <p className="text-xs sm:text-sm text-gray-600">{t('categories.totalCategories')}</p>
           <p className="text-2xl sm:text-3xl font-bold text-blue-600">{categories.length}</p>
         </div>
         <div className="card bg-green-50 border-green-200">
-          <p className="text-xs sm:text-sm text-gray-600">Income Categories</p>
+          <p className="text-xs sm:text-sm text-gray-600">{t('categories.incomeCategories')}</p>
           <p className="text-2xl sm:text-3xl font-bold text-green-600">{incomeCount}</p>
         </div>
         <div className="card bg-red-50 border-red-200">
-          <p className="text-xs sm:text-sm text-gray-600">Expense Categories</p>
+          <p className="text-xs sm:text-sm text-gray-600">{t('categories.expenseCategories')}</p>
           <p className="text-2xl sm:text-3xl font-bold text-red-600">{expenseCount}</p>
         </div>
       </div>
@@ -98,7 +100,7 @@ const Categories = () => {
             filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          All ({categories.length})
+          {t('categories.all')} ({categories.length})
         </button>
         <button
           onClick={() => setFilter('income')}
@@ -106,7 +108,7 @@ const Categories = () => {
             filter === 'income' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Income ({incomeCount})
+          {t('categories.income')} ({incomeCount})
         </button>
         <button
           onClick={() => setFilter('expense')}
@@ -114,7 +116,7 @@ const Categories = () => {
             filter === 'expense' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Expense ({expenseCount})
+          {t('categories.expense')} ({expenseCount})
         </button>
       </div>
 
@@ -175,10 +177,10 @@ const Categories = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            <p className="mb-4">No {filter !== 'all' ? filter : ''} categories found</p>
+            <p className="mb-4">{t('categories.noCategories')}</p>
             {filter === 'all' && (
               <button onClick={handleAdd} className="btn btn-primary">
-                Create Your First Category
+                {t('categories.addCategory')}
               </button>
             )}
           </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
@@ -11,6 +12,7 @@ const COLORS = [
 ];
 
 const CategoryModal = ({ category, onClose }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     type: 'expense',
@@ -37,15 +39,15 @@ const CategoryModal = ({ category, onClose }) => {
     try {
       if (category) {
         await api.put(`/categories/${category.id}`, formData);
-        toast.success('Category updated');
+        toast.success(t('categories.categoryUpdated'));
       } else {
         await api.post('/categories', formData);
-        toast.success('Category created');
+        toast.success(t('categories.categoryCreated'));
       }
 
       onClose();
     } catch (error) {
-      toast.error(category ? 'Failed to update category' : 'Failed to create category');
+      toast.error(category ? t('categories.failedToUpdate') : t('categories.failedToCreate'));
       console.error(error);
     } finally {
       setLoading(false);
@@ -61,7 +63,7 @@ const CategoryModal = ({ category, onClose }) => {
       <div className="bg-white rounded-lg max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h2 className="text-xl sm:text-2xl font-bold">
-            {category ? 'Edit Category' : 'Add New Category'}
+            {category ? t('categories.editCategory') : t('categories.addCategory')}
           </h2>
           <button 
             onClick={onClose} 
@@ -75,7 +77,7 @@ const CategoryModal = ({ category, onClose }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Name
+              {t('categories.name')}
             </label>
             <input
               type="text"
@@ -84,13 +86,13 @@ const CategoryModal = ({ category, onClose }) => {
               onChange={handleChange}
               className="input"
               required
-              placeholder="Category name"
+              placeholder={t('categories.categoryName')}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Type
+              {t('categories.type')}
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -103,7 +105,7 @@ const CategoryModal = ({ category, onClose }) => {
                 }`}
                 disabled={!!category}
               >
-                Income
+                {t('categories.income')}
               </button>
               <button
                 type="button"
@@ -115,17 +117,17 @@ const CategoryModal = ({ category, onClose }) => {
                 }`}
                 disabled={!!category}
               >
-                Expense
+                {t('categories.expense')}
               </button>
             </div>
             {category && (
-              <p className="text-xs text-gray-500 mt-1">Type cannot be changed</p>
+              <p className="text-xs text-gray-500 mt-1">{t('categories.typeCannotChange')}</p>
             )}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Color <span className="text-xs text-gray-500">(Choose your favorite)</span>
+              {t('categories.color')}
             </label>
             <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
               {COLORS.map((color) => (
@@ -152,14 +154,14 @@ const CategoryModal = ({ category, onClose }) => {
               onClick={onClose}
               className="btn btn-secondary flex-1"
             >
-              Cancel
+              {t('categories.cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="btn btn-primary flex-1"
             >
-              {loading ? 'Saving...' : (category ? 'Update' : 'Create')}
+              {loading ? t('categories.saving') : (category ? t('categories.update') : t('categories.create'))}
             </button>
           </div>
         </form>
