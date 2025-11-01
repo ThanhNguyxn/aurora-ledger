@@ -38,6 +38,13 @@ const BudgetModal = ({ month, year, onClose }) => {
     fetchCategories();
   }, []);
 
+  // Update currency when user changes it in sidebar
+  useEffect(() => {
+    if (userCurrency) {
+      setFormData(prev => ({ ...prev, currency: userCurrency }));
+    }
+  }, [userCurrency]);
+
   const fetchCategories = async () => {
     try {
       const response = await api.get('/categories?type=expense');
@@ -60,12 +67,15 @@ const BudgetModal = ({ month, year, onClose }) => {
         year: formData.year
       };
 
+      console.log('💰 Creating budget with data:', data);
+
       await api.post('/budgets', data);
       toast.success(t('budgets.budgetSet'));
       onClose();
     } catch (error) {
-      toast.error(t('budgets.failedToSet'));
-      console.error(error);
+      console.error('❌ Budget creation error:', error);
+      console.error('❌ Response:', error.response?.data);
+      toast.error(error.response?.data?.error || t('budgets.failedToSet'));
     } finally {
       setLoading(false);
     }
