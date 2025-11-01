@@ -7,12 +7,14 @@ const createTransporter = () => {
     console.log('📧 Using SendGrid for email delivery');
     return nodemailer.createTransport({
       host: 'smtp.sendgrid.net',
-      port: 587,
+      port: 2525, // Changed from 587 to 2525 to avoid firewall issues
       secure: false, // Use TLS
       auth: {
         user: 'apikey', // This is always 'apikey' for SendGrid
         pass: process.env.SENDGRID_API_KEY,
       },
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
     });
   }
 
