@@ -55,11 +55,21 @@ const Recurring = () => {
     e.preventDefault();
     
     try {
+      // Validate required fields
+      if (!formData.type || !formData.amount || !formData.frequency || !formData.start_date) {
+        toast.error('Please fill all required fields');
+        return;
+      }
+
       const submitData = {
-        ...formData,
+        type: formData.type,
         amount: parseFloat(formData.amount),
-        category_id: formData.category_id ? parseInt(formData.category_id) : null,
+        currency: formData.currency || 'USD',
+        frequency: formData.frequency,
+        start_date: formData.start_date,
         end_date: formData.end_date || null,
+        category_id: formData.category_id ? parseInt(formData.category_id) : null,
+        description: formData.description || '',
       };
 
       console.log('📤 Submitting recurring data:', submitData);
