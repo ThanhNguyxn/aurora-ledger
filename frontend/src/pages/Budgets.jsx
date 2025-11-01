@@ -5,7 +5,6 @@ import { useCurrency } from '../context/CurrencyContext';
 import { Plus, Trash2, TrendingDown, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BudgetModal from '../components/BudgetModal';
-import CurrencySelector from '../components/CurrencySelector';
 
 const Budgets = () => {
   const { t } = useTranslation();
@@ -98,10 +97,7 @@ const Budgets = () => {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl sm:text-3xl font-bold">{t('budgets.title')}</h1>
-          <CurrencySelector />
-        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('budgets.title')}</h1>
         <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
           <Plus size={20} />
           <span>{t('budgets.setBudget')}</span>
