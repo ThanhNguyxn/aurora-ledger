@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
-import { Repeat, Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Calendar, AlertCircle } from 'lucide-react';
+import { Repeat, Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Calendar, AlertCircle, X } from 'lucide-react';
 
 const Recurring = () => {
   const { t } = useTranslation();
@@ -65,10 +65,12 @@ const Recurring = () => {
       console.log('📤 Submitting recurring data:', submitData);
 
       if (editingRecurring) {
-        await api.put(`/recurring/${editingRecurring.id}`, submitData);
+        const response = await api.put(`/recurring/${editingRecurring.id}`, submitData);
+        console.log('✅ Update response:', response.data);
         toast.success(t('recurring.recurringUpdated'));
       } else {
-        await api.post('/recurring', submitData);
+        const response = await api.post('/recurring', submitData);
+        console.log('✅ Create response:', response.data);
         toast.success(t('recurring.recurringCreated'));
       }
 
@@ -76,11 +78,20 @@ const Recurring = () => {
       resetForm();
       fetchRecurring();
     } catch (error) {
-      console.error('❌ Recurring error:', error.response?.data);
+      console.error('❌ Recurring error FULL:', error);
+      console.error('❌ Response data:', error.response?.data);
+      console.error('❌ Status:', error.response?.status);
+      
       const errorMsg = error.response?.data?.errors 
-        ? error.response.data.errors.map(e => e.msg).join(', ')
+        ? error.response.data.errors.map(e => `${e.param}: ${e.msg}`).join(', ')
         : error.response?.data?.error || t('common.error');
+      
       toast.error(errorMsg);
+      
+      // Show detailed error in console
+      if (error.response?.data?.errors) {
+        console.table(error.response.data.errors);
+      }
     }
   };
 
@@ -310,48 +321,75 @@ const Recurring = () => {
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b dark:border-gray-700">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
                 {editingRecurring ? t('recurring.editRecurring') : t('recurring.addRecurring')}
               </h2>
+              <button 
+                onClick={() => setModalOpen(false)} 
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                title={t('common.close')}
+              >
+                <X size={20} className="text-gray-600 dark:text-gray-400" />
+              </button>
+            </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Type */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t('transactions.type')}
-                  </label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value, category_id: '' })}
-                    className="input"
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="p-6 space-y-5">
+              {/* Type - Toggle Buttons */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('transactions.type')}
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, type: 'income', category_id: '' })}
+                    className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                      formData.type === 'income'
+                        ? 'bg-green-600 text-white shadow-lg shadow-green-200 dark:shadow-green-900/50'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    }`}
                   >
-                    <option value="income">{t('transactions.income')}</option>
-                    <option value="expense">{t('transactions.expense')}</option>
-                  </select>
+                    💰 {t('transactions.income')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, type: 'expense', category_id: '' })}
+                    className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                      formData.type === 'expense'
+                        ? 'bg-red-600 text-white shadow-lg shadow-red-200 dark:shadow-red-900/50'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    }`}
+                  >
+                    💸 {t('transactions.expense')}
+                  </button>
                 </div>
+              </div>
 
-                {/* Amount */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              {/* Amount & Currency */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('transactions.amount')}
                   </label>
                   <input
                     type="number"
                     step="0.01"
+                    min="0.01"
+                    max="999999999999.99"
                     required
                     value={formData.amount}
                     onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                    className="input"
+                    className="input text-lg"
                     placeholder="0.00"
                   />
                 </div>
-
-                {/* Currency */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('transactions.transactionCurrency')}
                   </label>
                   <select
@@ -359,66 +397,75 @@ const Recurring = () => {
                     onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
                     className="input"
                   >
-                    <option value="USD">🇺🇸 USD - US Dollar</option>
-                    <option value="EUR">🇪🇺 EUR - Euro</option>
-                    <option value="VND">🇻🇳 VND - Vietnamese Dong</option>
-                    <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
-                    <option value="GBP">🇬🇧 GBP - British Pound</option>
-                    <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
-                    <option value="KRW">🇰🇷 KRW - Korean Won</option>
-                    <option value="THB">🇹🇭 THB - Thai Baht</option>
-                    <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
-                    <option value="MYR">🇲🇾 MYR - Malaysian Ringgit</option>
-                    <option value="IDR">🇮🇩 IDR - Indonesian Rupiah</option>
-                    <option value="PHP">🇵🇭 PHP - Philippine Peso</option>
-                    <option value="INR">🇮🇳 INR - Indian Rupee</option>
-                    <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
-                    <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
-                  </select>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {t('transactions.willConvert')}
-                  </p>
-                </div>
-
-                {/* Frequency */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t('recurring.frequency')}
-                  </label>
-                  <select
-                    value={formData.frequency}
-                    onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
-                    className="input"
-                  >
-                    <option value="daily">{t('recurring.daily')}</option>
-                    <option value="weekly">{t('recurring.weekly')}</option>
-                    <option value="monthly">{t('recurring.monthly')}</option>
-                    <option value="yearly">{t('recurring.yearly')}</option>
+                    <option value="USD">$ USD</option>
+                    <option value="EUR">€ EUR</option>
+                    <option value="VND">₫ VND</option>
+                    <option value="JPY">¥ JPY</option>
+                    <option value="GBP">£ GBP</option>
+                    <option value="CNY">¥ CNY</option>
+                    <option value="KRW">₩ KRW</option>
+                    <option value="THB">฿ THB</option>
+                    <option value="SGD">S$ SGD</option>
+                    <option value="MYR">RM MYR</option>
+                    <option value="IDR">Rp IDR</option>
+                    <option value="PHP">₱ PHP</option>
+                    <option value="INR">₹ INR</option>
+                    <option value="AUD">A$ AUD</option>
+                    <option value="CAD">C$ CAD</option>
                   </select>
                 </div>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 -mt-2">
+                {t('transactions.maxAmount')} • {t('transactions.willConvert')}
+              </p>
 
-                {/* Category */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t('transactions.category')}
-                  </label>
-                  <select
-                    value={formData.category_id}
-                    onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                    className="input"
-                  >
-                    <option value="">{t('transactions.uncategorized')}</option>
-                    {filteredCategories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
+              {/* Frequency */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('recurring.frequency')}
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {['daily', 'weekly', 'monthly', 'yearly'].map((freq) => (
+                    <button
+                      key={freq}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, frequency: freq })}
+                      className={`py-2 px-3 rounded-xl text-sm font-medium transition-all ${
+                        formData.frequency === freq
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 dark:shadow-blue-900/50'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      }`}
+                    >
+                      {freq === 'daily' && '📅'} {freq === 'weekly' && '📆'} {freq === 'monthly' && '📊'} {freq === 'yearly' && '🗓️'}
+                      <div className="text-xs mt-0.5">{t(`recurring.${freq}`)}</div>
+                    </button>
+                  ))}
                 </div>
+              </div>
 
-                {/* Start Date */}
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('transactions.category')}
+                </label>
+                <select
+                  value={formData.category_id}
+                  onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                  className="input"
+                >
+                  <option value="">{t('transactions.uncategorized')}</option>
+                  {filteredCategories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.icon} {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Dates */}
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('recurring.startDate')}
                   </label>
                   <input
@@ -429,10 +476,8 @@ const Recurring = () => {
                     className="input"
                   />
                 </div>
-
-                {/* End Date */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('recurring.endDate')}
                   </label>
                   <input
@@ -442,36 +487,39 @@ const Recurring = () => {
                     className="input"
                   />
                 </div>
+              </div>
 
-                {/* Description */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t('transactions.description')} ({t('transactions.optional')})
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="input"
-                    rows="3"
-                    placeholder={t('transactions.addNote')}
-                  ></textarea>
-                </div>
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('transactions.description')} <span className="text-gray-400">({t('transactions.optional')})</span>
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="input resize-none"
+                  rows="3"
+                  placeholder={t('transactions.addNote')}
+                ></textarea>
+              </div>
 
-                {/* Buttons */}
-                <div className="flex gap-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setModalOpen(false)}
-                    className="btn-secondary flex-1"
-                  >
-                    {t('common.cancel')}
-                  </button>
-                  <button type="submit" className="btn-primary flex-1">
-                    {editingRecurring ? t('common.save') : t('transactions.create')}
-                  </button>
-                </div>
-              </form>
-            </div>
+              {/* Buttons */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="btn btn-secondary flex-1 py-3"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn btn-primary flex-1 py-3"
+                >
+                  {editingRecurring ? t('common.save') : t('transactions.create')}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
