@@ -328,6 +328,37 @@ const Recurring = () => {
                   />
                 </div>
 
+                {/* Currency */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {t('transactions.transactionCurrency')}
+                  </label>
+                  <select
+                    value={formData.currency}
+                    onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+                    className="input"
+                  >
+                    <option value="USD">🇺🇸 USD - US Dollar</option>
+                    <option value="EUR">🇪🇺 EUR - Euro</option>
+                    <option value="VND">🇻🇳 VND - Vietnamese Dong</option>
+                    <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                    <option value="GBP">🇬🇧 GBP - British Pound</option>
+                    <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
+                    <option value="KRW">🇰🇷 KRW - Korean Won</option>
+                    <option value="THB">🇹🇭 THB - Thai Baht</option>
+                    <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                    <option value="MYR">🇲🇾 MYR - Malaysian Ringgit</option>
+                    <option value="IDR">🇮🇩 IDR - Indonesian Rupiah</option>
+                    <option value="PHP">🇵🇭 PHP - Philippine Peso</option>
+                    <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                    <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                    <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                  </select>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {t('transactions.willConvert')}
+                  </p>
+                </div>
+
                 {/* Frequency */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
