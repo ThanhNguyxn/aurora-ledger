@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { CurrencyProvider } from './context/CurrencyContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -45,11 +46,12 @@ function PublicRoute({ children }) {
 
 function App() {
   return (
-    <AuthProvider>
-      <CurrencyProvider>
-        <Router>
-          <Toaster position="top-right" />
-          <Routes>
+    <ThemeProvider>
+      <AuthProvider>
+        <CurrencyProvider>
+          <Router>
+            <Toaster position="top-right" />
+            <Routes>
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
             <Route path="/auth/callback" element={<AuthCallback />} />
@@ -68,6 +70,7 @@ function App() {
         </Router>
       </CurrencyProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
 

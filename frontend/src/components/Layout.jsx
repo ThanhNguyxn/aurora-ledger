@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import CurrencySelector from './CurrencySelector';
 import LanguageSelector from './LanguageSelector';
+import ThemeToggle from './ThemeToggle';
 import { 
   LayoutDashboard, 
   ArrowLeftRight, 
@@ -29,9 +30,9 @@ const Layout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Mobile Header */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b z-30 px-4 py-3">
+      <header className="lg:hidden fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 border-b dark:border-gray-700 z-30 px-4 py-3">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             {t('app.name')}
@@ -47,7 +48,7 @@ const Layout = () => {
 
       {/* Sidebar - Desktop & Mobile */}
       <aside className={`
-        fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-20 transition-transform duration-300
+        fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-20 transition-all duration-300
         lg:translate-x-0
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
