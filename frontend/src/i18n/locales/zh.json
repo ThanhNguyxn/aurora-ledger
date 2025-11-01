@@ -152,7 +152,12 @@
     "cancel": "取消",
     "overBudgetBy": "超出预算",
     "approachingLimit": "接近限额",
-    "maxAmount": "最大：999,999,999,999.99"
+    "maxAmount": "最大：999,999,999,999.99",
+    "currencyInfo": "选择此预算的货币",
+    "inputCurrencyNote": "选择输入货币（将自动转换为您的显示货币）",
+    "conversionNote": "示例",
+    "conversionExample": "如果您输入 10 美元，而您的显示货币是人民币，它将保存为 ~70 人民币（基于当前汇率）",
+    "conversionExplanation": "您的预算将以所选货币保存，并在查看时自动转换为您的显示货币。"
   },
   "reports": {
     "title": "报告与分析",

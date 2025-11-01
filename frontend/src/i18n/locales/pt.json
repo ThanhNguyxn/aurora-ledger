@@ -152,7 +152,12 @@
     "cancel": "Cancelar",
     "overBudgetBy": "Acima do orçamento em",
     "approachingLimit": "Aproximando do limite",
-    "maxAmount": "Máximo: 999.999.999.999,99"
+    "maxAmount": "Máximo: 999.999.999.999,99",
+    "currencyInfo": "Escolha a moeda para este orçamento",
+    "inputCurrencyNote": "Selecione a moeda de entrada (será convertida automaticamente para sua moeda de exibição)",
+    "conversionNote": "Exemplo",
+    "conversionExample": "Se você inserir 10 USD e sua moeda de exibição for BRL, será salvo como ~50 BRL (com base na taxa de câmbio atual)",
+    "conversionExplanation": "Seu orçamento será salvo na moeda selecionada e automaticamente convertido para sua moeda de exibição ao visualizar."
   },
   "reports": {
     "title": "Relatórios e Análises",

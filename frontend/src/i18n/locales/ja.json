@@ -152,7 +152,12 @@
     "cancel": "キャンセル",
     "overBudgetBy": "予算超過",
     "approachingLimit": "制限に近づいています",
-    "maxAmount": "最大：999,999,999,999.99"
+    "maxAmount": "最大：999,999,999,999.99",
+    "currencyInfo": "この予算の通貨を選択してください",
+    "inputCurrencyNote": "入力通貨を選択（表示通貨に自動変換されます）",
+    "conversionNote": "例",
+    "conversionExample": "10 USDを入力し、表示通貨がJPYの場合、現在の為替レートに基づいて約1,485円として保存されます",
+    "conversionExplanation": "予算は選択した通貨で保存され、表示時に表示通貨に自動的に変換されます。"
   },
   "reports": {
     "title": "レポートと分析",

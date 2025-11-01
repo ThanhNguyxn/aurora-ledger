@@ -148,7 +148,12 @@
     "cancel": "Cancel",
     "overBudgetBy": "Over budget by",
     "approachingLimit": "Approaching limit",
-    "maxAmount": "Maximum: 999,999,999,999.99"
+    "maxAmount": "Maximum: 999,999,999,999.99",
+    "currencyInfo": "Choose the currency for this budget",
+    "inputCurrencyNote": "Select currency for input (will auto-convert to your display currency)",
+    "conversionNote": "Example",
+    "conversionExample": "If you enter 10 USD and your display currency is VND, it will be saved as ~260,000 VND (based on current exchange rate)",
+    "conversionExplanation": "Your budget will be saved in the selected currency and automatically converted to your display currency when viewing."
   },
   "reports": {
     "title": "Reports & Analytics",

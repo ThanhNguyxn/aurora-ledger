@@ -152,7 +152,12 @@
     "cancel": "취소",
     "overBudgetBy": "예산 초과",
     "approachingLimit": "한도에 근접",
-    "maxAmount": "최대: 999,999,999,999.99"
+    "maxAmount": "최대: 999,999,999,999.99",
+    "currencyInfo": "이 예산의 통화 선택",
+    "inputCurrencyNote": "입력 통화 선택 (표시 통화로 자동 변환됩니다)",
+    "conversionNote": "예시",
+    "conversionExample": "10 USD를 입력하고 표시 통화가 KRW인 경우 현재 환율을 기준으로 약 13,000원으로 저장됩니다",
+    "conversionExplanation": "예산은 선택한 통화로 저장되며 조회 시 표시 통화로 자동 변환됩니다."
   },
   "reports": {
     "title": "보고서 및 분석",

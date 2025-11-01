@@ -96,25 +96,26 @@ const Budgets = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h1 className="text-2xl sm:text-3xl font-bold">{t('budgets.title')}</h1>
-        <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
-          <Plus size={20} />
-          <span>{t('budgets.setBudget')}</span>
-        </button>
-      </div>
-
-      {/* Month/Year Selector */}
+      {/* Header with Month/Year Selector */}
       <div className="card">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold dark:text-gray-100">{t('budgets.title')}</h1>
+          <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
+            <Plus size={20} />
+            <span>{t('budgets.setBudget')}</span>
+          </button>
+        </div>
+        
+        {/* Month/Year Selector - Inline */}
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
               {t('budgets.month')}
             </label>
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-              className="input"
+              className="input text-sm"
             >
               {Array.from({ length: 12 }, (_, i) => (
                 <option key={i + 1} value={i + 1}>
@@ -124,13 +125,13 @@ const Budgets = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
               {t('budgets.year')}
             </label>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-              className="input"
+              className="input text-sm"
             >
               {Array.from({ length: 5 }, (_, i) => {
                 const year = new Date().getFullYear() - 2 + i;

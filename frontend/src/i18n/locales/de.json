@@ -152,7 +152,12 @@
     "cancel": "Abbrechen",
     "overBudgetBy": "Über Budget um",
     "approachingLimit": "Grenze wird erreicht",
-    "maxAmount": "Maximum: 999.999.999.999,99"
+    "maxAmount": "Maximum: 999.999.999.999,99",
+    "currencyInfo": "Wählen Sie die Währung für dieses Budget",
+    "inputCurrencyNote": "Wählen Sie die Eingabewährung (wird automatisch in Ihre Anzeigewährung umgerechnet)",
+    "conversionNote": "Beispiel",
+    "conversionExample": "Wenn Sie 10 USD eingeben und Ihre Anzeigewährung EUR ist, wird es als ~9,20 EUR gespeichert (basierend auf dem aktuellen Wechselkurs)",
+    "conversionExplanation": "Ihr Budget wird in der ausgewählten Währung gespeichert und bei der Anzeige automatisch in Ihre Anzeigewährung umgerechnet."
   },
   "reports": {
     "title": "Berichte und Analysen",

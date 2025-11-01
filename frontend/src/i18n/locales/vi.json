@@ -150,7 +150,12 @@
     "cancel": "Hủy",
     "overBudgetBy": "Vượt ngân sách",
     "approachingLimit": "Sắp đạt giới hạn",
-    "maxAmount": "Tối đa: 999,999,999,999.99"
+    "maxAmount": "Tối đa: 999,999,999,999.99",
+    "currencyInfo": "Chọn đơn vị tiền tệ cho ngân sách này",
+    "inputCurrencyNote": "Chọn đơn vị tiền tệ để nhập (sẽ tự động quy đổi sang đơn vị hiển thị)",
+    "conversionNote": "Ví dụ",
+    "conversionExample": "Nếu bạn nhập 10 USD và đơn vị hiển thị là VND, nó sẽ được lưu dưới dạng ~260.000 VND (dựa trên tỷ giá hiện tại)",
+    "conversionExplanation": "Ngân sách của bạn sẽ được lưu bằng đơn vị tiền tệ đã chọn và tự động quy đổi sang đơn vị hiển thị khi xem."
   },
   "reports": {
     "title": "Báo cáo & Phân tích",

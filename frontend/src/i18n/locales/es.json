@@ -150,7 +150,12 @@
     "cancel": "Cancelar",
     "overBudgetBy": "Sobre presupuesto por",
     "approachingLimit": "Acercándose al límite",
-    "maxAmount": "Máximo: 999,999,999,999.99"
+    "maxAmount": "Máximo: 999,999,999,999.99",
+    "currencyInfo": "Elige la moneda para este presupuesto",
+    "inputCurrencyNote": "Seleccione la moneda de entrada (se convertirá automáticamente a su moneda de visualización)",
+    "conversionNote": "Ejemplo",
+    "conversionExample": "Si ingresa 10 USD y su moneda de visualización es EUR, se guardará como ~9,20 EUR (según el tipo de cambio actual)",
+    "conversionExplanation": "Su presupuesto se guardará en la moneda seleccionada y se convertirá automáticamente a su moneda de visualización al verlo."
   },
   "reports": {
     "title": "Informes y Análisis",

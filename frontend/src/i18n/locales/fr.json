@@ -152,7 +152,12 @@
     "cancel": "Annuler",
     "overBudgetBy": "Dépassement de",
     "approachingLimit": "Approche de la limite",
-    "maxAmount": "Maximum : 999 999 999 999,99"
+    "maxAmount": "Maximum : 999 999 999 999,99",
+    "currencyInfo": "Choisissez la devise pour ce budget",
+    "inputCurrencyNote": "Sélectionnez la devise de saisie (sera automatiquement convertie dans votre devise d'affichage)",
+    "conversionNote": "Exemple",
+    "conversionExample": "Si vous saisissez 10 USD et que votre devise d'affichage est EUR, il sera enregistré comme ~9,20 EUR (selon le taux de change actuel)",
+    "conversionExplanation": "Votre budget sera enregistré dans la devise sélectionnée et automatiquement converti dans votre devise d'affichage lors de la consultation."
   },
   "reports": {
     "title": "Rapports et Analyses",
