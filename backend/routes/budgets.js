@@ -46,7 +46,8 @@ router.post('/',
     body('category_id').isInt(),
     body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
     body('month').isInt({ min: 1, max: 12 }),
-    body('year').isInt({ min: 2000 })
+    body('year').isInt({ min: 2000 }),
+    body('currency').optional().isString().isLength({ min: 3, max: 3 })
   ],
   async (req, res) => {
     try {
@@ -55,7 +56,7 @@ router.post('/',
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { category_id, amount, month, year } = req.body;
+      const { category_id, amount, month, year, currency = 'USD' } = req.body;
 
       // Verify category belongs to user and is expense type
       const catResult = await pool.query(
@@ -72,12 +73,12 @@ router.post('/',
       }
 
       const result = await pool.query(
-        `INSERT INTO budgets (user_id, category_id, amount, month, year)
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO budgets (user_id, category_id, amount, month, year, currency)
+         VALUES ($1, $2, $3, $4, $5, $6)
          ON CONFLICT (user_id, category_id, month, year)
-         DO UPDATE SET amount = $3, updated_at = CURRENT_TIMESTAMP
+         DO UPDATE SET amount = $3, currency = $6, updated_at = CURRENT_TIMESTAMP
          RETURNING *`,
-        [req.user.id, category_id, amount, month, year]
+        [req.user.id, category_id, amount, month, year, currency]
       );
 
       res.status(201).json(result.rows[0]);
