@@ -140,10 +140,10 @@ router.put('/users/:id/role',
   }
 );
 
-// Reset user password (admin only)
+// Reset user password (admin and mod can reset)
 router.post('/users/:id/reset-password',
   authenticateToken,
-  isAdmin,
+  isMod,
   [body('newPassword').isLength({ min: 6 })],
   async (req, res) => {
     try {

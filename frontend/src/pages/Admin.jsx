@@ -270,8 +270,8 @@ const Admin = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        {/* Only Admin can reset password */}
-                        {user?.role === 'admin' && (
+                        {/* Mod and Admin can reset password */}
+                        {(user?.role === 'admin' || user?.role === 'mod') && (
                           <button
                             onClick={() => {
                               setSelectedUser(u);
