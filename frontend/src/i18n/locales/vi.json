@@ -184,6 +184,32 @@
     "success": "Thành công",
     "warning": "Cảnh báo",
     "info": "Thông tin"
+  },
+  "recurring": {
+    "title": "Giao dịch định kỳ",
+    "addRecurring": "Thêm định kỳ",
+    "editRecurring": "Sửa định kỳ",
+    "makeRecurring": "Tạo định kỳ",
+    "frequency": "Tần suất",
+    "daily": "Hàng ngày",
+    "weekly": "Hàng tuần",
+    "monthly": "Hàng tháng",
+    "yearly": "Hàng năm",
+    "startDate": "Ngày bắt đầu",
+    "endDate": "Ngày kết thúc (Tùy chọn)",
+    "nextOccurrence": "Lần tiếp theo",
+    "active": "Đang hoạt động",
+    "inactive": "Tạm dừng",
+    "noEndDate": "Không có ngày kết thúc",
+    "recurringCreated": "Đã tạo giao dịch định kỳ",
+    "recurringUpdated": "Đã cập nhật giao dịch định kỳ",
+    "recurringDeleted": "Đã xóa giao dịch định kỳ",
+    "willCreateOn": "Sẽ tạo giao dịch vào",
+    "every": "Mỗi",
+    "day": "ngày",
+    "week": "tuần",
+    "month": "tháng",
+    "year": "năm"
   }
 }
 

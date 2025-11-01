@@ -21,6 +21,12 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
   const [categories, setCategories] = useState(initialCategories);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [quickAddName, setQuickAddName] = useState('');
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [recurringData, setRecurringData] = useState({
+    frequency: 'monthly',
+    startDate: format(new Date(), 'yyyy-MM-dd'),
+    endDate: ''
+  });
 
   useEffect(() => {
     if (transaction) {
@@ -302,6 +308,59 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
               rows="3"
               placeholder={t('transactions.addNote')}
             ></textarea>
+          </div>
+
+          {/* Recurring Options */}
+          <div className="border-t dark:border-gray-700 pt-4">
+            <div className="flex items-center justify-between mb-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isRecurring}
+                  onChange={(e) => setIsRecurring(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  🔄 {t('recurring.makeRecurring')}
+                </span>
+              </label>
+            </div>
+
+            {isRecurring && (
+              <div className="space-y-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {t('recurring.frequency')}
+                    </label>
+                    <select
+                      value={recurringData.frequency}
+                      onChange={(e) => setRecurringData({...recurringData, frequency: e.target.value})}
+                      className="input text-sm"
+                    >
+                      <option value="daily">{t('recurring.daily')}</option>
+                      <option value="weekly">{t('recurring.weekly')}</option>
+                      <option value="monthly">{t('recurring.monthly')}</option>
+                      <option value="yearly">{t('recurring.yearly')}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {t('recurring.startDate')}
+                    </label>
+                    <input
+                      type="date"
+                      value={recurringData.startDate}
+                      onChange={(e) => setRecurringData({...recurringData, startDate: e.target.value})}
+                      className="input text-sm"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  💡 {t('recurring.willCreateOn')} {recurringData.frequency === 'monthly' ? t('recurring.month') : recurringData.frequency === 'weekly' ? t('recurring.week') : recurringData.frequency === 'yearly' ? t('recurring.year') : t('recurring.day')}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="flex gap-3 pt-4">

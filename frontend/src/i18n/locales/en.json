@@ -182,6 +182,32 @@
     "success": "Success",
     "warning": "Warning",
     "info": "Info"
+  },
+  "recurring": {
+    "title": "Recurring Transactions",
+    "addRecurring": "Add Recurring",
+    "editRecurring": "Edit Recurring",
+    "makeRecurring": "Make Recurring",
+    "frequency": "Frequency",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "startDate": "Start Date",
+    "endDate": "End Date (Optional)",
+    "nextOccurrence": "Next Occurrence",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noEndDate": "No end date",
+    "recurringCreated": "Recurring transaction created",
+    "recurringUpdated": "Recurring transaction updated",
+    "recurringDeleted": "Recurring transaction deleted",
+    "willCreateOn": "Will create transaction on",
+    "every": "Every",
+    "day": "day",
+    "week": "week",
+    "month": "month",
+    "year": "year"
   }
 }
 
