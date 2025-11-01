@@ -17,7 +17,7 @@ import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
-  const { formatCurrency, currency } = useCurrency();
+  const { formatCurrency, formatAmount, currency } = useCurrency();
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -271,7 +271,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <p className={`font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
-                    {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                    {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, transaction.currency)}
                   </p>
                 </div>
               ))

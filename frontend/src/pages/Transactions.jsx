@@ -10,7 +10,7 @@ import TransactionModal from '../components/TransactionModal';
 
 const Transactions = () => {
   const { t, i18n } = useTranslation();
-  const { formatCurrency } = useCurrency();
+  const { formatAmount } = useCurrency();
   
   const getDateLocale = () => {
     const locales = { en: enUS, vi: vi, es: es, fr: fr, de: de, zh: zhCN, ja: ja, ko: ko, pt: pt, ru: ru };
@@ -242,7 +242,7 @@ const Transactions = () => {
                           transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                         }`}
                       >
-                        {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                        {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, transaction.currency)}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">

@@ -140,12 +140,19 @@ export function CurrencyProvider({ children }) {
     return `${symbol}${formattedAmount}`;
   };
 
+  // Convert and format amount to user's display currency
+  const formatAmount = (amount, fromCurrency = 'USD') => {
+    const convertedAmount = convertAmount(amount, fromCurrency);
+    return formatCurrency(convertedAmount, currency);
+  };
+
   const value = {
     currency,
     setCurrency: updateCurrency,
     exchangeRates,
     convertAmount,
     formatCurrency,
+    formatAmount,
     loading
   };
 
