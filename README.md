@@ -9,83 +9,63 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![Live Demo](https://img.shields.io/badge/Demo-Online-blue.svg)](https://aurora-ledger.vercel.app)
 
-[🚀 Live Demo](https://aurora-ledger.vercel.app) • [📖 Documentation](#-features) • [🤝 Contributing](#-contributing)
-
 </div>
 
 ---
 
 ## 💡 About
 
-**Aurora Ledger** is a modern, feature-rich personal finance management application that helps you take complete control of your financial life. Built with cutting-edge web technologies, it offers an intuitive interface for tracking expenses, managing budgets, and analyzing your financial health.
+**Aurora Ledger** helps you take control of your personal finances with an intuitive, modern interface.
 
-### ✨ Why Aurora Ledger?
+### Key Features
 
-- 🎯 **Easy to Use** - Clean, intuitive interface designed for everyone
-- 🔒 **Privacy First** - Your financial data stays secure and private
-- 🌐 **Global Support** - 29+ currencies with real-time exchange rates
-- 📊 **Powerful Analytics** - Visualize spending patterns and trends
-- 💯 **100% Free** - Open source and deployed on free-tier services
-- 📱 **Fully Responsive** - Perfect experience on desktop, tablet, and mobile
-
----
-
-## 📊 Features
-
-### 💰 Transaction Management
-- ✅ **Income & Expense Tracking** - Record all your financial activities
-- 🏷️ **Smart Categorization** - Organize with custom categories and colors
-- � **Detailed Notes** - Add descriptions and context to every transaction
-- 🔍 **Advanced Filters** - Search by date, type, category, and amount
-- ✏️ **Quick Edit** - Modify or delete transactions anytime
-
-### 📈 Budget Management
-- 🎯 **Monthly Budgets** - Set spending limits per category
-- 📊 **Visual Progress** - Beautiful progress bars and indicators
-- ⚡ **Auto Tracking** - Spending calculated automatically
-- 🔔 **Smart Alerts** - Warnings at 80% and 100% thresholds
-- 🗓️ **Flexible Views** - Monthly and yearly budget planning
-- � **Multi-Currency Input** - Create budgets in any currency
-
-### 📉 Financial Reports
-- 📊 **Income vs Expense** - Track your financial health over time
-- 🥧 **Category Breakdown** - See where your money goes (pie charts)
-- 📊 **Monthly Comparison** - Bar charts for trend analysis
-- 📈 **6-Month Trends** - Identify patterns in your spending
-- 💾 **Export Data** - Download reports as CSV
-
-### 🌍 Multi-Currency Support
-- 💱 **29+ Currencies** - Support for all major global currencies
-- 🔄 **Real-Time Rates** - Automatic exchange rate updates
-- 🎯 **Smart Conversion** - Accurate cross-currency calculations
-- 💰 **Format Aware** - Currency symbols and decimal places
-- ⚡ **24h Caching** - Fast performance with rate caching
-
-### 🔐 Security & Authentication
-- 🔒 **Bcrypt Encryption** - Military-grade password hashing
-- 🎫 **JWT Tokens** - Secure stateless authentication (7-day expiry)
-- 🛡️ **SQL Protection** - Parameterized queries prevent injection
-- 🔐 **HTTPS Only** - All data encrypted in transit
-- 👤 **Data Privacy** - Complete isolation between user accounts
-- 🌐 **CORS Security** - Restricted API access
+- 📊 **Transaction Tracking** - Income & expense management with categories
+- 💰 **Budget Management** - Monthly budgets with automatic tracking
+- 📈 **Financial Reports** - Interactive charts and analytics
+- 🌍 **Multi-Currency** - 29+ currencies with real-time exchange rates
+- 🔐 **Secure & Private** - Encrypted data, JWT authentication
+- 🎨 **Beautiful UI** - Responsive design for all devices
 
 ---
 
 ## 🌍 Supported Currencies
 
-**29 major world currencies** with real-time exchange rates updated daily:
+**29 major currencies** with real-time exchange rates:
 
 ### 🌎 Americas
-`USD` US Dollar • `CAD` Canadian Dollar • `BRL` Brazilian Real • `MXN` Mexican Peso
+USD (US Dollar) • CAD (Canadian Dollar) • BRL (Brazilian Real) • MXN (Mexican Peso)
 
 ### 🌍 Europe
-`EUR` Euro • `GBP` British Pound • `CHF` Swiss Franc • `SEK` Swedish Krona • `NOK` Norwegian Krone • `DKK` Danish Krone • `PLN` Polish Zloty • `RUB` Russian Ruble • `TRY` Turkish Lira
+EUR (Euro) • GBP (British Pound) • CHF (Swiss Franc) • SEK (Swedish Krona) • NOK (Norwegian Krone) • DKK (Danish Krone) • PLN (Polish Zloty) • RUB (Russian Ruble) • TRY (Turkish Lira)
 
 ### 🌏 Asia-Pacific
-`VND` Vietnamese Dong • `JPY` Japanese Yen • `CNY` Chinese Yuan • `KRW` Korean Won • `THB` Thai Baht • `SGD` Singapore Dollar • `MYR` Malaysian Ringgit • `IDR` Indonesian Rupiah • `PHP` Philippine Peso • `INR` Indian Rupee • `HKD` Hong Kong Dollar • `AUD` Australian Dollar • `NZD` New Zealand Dollar
+VND (Vietnamese Dong) • JPY (Japanese Yen) • CNY (Chinese Yuan) • KRW (Korean Won) • THB (Thai Baht) • SGD (Singapore Dollar) • MYR (Malaysian Ringgit) • IDR (Indonesian Rupiah) • PHP (Philippine Peso) • INR (Indian Rupee) • HKD (Hong Kong Dollar) • AUD (Australian Dollar) • NZD (New Zealand Dollar)
 
 ### 🌍 Middle East & Africa
-`AED` UAE Dirham • `SAR` Saudi Riyal • `ZAR` South African Rand
+AED (UAE Dirham) • SAR (Saudi Riyal) • ZAR (South African Rand)
+
+---
+
+## 🛠️ Built With
+
+### Frontend
+- [React](https://reactjs.org/) - UI library
+- [Vite](https://vitejs.dev/) - Build tool
+- [Tailwind CSS](https://tailwindcss.com/) - Styling framework
+- [Recharts](https://recharts.org/) - Charts and data visualization
+- [React Router](https://reactrouter.com/) - Client-side routing
+- [Axios](https://axios-http.com/) - HTTP client
+
+### Backend
+- [Node.js](https://nodejs.org/) - JavaScript runtime
+- [Express](https://expressjs.com/) - Web framework
+- [PostgreSQL](https://www.postgresql.org/) - Relational database
+- [JWT](https://jwt.io/) - Secure authentication
+- [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Password hashing
+- [Passport.js](https://www.passportjs.org/) - OAuth authentication
+
+### APIs & Services
+- [ExchangeRate API](https://www.exchangerate-api.com/) - Real-time currency conversion
 
 ---
 
@@ -169,43 +149,35 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 
 ---
 
-## � Quick Start
+## 📊 Features
 
-### Prerequisites
-- Node.js 16+ and npm
-- PostgreSQL database
-- ExchangeRate-API key (free tier)
+### Transaction Management
+✅ Add income and expense transactions  
+✅ Categorize with custom categories  
+✅ Add notes and descriptions  
+✅ Search and filter by date, type, category  
+✅ Edit and delete transactions  
 
-### Installation
+### Budget Tracking
+✅ Set monthly budgets per category  
+✅ Visual progress indicators  
+✅ Automatic spending calculations  
+✅ Budget alerts at 80% and 100%  
+✅ Monthly and yearly views  
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/ThanhNguyxn/aurora-ledger.git
-   cd aurora-ledger
-   ```
+### Financial Reports
+✅ Income vs Expense trends  
+✅ Spending by category (pie charts)  
+✅ Monthly comparison (bar charts)  
+✅ 6-month trend analysis  
+✅ Export data to CSV  
 
-2. **Setup Backend**
-   ```bash
-   cd backend
-   npm install
-   cp env.example .env
-   # Edit .env with your database credentials
-   npm run migrate
-   npm start
-   ```
-
-3. **Setup Frontend**
-   ```bash
-   cd frontend
-   npm install
-   cp env.example .env
-   # Edit .env with your backend URL
-   npm run dev
-   ```
-
-4. **Access the app**
-   - Frontend: `http://localhost:5173`
-   - Backend: `http://localhost:5000`
+### Multi-Currency
+✅ Choose from 29 currencies  
+✅ Real-time exchange rates  
+✅ Automatic conversion  
+✅ Currency-specific formatting  
+✅ 24-hour rate caching  
 
 ---
 
@@ -220,53 +192,6 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 
 ---
 
-## 🛠️ Built With
-
-### Frontend Technologies
-- **[React 18](https://reactjs.org/)** - Modern UI library with hooks
-- **[Vite](https://vitejs.dev/)** - Lightning-fast build tool and dev server
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[Recharts](https://recharts.org/)** - Composable charting library
-- **[React Router](https://reactrouter.com/)** - Declarative routing for React
-- **[Axios](https://axios-http.com/)** - Promise-based HTTP client
-- **[React i18next](https://react.i18next.com/)** - Internationalization framework
-
-### Backend Technologies
-- **[Node.js](https://nodejs.org/)** - JavaScript runtime environment
-- **[Express](https://expressjs.com/)** - Fast, minimalist web framework
-- **[PostgreSQL](https://www.postgresql.org/)** - Powerful relational database
-- **[JWT](https://jwt.io/)** - JSON Web Token authentication
-- **[Bcrypt](https://github.com/kelektiv/node.bcrypt.js)** - Password hashing library
-- **[Passport.js](https://www.passportjs.org/)** - Authentication middleware
-- **[Node-cron](https://github.com/node-cron/node-cron)** - Task scheduler
-
-### External APIs & Services
-- **[ExchangeRate-API](https://www.exchangerate-api.com/)** - Real-time currency conversion (1,500 requests/month free)
-- **[Vercel](https://vercel.com/)** - Frontend hosting with global CDN
-- **[Render](https://render.com/)** - Backend hosting with auto-deploy
-- **[Neon](https://neon.tech/)** - Serverless PostgreSQL database
-
----
-
-## 📸 Screenshots
-
-<div align="center">
-
-### 📊 Dashboard
-![Dashboard](https://via.placeholder.com/800x400/1e293b/ffffff?text=Dashboard+View)
-
-### 💰 Transaction Management  
-![Transactions](https://via.placeholder.com/800x400/1e293b/ffffff?text=Transaction+Management)
-
-### 📈 Budget Tracking
-![Budgets](https://via.placeholder.com/800x400/1e293b/ffffff?text=Budget+Tracking)
-
-### 📉 Financial Reports
-![Reports](https://via.placeholder.com/800x400/1e293b/ffffff?text=Financial+Reports)
-
-</div>
-
----
 
 ## 🤝 Contributing
 
@@ -312,3 +237,4 @@ Built with amazing open-source technologies:
 ⭐ Star this repo if you find it useful!
 
 </div>
+#
