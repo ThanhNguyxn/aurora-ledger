@@ -7,6 +7,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "transactions": "Transactions",
+    "recurring": "Recurring",
     "categories": "Categories",
     "budgets": "Budgets",
     "reports": "Reports",

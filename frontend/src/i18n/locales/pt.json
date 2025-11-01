@@ -7,6 +7,7 @@
   "nav": {
     "dashboard": "Painel",
     "transactions": "Transações",
+    "recurring": "Recorrentes",
     "categories": "Categorias",
     "budgets": "Orçamentos",
     "reports": "Relatórios",
@@ -186,5 +187,31 @@
     "success": "Sucesso",
     "warning": "Aviso",
     "info": "Informação"
+  },
+  "recurring": {
+    "title": "Transações Recorrentes",
+    "addRecurring": "Adicionar Recorrente",
+    "editRecurring": "Editar Recorrente",
+    "makeRecurring": "Tornar Recorrente",
+    "frequency": "Frequência",
+    "daily": "Diária",
+    "weekly": "Semanal",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "startDate": "Data inicial",
+    "endDate": "Data final (Opcional)",
+    "nextOccurrence": "Próxima ocorrência",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "noEndDate": "Sem data final",
+    "recurringCreated": "Transação recorrente criada",
+    "recurringUpdated": "Transação recorrente atualizada",
+    "recurringDeleted": "Transação recorrente excluída",
+    "willCreateOn": "Criará transação em",
+    "every": "A cada",
+    "day": "dia",
+    "week": "semana",
+    "month": "mês",
+    "year": "ano"
   }
 }

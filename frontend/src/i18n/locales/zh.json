@@ -7,6 +7,7 @@
   "nav": {
     "dashboard": "仪表板",
     "transactions": "交易",
+    "recurring": "定期",
     "categories": "类别",
     "budgets": "预算",
     "reports": "报告",
@@ -186,5 +187,31 @@
     "success": "成功",
     "warning": "警告",
     "info": "信息"
+  },
+  "recurring": {
+    "title": "定期交易",
+    "addRecurring": "添加定期",
+    "editRecurring": "编辑定期",
+    "makeRecurring": "设为定期",
+    "frequency": "频率",
+    "daily": "每日",
+    "weekly": "每周",
+    "monthly": "每月",
+    "yearly": "每年",
+    "startDate": "开始日期",
+    "endDate": "结束日期（可选）",
+    "nextOccurrence": "下次发生",
+    "active": "活跃",
+    "inactive": "非活跃",
+    "noEndDate": "无结束日期",
+    "recurringCreated": "定期交易已创建",
+    "recurringUpdated": "定期交易已更新",
+    "recurringDeleted": "定期交易已删除",
+    "willCreateOn": "将创建交易于",
+    "every": "每",
+    "day": "天",
+    "week": "周",
+    "month": "月",
+    "year": "年"
   }
 }

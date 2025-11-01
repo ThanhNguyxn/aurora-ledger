@@ -7,6 +7,7 @@
   "nav": {
     "dashboard": "대시보드",
     "transactions": "거래",
+    "recurring": "반복",
     "categories": "카테고리",
     "budgets": "예산",
     "reports": "보고서",
@@ -186,5 +187,31 @@
     "success": "성공",
     "warning": "경고",
     "info": "정보"
+  },
+  "recurring": {
+    "title": "반복 거래",
+    "addRecurring": "반복 추가",
+    "editRecurring": "반복 수정",
+    "makeRecurring": "반복으로 만들기",
+    "frequency": "빈도",
+    "daily": "매일",
+    "weekly": "매주",
+    "monthly": "매월",
+    "yearly": "매년",
+    "startDate": "시작일",
+    "endDate": "종료일 (선택사항)",
+    "nextOccurrence": "다음 발생",
+    "active": "활성",
+    "inactive": "비활성",
+    "noEndDate": "종료일 없음",
+    "recurringCreated": "반복 거래가 생성되었습니다",
+    "recurringUpdated": "반복 거래가 업데이트되었습니다",
+    "recurringDeleted": "반복 거래가 삭제되었습니다",
+    "willCreateOn": "거래를 생성합니다",
+    "every": "매",
+    "day": "일",
+    "week": "주",
+    "month": "월",
+    "year": "년"
   }
 }

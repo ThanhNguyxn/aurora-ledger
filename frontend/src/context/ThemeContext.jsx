@@ -17,17 +17,28 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const root = window.document.documentElement;
     
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    // Remove both classes first to ensure clean state
+    root.classList.remove('light', 'dark');
     
+    // Add the current theme class
+    root.classList.add(theme);
+    
+    // Save to localStorage
     localStorage.setItem('theme', theme);
+    
+    // Update meta theme-color for mobile browsers
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', theme === 'dark' ? '#030712' : '#f9fafb');
+    }
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    setTheme(prev => {
+      const newTheme = prev === 'light' ? 'dark' : 'light';
+      console.log(`🎨 Theme toggled: ${prev} → ${newTheme}`);
+      return newTheme;
+    });
   };
 
   const value = {

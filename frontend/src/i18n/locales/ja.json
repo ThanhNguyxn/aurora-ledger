@@ -7,6 +7,7 @@
   "nav": {
     "dashboard": "ダッシュボード",
     "transactions": "取引",
+    "recurring": "定期",
     "categories": "カテゴリ",
     "budgets": "予算",
     "reports": "レポート",
@@ -186,5 +187,31 @@
     "success": "成功",
     "warning": "警告",
     "info": "情報"
+  },
+  "recurring": {
+    "title": "定期取引",
+    "addRecurring": "定期追加",
+    "editRecurring": "定期編集",
+    "makeRecurring": "定期にする",
+    "frequency": "頻度",
+    "daily": "毎日",
+    "weekly": "毎週",
+    "monthly": "毎月",
+    "yearly": "毎年",
+    "startDate": "開始日",
+    "endDate": "終了日（オプション）",
+    "nextOccurrence": "次回発生",
+    "active": "有効",
+    "inactive": "無効",
+    "noEndDate": "終了日なし",
+    "recurringCreated": "定期取引が作成されました",
+    "recurringUpdated": "定期取引が更新されました",
+    "recurringDeleted": "定期取引が削除されました",
+    "willCreateOn": "取引を作成します",
+    "every": "毎",
+    "day": "日",
+    "week": "週",
+    "month": "月",
+    "year": "年"
   }
 }
