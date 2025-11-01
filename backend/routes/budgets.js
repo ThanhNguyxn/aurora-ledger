@@ -27,8 +27,8 @@ router.get('/', async (req, res) => {
       `SELECT 
          b.id,
          b.category_id,
-         b.amount as original_amount,
-         b.currency as budget_currency,
+         b.amount,
+         b.currency,
          b.month,
          b.year,
          b.created_at,
@@ -78,15 +78,12 @@ router.get('/', async (req, res) => {
       [req.user.id, month, year, userCurrency]
     );
 
-    // Convert all amounts to user's currency
+    // Budget amount is already in user's currency (converted when saved)
+    // Only need to convert spent amounts from other currencies
     const budgetsWithConversion = await Promise.all(
       result.rows.map(async (budget) => {
-        // Convert budget amount to user currency
-        let budgetAmount = budget.original_amount;
-        if (budget.budget_currency !== userCurrency) {
-          const rate = await getExchangeRate(budget.budget_currency, userCurrency);
-          budgetAmount = convertCurrency(budget.original_amount, rate);
-        }
+        // Budget amount is already in user currency, no conversion needed
+        const budgetAmount = budget.amount;
 
         // Calculate total spent (already in user currency + need to convert others)
         let totalSpent = parseFloat(budget.spent_same_currency || 0);
@@ -103,16 +100,14 @@ router.get('/', async (req, res) => {
         return {
           id: budget.id,
           category_id: budget.category_id,
-          amount: budgetAmount,
-          currency: userCurrency, // Always return in user's currency
-          original_amount: budget.original_amount,
-          original_currency: budget.budget_currency,
+          amount: budgetAmount, // Already in user's currency
+          currency: userCurrency,
           month: budget.month,
           year: budget.year,
           category_name: budget.category_name,
           category_color: budget.category_color,
           category_icon: budget.category_icon,
-          spent: totalSpent,
+          spent: totalSpent, // Converted to user's currency
           created_at: budget.created_at,
           updated_at: budget.updated_at
         };
@@ -133,7 +128,7 @@ router.post('/',
     body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
     body('month').isInt({ min: 1, max: 12 }),
     body('year').isInt({ min: 2000 }),
-    body('currency').optional().isString().isLength({ min: 3, max: 3 })
+    body('input_currency').optional().isString().isLength({ min: 3, max: 3 })
   ],
   async (req, res) => {
     try {
@@ -142,7 +137,24 @@ router.post('/',
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { category_id, amount, month, year, currency = 'USD' } = req.body;
+      const { category_id, amount, month, year, input_currency } = req.body;
+
+      // Get user's preferred currency
+      const userResult = await pool.query(
+        'SELECT currency FROM users WHERE id = $1',
+        [req.user.id]
+      );
+      const userCurrency = userResult.rows[0]?.currency || 'USD';
+
+      // Convert amount from input currency to user's currency
+      let finalAmount = amount;
+      const inputCurr = input_currency || userCurrency;
+      
+      if (inputCurr !== userCurrency) {
+        const rate = await getExchangeRate(inputCurr, userCurrency);
+        finalAmount = convertCurrency(amount, rate);
+        console.log(`💱 Converting budget: ${amount} ${inputCurr} → ${finalAmount} ${userCurrency} (rate: ${rate})`);
+      }
 
       // Verify category belongs to user and is expense type
       const catResult = await pool.query(
@@ -158,13 +170,14 @@ router.post('/',
         return res.status(400).json({ error: 'Budgets can only be set for expense categories' });
       }
 
+      // Save with user's currency
       const result = await pool.query(
         `INSERT INTO budgets (user_id, category_id, amount, month, year, currency)
          VALUES ($1, $2, $3, $4, $5, $6)
          ON CONFLICT (user_id, category_id, month, year)
          DO UPDATE SET amount = $3, currency = $6, updated_at = CURRENT_TIMESTAMP
          RETURNING *`,
-        [req.user.id, category_id, amount, month, year, currency]
+        [req.user.id, category_id, finalAmount, month, year, userCurrency]
       );
 
       res.status(201).json(result.rows[0]);
