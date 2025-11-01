@@ -13,6 +13,7 @@ import {
   Wallet, 
   BarChart3, 
   User,
+  Shield,
   LogOut,
   Menu,
   X
@@ -32,6 +33,11 @@ const Layout = () => {
     { to: '/reports', icon: BarChart3, label: t('nav.reports') },
     { to: '/profile', icon: User, label: t('nav.profile') },
   ];
+
+  // Only add Admin link if user is admin
+  const allNavItems = user?.role === 'admin' 
+    ? [...navItems, { to: '/admin', icon: Shield, label: t('nav.admin') || 'Admin' }]
+    : navItems;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
@@ -72,7 +78,7 @@ const Layout = () => {
         </div>
 
         <nav className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
-          {navItems.map((item) => (
+          {allNavItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

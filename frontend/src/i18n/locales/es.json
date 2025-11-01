@@ -12,7 +12,8 @@
     "budgets": "Presupuestos",
     "reports": "Informes",
     "logout": "Cerrar sesión",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "admin": "Admin"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -243,5 +244,43 @@
     "passwordChangeError": "Error al cambiar contraseña",
     "passwordMismatch": "Las contraseñas no coinciden",
     "passwordTooShort": "La contraseña debe tener al menos 6 caracteres"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "subtitle": "Manage users and system settings",
+    "accessDenied": "Access Denied",
+    "adminOnly": "This page is only accessible to administrators.",
+    "totalUsers": "Total Users",
+    "newUsers30d": "New Users (30d)",
+    "totalTransactions": "Total Transactions",
+    "adminUsers": "Admin Users",
+    "userManagement": "User Management",
+    "searchUsers": "Search by email or name...",
+    "user": "User",
+    "role": "Role",
+    "stats": "Stats",
+    "joined": "Joined",
+    "actions": "Actions",
+    "noUsers": "No users found",
+    "transactions": "transactions",
+    "resetPassword": "Reset Password",
+    "deleteUser": "Delete User",
+    "confirmRoleChange": "Are you sure you want to change this user role?",
+    "roleUpdated": "Role updated successfully",
+    "failedToUpdateRole": "Failed to update role",
+    "confirmDelete": "Are you sure? This cannot be undone.",
+    "userDeleted": "User deleted successfully",
+    "failedToDeleteUser": "Failed to delete user",
+    "passwordReset": "Password reset successfully",
+    "failedToResetPassword": "Failed to reset password",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "resetPasswordFor": "Reset Password for",
+    "newPassword": "New Password",
+    "enterNewPassword": "Enter new password (min 6 characters)",
+    "showing": "Showing",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next",
+    "failedToLoadUsers": "Failed to load users"
   }
 }

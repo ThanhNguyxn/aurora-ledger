@@ -16,6 +16,7 @@ import Categories from './pages/Categories';
 import Budgets from './pages/Budgets';
 import Reports from './pages/Reports';
 import Profile from './pages/Profile';
+import Admin from './pages/Admin';
 import Layout from './components/Layout';
 
 function PrivateRoute({ children }) {
@@ -69,6 +70,7 @@ function App() {
               <Route path="budgets" element={<Budgets />} />
               <Route path="reports" element={<Reports />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="admin" element={<Admin />} />
             </Route>
           </Routes>
         </Router>

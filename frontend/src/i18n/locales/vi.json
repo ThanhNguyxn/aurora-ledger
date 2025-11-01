@@ -12,7 +12,8 @@
     "budgets": "Ngân sách",
     "reports": "Báo cáo",
     "profile": "Hồ sơ",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "admin": "Quản trị"
   },
   "auth": {
     "login": "Đăng nhập",
@@ -243,6 +244,9 @@
     "passwordChangeError": "Không thể đổi mật khẩu",
     "passwordMismatch": "Mật khẩu không khớp",
     "passwordTooShort": "Mật khẩu phải có ít nhất 6 ký tự"
+  },
+  "admin": {
+    "title": "Bảng điều khiển Quản trị",
+    "subtitle": "Quản lý người dùng và cài đặt hệ thống"
   }
 }
-
