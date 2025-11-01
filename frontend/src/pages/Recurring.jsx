@@ -7,7 +7,7 @@ import { Repeat, Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Calendar, AlertCi
 
 const Recurring = () => {
   const { t } = useTranslation();
-  const { displayCurrency, formatAmount } = useCurrency();
+  const { currency, formatCurrency } = useCurrency();
   const [recurring, setRecurring] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,7 @@ const Recurring = () => {
   const [formData, setFormData] = useState({
     type: 'expense',
     amount: '',
-    currency: displayCurrency,
+    currency: currency,
     category_id: '',
     description: '',
     frequency: 'monthly',
@@ -156,7 +156,7 @@ const Recurring = () => {
     setFormData({
       type: 'expense',
       amount: '',
-      currency: displayCurrency,
+      currency: currency,
       category_id: '',
       description: '',
       frequency: 'monthly',
@@ -276,7 +276,7 @@ const Recurring = () => {
                   </div>
                   
                   <h3 className="text-xl font-bold mb-1">
-                    {formatAmount(rec.amount, rec.currency)}
+                    {formatCurrency(rec.amount, rec.currency)}
                   </h3>
                   
                   {rec.category_name && (
