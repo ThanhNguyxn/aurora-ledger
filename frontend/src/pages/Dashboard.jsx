@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const { formatCurrency } = useCurrency();
+  const { formatCurrency, currency } = useCurrency();
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,6 +88,9 @@ const Dashboard = () => {
     );
   }
 
+  // Note: Amounts are stored in USD in database
+  // They are automatically converted when displayed via formatCurrency
+  // which uses the exchange rates from CurrencyContext
   const balance = stats?.totals?.balance || 0;
   const income = stats?.totals?.income || 0;
   const expense = stats?.totals?.expense || 0;
