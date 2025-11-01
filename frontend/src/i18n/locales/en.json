@@ -49,7 +49,10 @@
     "noExpenseData": "No expense data for this month",
     "noTransactions": "No transactions yet",
     "viewAll": "View all",
-    "failedToLoad": "Failed to load dashboard data"
+    "failedToLoad": "Failed to load dashboard data",
+    "thisMonth": "This Month",
+    "last30Days": "Last 30 Days",
+    "allTime": "All Time"
   },
   "transactions": {
     "title": "Transactions",

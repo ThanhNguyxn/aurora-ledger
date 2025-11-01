@@ -49,7 +49,10 @@
     "noExpenseData": "Keine Ausgabendaten für diesen Monat",
     "noTransactions": "Noch keine Transaktionen",
     "viewAll": "Alle anzeigen",
-    "failedToLoad": "Laden der Dashboard-Daten fehlgeschlagen"
+    "failedToLoad": "Laden der Dashboard-Daten fehlgeschlagen",
+    "thisMonth": "Dieser Monat",
+    "last30Days": "Letzte 30 Tage",
+    "allTime": "Alle Zeit"
   },
   "transactions": {
     "title": "Transaktionen",

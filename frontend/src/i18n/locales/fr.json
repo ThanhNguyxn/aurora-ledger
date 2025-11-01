@@ -49,7 +49,10 @@
     "noExpenseData": "Aucune donnée de dépenses ce mois-ci",
     "noTransactions": "Aucune transaction pour le moment",
     "viewAll": "Voir tout",
-    "failedToLoad": "Échec du chargement des données"
+    "failedToLoad": "Échec du chargement des données",
+    "thisMonth": "Ce mois-ci",
+    "last30Days": "30 derniers jours",
+    "allTime": "Tout le temps"
   },
   "transactions": {
     "title": "Transactions",

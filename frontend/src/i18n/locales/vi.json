@@ -49,7 +49,10 @@
     "noExpenseData": "Không có dữ liệu chi tiêu tháng này",
     "noTransactions": "Chưa có giao dịch nào",
     "viewAll": "Xem tất cả",
-    "failedToLoad": "Không thể tải dữ liệu tổng quan"
+    "failedToLoad": "Không thể tải dữ liệu tổng quan",
+    "thisMonth": "Tháng này",
+    "last30Days": "30 ngày qua",
+    "allTime": "Toàn bộ"
   },
   "transactions": {
     "title": "Giao dịch",

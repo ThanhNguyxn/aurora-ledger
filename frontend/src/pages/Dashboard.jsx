@@ -44,13 +44,13 @@ const Dashboard = () => {
         return {
           start: format(thirtyDaysAgo, 'yyyy-MM-dd'),
           end: format(today, 'yyyy-MM-dd'),
-          label: 'Last 30 Days'
+          label: t('dashboard.last30Days')
         };
       case 'all':
         return {
           start: '2020-01-01',
           end: format(today, 'yyyy-MM-dd'),
-          label: 'All Time'
+          label: t('dashboard.allTime')
         };
       default:
         return {
@@ -110,7 +110,7 @@ const Dashboard = () => {
               viewMode === 'month' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            This Month
+            {t('dashboard.thisMonth')}
           </button>
           <button
             onClick={() => setViewMode('last30')}
@@ -118,7 +118,7 @@ const Dashboard = () => {
               viewMode === 'last30' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            Last 30 Days
+            {t('dashboard.last30Days')}
           </button>
           <button
             onClick={() => setViewMode('all')}
@@ -126,7 +126,7 @@ const Dashboard = () => {
               viewMode === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            All Time
+            {t('dashboard.allTime')}
           </button>
         </div>
       </div>

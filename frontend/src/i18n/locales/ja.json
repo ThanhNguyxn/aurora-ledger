@@ -49,7 +49,10 @@
     "noExpenseData": "今月の支出データがありません",
     "noTransactions": "まだ取引がありません",
     "viewAll": "すべて表示",
-    "failedToLoad": "ダッシュボードデータの読み込みに失敗"
+    "failedToLoad": "ダッシュボードデータの読み込みに失敗",
+    "thisMonth": "今月",
+    "last30Days": "過去30日間",
+    "allTime": "全期間"
   },
   "transactions": {
     "title": "取引",

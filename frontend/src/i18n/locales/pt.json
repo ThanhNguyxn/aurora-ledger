@@ -49,7 +49,10 @@
     "noExpenseData": "Sem dados de despesas este mês",
     "noTransactions": "Ainda não há transações",
     "viewAll": "Ver tudo",
-    "failedToLoad": "Falha ao carregar dados do painel"
+    "failedToLoad": "Falha ao carregar dados do painel",
+    "thisMonth": "Este mês",
+    "last30Days": "Últimos 30 dias",
+    "allTime": "Todo o tempo"
   },
   "transactions": {
     "title": "Transações",
