@@ -164,7 +164,11 @@
     "noExpenseData": "No expense data",
     "failedToLoad": "Failed to load reports",
     "failedToExport": "Failed to export",
-    "reportExported": "Report exported"
+    "reportExported": "Report exported",
+    "income": "Income",
+    "expense": "Expenses",
+    "balance": "Balance",
+    "amount": "Amount"
   },
   "common": {
     "loading": "Loading...",

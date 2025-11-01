@@ -23,7 +23,7 @@ import toast from 'react-hot-toast';
 
 const Reports = () => {
   const { t } = useTranslation();
-  const { formatCurrency } = useCurrency();
+  const { formatCurrency, convertAmount } = useCurrency();
   const [dateRange, setDateRange] = useState({
     start_date: format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd'),
     end_date: format(endOfMonth(new Date()), 'yyyy-MM-dd')
@@ -84,9 +84,32 @@ const Reports = () => {
     );
   }
 
-  const income = overview?.totals?.income || 0;
-  const expense = overview?.totals?.expense || 0;
-  const balance = overview?.totals?.balance || 0;
+  // Convert backend USD amounts to user's currency
+  const incomeUSD = overview?.totals?.income || 0;
+  const expenseUSD = overview?.totals?.expense || 0;
+  const balanceUSD = overview?.totals?.balance || 0;
+
+  const income = convertAmount(incomeUSD, 'USD');
+  const expense = convertAmount(expenseUSD, 'USD');
+  const balance = convertAmount(balanceUSD, 'USD');
+
+  // Convert category data
+  const incomeByCategory = overview?.byCategory?.income?.map(cat => ({
+    ...cat,
+    total: convertAmount(cat.total, 'USD')
+  })) || [];
+
+  const expenseByCategory = overview?.byCategory?.expense?.map(cat => ({
+    ...cat,
+    total: convertAmount(cat.total, 'USD')
+  })) || [];
+
+  // Convert trends data
+  const trendsConverted = trends.map(t => ({
+    ...t,
+    income: convertAmount(t.income, 'USD'),
+    expense: convertAmount(t.expense, 'USD')
+  }));
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -162,15 +185,15 @@ const Reports = () => {
       <div className="card">
         <h2 className="text-lg sm:text-xl font-bold mb-4">{t('reports.monthlyTrends')}</h2>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={trends}>
+          <LineChart data={trendsConverted}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="income" stroke="#10B981" strokeWidth={2} name="Income" />
-            <Line type="monotone" dataKey="expense" stroke="#EF4444" strokeWidth={2} name="Expenses" />
-            <Line type="monotone" dataKey="balance" stroke="#3B82F6" strokeWidth={2} name="Balance" />
+            <Line type="monotone" dataKey="income" stroke="#10B981" strokeWidth={2} name={t('reports.income')} />
+            <Line type="monotone" dataKey="expense" stroke="#EF4444" strokeWidth={2} name={t('reports.expense')} />
+            <Line type="monotone" dataKey="balance" stroke="#3B82F6" strokeWidth={2} name={t('reports.balance')} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -179,12 +202,12 @@ const Reports = () => {
         {/* Income Breakdown */}
         <div className="card">
           <h2 className="text-lg sm:text-xl font-bold mb-4">{t('reports.incomeByCategory')}</h2>
-          {overview?.byCategory?.income?.length > 0 ? (
+          {incomeByCategory?.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
-                    data={overview.byCategory.income}
+                    data={incomeByCategory}
                     dataKey="total"
                     nameKey="category_name"
                     cx="50%"
@@ -192,7 +215,7 @@ const Reports = () => {
                     outerRadius={80}
                     label={(entry) => formatCurrency(entry.total)}
                   >
-                    {overview.byCategory.income.map((entry, index) => (
+                    {incomeByCategory.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.category_color} />
                     ))}
                   </Pie>
@@ -200,7 +223,7 @@ const Reports = () => {
                 </PieChart>
               </ResponsiveContainer>
               <div className="mt-4 space-y-2">
-                {overview.byCategory.income.map((cat) => (
+                {incomeByCategory.map((cat) => (
                   <div key={cat.category_id} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">
                       <div
@@ -224,23 +247,23 @@ const Reports = () => {
         {/* Expense Breakdown */}
         <div className="card">
           <h2 className="text-lg sm:text-xl font-bold mb-4">{t('reports.expensesByCategory')}</h2>
-          {overview?.byCategory?.expense?.length > 0 ? (
+          {expenseByCategory?.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={overview.byCategory.expense}>
+                <BarChart data={expenseByCategory}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="category_name" angle={-45} textAnchor="end" height={100} />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="total" name="Amount">
-                    {overview.byCategory.expense.map((entry, index) => (
+                  <Bar dataKey="total" name={t('reports.amount')}>
+                    {expenseByCategory.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.category_color} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
               <div className="mt-4 space-y-2 max-h-48 overflow-y-auto">
-                {overview.byCategory.expense.map((cat) => {
+                {expenseByCategory.map((cat) => {
                   const percentage = (cat.total / expense * 100).toFixed(1);
                   return (
                     <div key={cat.category_id}>

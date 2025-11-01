@@ -166,7 +166,11 @@
     "noExpenseData": "Không có dữ liệu chi tiêu",
     "failedToLoad": "Không thể tải báo cáo",
     "failedToExport": "Không thể xuất",
-    "reportExported": "Đã xuất báo cáo"
+    "reportExported": "Đã xuất báo cáo",
+    "income": "Thu nhập",
+    "expense": "Chi tiêu",
+    "balance": "Số dư",
+    "amount": "Số tiền"
   },
   "common": {
     "loading": "Đang tải...",

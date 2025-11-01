@@ -8,7 +8,7 @@ import BudgetModal from '../components/BudgetModal';
 
 const Budgets = () => {
   const { t } = useTranslation();
-  const { formatCurrency } = useCurrency();
+  const { formatCurrency, convertAmount } = useCurrency();
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -70,8 +70,12 @@ const Budgets = () => {
     return null;
   };
 
-  const totalBudget = budgets.reduce((sum, b) => sum + parseFloat(b.amount), 0);
-  const totalSpent = budgets.reduce((sum, b) => sum + parseFloat(b.spent), 0);
+  // Convert amounts from backend USD to user's currency
+  const totalBudgetUSD = budgets.reduce((sum, b) => sum + parseFloat(b.amount), 0);
+  const totalSpentUSD = budgets.reduce((sum, b) => sum + parseFloat(b.spent), 0);
+  
+  const totalBudget = convertAmount(totalBudgetUSD, 'USD');
+  const totalSpent = convertAmount(totalSpentUSD, 'USD');
   const overallPercentage = totalBudget > 0 ? (totalSpent / totalBudget * 100) : 0;
 
   return (
@@ -162,8 +166,12 @@ const Budgets = () => {
         ) : budgets.length > 0 ? (
           <div className="space-y-4">
             {budgets.map((budget) => {
-              const spent = parseFloat(budget.spent);
-              const amount = parseFloat(budget.amount);
+              const spentUSD = parseFloat(budget.spent);
+              const amountUSD = parseFloat(budget.amount);
+              
+              // Convert to user's currency
+              const spent = convertAmount(spentUSD, 'USD');
+              const amount = convertAmount(amountUSD, 'USD');
               const remaining = amount - spent;
               const percentage = (spent / amount * 100);
 
