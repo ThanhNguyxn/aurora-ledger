@@ -11,7 +11,8 @@
     "categories": "Категории",
     "budgets": "Бюджеты",
     "reports": "Отчеты",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "profile": "Профиль"
   },
   "auth": {
     "login": "Войти",
@@ -217,5 +218,32 @@
     "week": "неделя",
     "month": "месяц",
     "year": "год"
+  },
+  "profile": {
+    "title": "Настройки профиля",
+    "subtitle": "Управление настройками учетной записи и предпочтениями",
+    "personalInfo": "Личная информация",
+    "fullName": "Полное имя",
+    "fullNamePlaceholder": "Введите ваше полное имя",
+    "email": "Адрес электронной почты",
+    "emailPlaceholder": "Введите ваш email",
+    "updateProfile": "Обновить профиль",
+    "updating": "Обновление...",
+    "changePassword": "Изменить пароль",
+    "currentPassword": "Текущий пароль",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Подтвердите новый пароль",
+    "passwordRequirement": "Минимум 6 символов",
+    "changePasswordBtn": "Изменить пароль",
+    "changing": "Изменение...",
+    "accountInfo": "Информация об учетной записи",
+    "accountCreated": "Учетная запись создана",
+    "userId": "ID пользователя",
+    "updateSuccess": "Профиль успешно обновлен!",
+    "updateError": "Не удалось обновить профиль",
+    "passwordChanged": "Пароль успешно изменен!",
+    "passwordChangeError": "Не удалось изменить пароль",
+    "passwordMismatch": "Пароли не совпадают",
+    "passwordTooShort": "Пароль должен содержать не менее 6 символов"
   }
 }

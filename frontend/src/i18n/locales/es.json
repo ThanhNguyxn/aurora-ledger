@@ -11,7 +11,8 @@
     "categories": "Categorías",
     "budgets": "Presupuestos",
     "reports": "Informes",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "profile": "Perfil"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -215,5 +216,32 @@
     "week": "semana",
     "month": "mes",
     "year": "año"
+  },
+  "profile": {
+    "title": "Configuración del perfil",
+    "subtitle": "Administra la configuración de tu cuenta y preferencias",
+    "personalInfo": "Información personal",
+    "fullName": "Nombre completo",
+    "fullNamePlaceholder": "Ingresa tu nombre completo",
+    "email": "Dirección de correo electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "updateProfile": "Actualizar perfil",
+    "updating": "Actualizando...",
+    "changePassword": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "passwordRequirement": "Al menos 6 caracteres",
+    "changePasswordBtn": "Cambiar contraseña",
+    "changing": "Cambiando...",
+    "accountInfo": "Información de la cuenta",
+    "accountCreated": "Cuenta creada",
+    "userId": "ID de usuario",
+    "updateSuccess": "¡Perfil actualizado exitosamente!",
+    "updateError": "Error al actualizar perfil",
+    "passwordChanged": "¡Contraseña cambiada exitosamente!",
+    "passwordChangeError": "Error al cambiar contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres"
   }
 }

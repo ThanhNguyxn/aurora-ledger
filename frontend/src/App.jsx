@@ -15,6 +15,7 @@ import Recurring from './pages/Recurring';
 import Categories from './pages/Categories';
 import Budgets from './pages/Budgets';
 import Reports from './pages/Reports';
+import Profile from './pages/Profile';
 import Layout from './components/Layout';
 
 function PrivateRoute({ children }) {
@@ -67,6 +68,7 @@ function App() {
               <Route path="categories" element={<Categories />} />
               <Route path="budgets" element={<Budgets />} />
               <Route path="reports" element={<Reports />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
           </Routes>
         </Router>

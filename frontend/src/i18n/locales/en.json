@@ -11,6 +11,7 @@
     "categories": "Categories",
     "budgets": "Budgets",
     "reports": "Reports",
+    "profile": "Profile",
     "logout": "Logout"
   },
   "auth": {
@@ -213,6 +214,32 @@
     "week": "week",
     "month": "month",
     "year": "year"
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "subtitle": "Manage your account settings and preferences",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "updateProfile": "Update Profile",
+    "updating": "Updating...",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "passwordRequirement": "At least 6 characters",
+    "changePasswordBtn": "Change Password",
+    "changing": "Changing...",
+    "accountInfo": "Account Information",
+    "accountCreated": "Account Created",
+    "userId": "User ID",
+    "updateSuccess": "Profile updated successfully!",
+    "updateError": "Failed to update profile",
+    "passwordChanged": "Password changed successfully!",
+    "passwordChangeError": "Failed to change password",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters"
   }
 }
-

@@ -11,6 +11,7 @@
     "categories": "Danh mục",
     "budgets": "Ngân sách",
     "reports": "Báo cáo",
+    "profile": "Hồ sơ",
     "logout": "Đăng xuất"
   },
   "auth": {
@@ -215,6 +216,33 @@
     "week": "tuần",
     "month": "tháng",
     "year": "năm"
+  },
+  "profile": {
+    "title": "Cài đặt hồ sơ",
+    "subtitle": "Quản lý cài đặt tài khoản và tùy chọn của bạn",
+    "personalInfo": "Thông tin cá nhân",
+    "fullName": "Họ và tên",
+    "fullNamePlaceholder": "Nhập họ và tên",
+    "email": "Địa chỉ Email",
+    "emailPlaceholder": "Nhập email",
+    "updateProfile": "Cập nhật hồ sơ",
+    "updating": "Đang cập nhật...",
+    "changePassword": "Đổi mật khẩu",
+    "currentPassword": "Mật khẩu hiện tại",
+    "newPassword": "Mật khẩu mới",
+    "confirmPassword": "Xác nhận mật khẩu mới",
+    "passwordRequirement": "Tối thiểu 6 ký tự",
+    "changePasswordBtn": "Đổi mật khẩu",
+    "changing": "Đang đổi...",
+    "accountInfo": "Thông tin tài khoản",
+    "accountCreated": "Tài khoản được tạo",
+    "userId": "ID người dùng",
+    "updateSuccess": "Cập nhật hồ sơ thành công!",
+    "updateError": "Không thể cập nhật hồ sơ",
+    "passwordChanged": "Đổi mật khẩu thành công!",
+    "passwordChangeError": "Không thể đổi mật khẩu",
+    "passwordMismatch": "Mật khẩu không khớp",
+    "passwordTooShort": "Mật khẩu phải có ít nhất 6 ký tự"
   }
 }
 

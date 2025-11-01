@@ -11,7 +11,8 @@
     "categories": "カテゴリ",
     "budgets": "予算",
     "reports": "レポート",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "profile": "プロフィール"
   },
   "auth": {
     "login": "ログイン",
@@ -217,5 +218,32 @@
     "week": "週",
     "month": "月",
     "year": "年"
+  },
+  "profile": {
+    "title": "プロフィール設定",
+    "subtitle": "アカウント設定と設定を管理",
+    "personalInfo": "個人情報",
+    "fullName": "氏名",
+    "fullNamePlaceholder": "氏名を入力",
+    "email": "メールアドレス",
+    "emailPlaceholder": "メールアドレスを入力",
+    "updateProfile": "プロフィールを更新",
+    "updating": "更新中...",
+    "changePassword": "パスワードを変更",
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "confirmPassword": "新しいパスワードを確認",
+    "passwordRequirement": "6文字以上",
+    "changePasswordBtn": "パスワードを変更",
+    "changing": "変更中...",
+    "accountInfo": "アカウント情報",
+    "accountCreated": "アカウント作成日",
+    "userId": "ユーザーID",
+    "updateSuccess": "プロフィールが正常に更新されました！",
+    "updateError": "プロフィールの更新に失敗しました",
+    "passwordChanged": "パスワードが正常に変更されました！",
+    "passwordChangeError": "パスワードの変更に失敗しました",
+    "passwordMismatch": "パスワードが一致しません",
+    "passwordTooShort": "パスワードは6文字以上である必要があります"
   }
 }

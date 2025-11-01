@@ -12,6 +12,7 @@ import {
   FolderKanban, 
   Wallet, 
   BarChart3, 
+  User,
   LogOut,
   Menu,
   X
@@ -29,6 +30,7 @@ const Layout = () => {
     { to: '/categories', icon: FolderKanban, label: t('nav.categories') },
     { to: '/budgets', icon: Wallet, label: t('nav.budgets') },
     { to: '/reports', icon: BarChart3, label: t('nav.reports') },
+    { to: '/profile', icon: User, label: t('nav.profile') },
   ];
 
   return (

@@ -11,7 +11,8 @@
     "categories": "类别",
     "budgets": "预算",
     "reports": "报告",
-    "logout": "登出"
+    "logout": "登出",
+    "profile": "个人资料"
   },
   "auth": {
     "login": "登录",
@@ -217,5 +218,32 @@
     "week": "周",
     "month": "月",
     "year": "年"
+  },
+  "profile": {
+    "title": "个人资料设置",
+    "subtitle": "管理您的账户设置和偏好",
+    "personalInfo": "个人信息",
+    "fullName": "全名",
+    "fullNamePlaceholder": "输入您的全名",
+    "email": "电子邮件地址",
+    "emailPlaceholder": "输入您的电子邮件",
+    "updateProfile": "更新资料",
+    "updating": "更新中...",
+    "changePassword": "更改密码",
+    "currentPassword": "当前密码",
+    "newPassword": "新密码",
+    "confirmPassword": "确认新密码",
+    "passwordRequirement": "至少6个字符",
+    "changePasswordBtn": "更改密码",
+    "changing": "更改中...",
+    "accountInfo": "账户信息",
+    "accountCreated": "账户创建时间",
+    "userId": "用户ID",
+    "updateSuccess": "资料更新成功！",
+    "updateError": "更新资料失败",
+    "passwordChanged": "密码更改成功！",
+    "passwordChangeError": "更改密码失败",
+    "passwordMismatch": "密码不匹配",
+    "passwordTooShort": "密码至少需要6个字符"
   }
 }

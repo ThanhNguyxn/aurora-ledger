@@ -11,7 +11,8 @@
     "categories": "Catégories",
     "budgets": "Budgets",
     "reports": "Rapports",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "profile": "Profil"
   },
   "auth": {
     "login": "Connexion",
@@ -217,5 +218,32 @@
     "week": "semaine",
     "month": "mois",
     "year": "année"
+  },
+  "profile": {
+    "title": "Paramètres du profil",
+    "subtitle": "Gérez les paramètres de votre compte et les préférences",
+    "personalInfo": "Informations personnelles",
+    "fullName": "Nom complet",
+    "fullNamePlaceholder": "Entrez votre nom complet",
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "Entrez votre e-mail",
+    "updateProfile": "Mettre à jour le profil",
+    "updating": "Mise à jour...",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "passwordRequirement": "Au moins 6 caractères",
+    "changePasswordBtn": "Changer le mot de passe",
+    "changing": "Changement...",
+    "accountInfo": "Informations sur le compte",
+    "accountCreated": "Compte créé",
+    "userId": "ID utilisateur",
+    "updateSuccess": "Profil mis à jour avec succès!",
+    "updateError": "Échec de la mise à jour du profil",
+    "passwordChanged": "Mot de passe changé avec succès!",
+    "passwordChangeError": "Échec du changement de mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères"
   }
 }

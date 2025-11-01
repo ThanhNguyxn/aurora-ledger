@@ -11,7 +11,8 @@
     "categories": "Kategorien",
     "budgets": "Budgets",
     "reports": "Berichte",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "profile": "Profil"
   },
   "auth": {
     "login": "Anmelden",
@@ -217,5 +218,32 @@
     "week": "Woche",
     "month": "Monat",
     "year": "Jahr"
+  },
+  "profile": {
+    "title": "Profileinstellungen",
+    "subtitle": "Verwalten Sie Ihre Kontoeinstellungen und Präferenzen",
+    "personalInfo": "Persönliche Informationen",
+    "fullName": "Vollständiger Name",
+    "fullNamePlaceholder": "Geben Sie Ihren vollständigen Namen ein",
+    "email": "E-Mail-Adresse",
+    "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
+    "updateProfile": "Profil aktualisieren",
+    "updating": "Aktualisierung...",
+    "changePassword": "Passwort ändern",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Neues Passwort bestätigen",
+    "passwordRequirement": "Mindestens 6 Zeichen",
+    "changePasswordBtn": "Passwort ändern",
+    "changing": "Änderung...",
+    "accountInfo": "Kontoinformationen",
+    "accountCreated": "Konto erstellt",
+    "userId": "Benutzer-ID",
+    "updateSuccess": "Profil erfolgreich aktualisiert!",
+    "updateError": "Profil konnte nicht aktualisiert werden",
+    "passwordChanged": "Passwort erfolgreich geändert!",
+    "passwordChangeError": "Passwort konnte nicht geändert werden",
+    "passwordMismatch": "Passwörter stimmen nicht überein",
+    "passwordTooShort": "Passwort muss mindestens 6 Zeichen lang sein"
   }
 }
