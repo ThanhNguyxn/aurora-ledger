@@ -11,11 +11,12 @@ import {
   Calendar 
 } from 'lucide-react';
 import { format, startOfMonth, endOfMonth } from 'date-fns';
+import { enUS, vi, es, fr, de, zhCN, ja, ko, pt, ru } from 'date-fns/locale';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import toast from 'react-hot-toast';
 
 const Dashboard = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { formatCurrency, currency } = useCurrency();
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
@@ -30,14 +31,32 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [viewMode]);
 
+  const getDateLocale = () => {
+    const locales = {
+      en: enUS,
+      vi: vi,
+      es: es,
+      fr: fr,
+      de: de,
+      zh: zhCN,
+      ja: ja,
+      ko: ko,
+      pt: pt,
+      ru: ru
+    };
+    return locales[i18n.language] || enUS;
+  };
+
   const getDateRange = () => {
     const today = new Date();
+    const locale = getDateLocale();
+    
     switch (viewMode) {
       case 'month':
         return {
           start: format(startOfMonth(today), 'yyyy-MM-dd'),
           end: format(endOfMonth(today), 'yyyy-MM-dd'),
-          label: format(today, 'MMMM yyyy')
+          label: format(today, 'MMMM yyyy', { locale })
         };
       case 'last30':
         const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
@@ -56,7 +75,7 @@ const Dashboard = () => {
         return {
           start: format(startOfMonth(today), 'yyyy-MM-dd'),
           end: format(endOfMonth(today), 'yyyy-MM-dd'),
-          label: format(today, 'MMMM yyyy')
+          label: format(today, 'MMMM yyyy', { locale })
         };
     }
   };
