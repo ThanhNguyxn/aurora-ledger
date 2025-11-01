@@ -71,33 +71,81 @@ AED (UAE Dirham) • SAR (Saudi Riyal) • ZAR (South African Rand)
 
 ## 🌐 Deployment Platforms
 
-This project is deployed using free-tier cloud services:
+**✨ This project is 100% FREE - deployed using free-tier services:**
 
-### Frontend Hosting
-- **[Vercel](https://vercel.com)** - Frontend hosting with global CDN
+### 🎯 Currently Using (FREE Tier):
 
-### Backend Hosting
-- **[Render](https://render.com)** - Backend API server (750 hours/month free)
+#### Frontend Hosting
+- **[Vercel](https://vercel.com)** - FREE tier
+  - ✅ Unlimited bandwidth
+  - ✅ Global CDN
+  - ✅ Auto SSL/HTTPS
+  - ✅ Instant deploys from GitHub
 
-### Database Hosting
-- **[Neon](https://neon.tech)** - Serverless PostgreSQL database
+#### Backend Hosting  
+- **[Render](https://render.com)** - FREE tier
+  - ✅ 750 hours/month (enough for 24/7 with 1 service)
+  - ⚠️ Sleeps after 15 min inactivity (use UptimeRobot to prevent)
+  - ✅ Auto deploy from GitHub
+  - ✅ Environment variables support
 
-### Alternative Free Platforms
+#### Database Hosting
+- **[Neon](https://neon.tech)** - FREE tier
+  - ✅ 0.5GB storage
+  - ✅ Serverless PostgreSQL
+  - ✅ Auto-scaling
+  - ⚠️ Pauses after 7 days inactivity (auto-resumes)
+
+#### Monitoring (Keep Backend Alive)
+- **[UptimeRobot](https://uptimerobot.com)** - FREE tier
+  - ✅ Ping backend every 5 minutes
+  - ✅ Prevents Render from sleeping
+  - ✅ 50 monitors free
+  - ✅ Email alerts on downtime
+
+#### API Services
+- **[ExchangeRate-API](https://www.exchangerate-api.com/)** - FREE tier
+  - ✅ 1,500 requests/month
+  - ✅ 29+ currencies support
+  - ✅ Daily rate updates
+
+---
+
+### 💡 Alternative Free Platforms (If needed)
 
 **Frontend:**
-- [Netlify](https://netlify.com) - Static site hosting
-- [Cloudflare Pages](https://pages.cloudflare.com) - Global edge network
+- [Netlify](https://netlify.com) - 100GB bandwidth/month
+- [Cloudflare Pages](https://pages.cloudflare.com) - Unlimited bandwidth
 - [GitHub Pages](https://pages.github.com) - Free static hosting
 
 **Backend:**
-- [Railway](https://railway.app) - $5 free credits monthly
-- [Fly.io](https://fly.io) - Global application platform
-- [Cyclic](https://cyclic.sh) - Serverless Node.js hosting
+- [Railway](https://railway.app) - $5 free credits/month
+- [Fly.io](https://fly.io) - 3 VMs free
+- [Cyclic](https://cyclic.sh) - Serverless Node.js
 
 **Database:**
-- [Supabase](https://supabase.com) - PostgreSQL with additional features
-- [ElephantSQL](https://elephantsql.com) - Managed PostgreSQL
-- [Aiven](https://aiven.io) - Managed database services
+- [Supabase](https://supabase.com) - 500MB storage, 2GB transfer
+- [ElephantSQL](https://elephantsql.com) - 20MB free
+- [Railway](https://railway.app) - PostgreSQL included
+
+---
+
+### ⚡ Pro Tips for Free Tier:
+
+1. **Prevent Backend Sleep:**
+   - Use UptimeRobot to ping every 5 minutes
+   - Or upgrade to Render Starter ($7/month)
+
+2. **Optimize Database:**
+   - Neon free tier is generous (0.5GB)
+   - Export data regularly (CSV export feature included)
+   - Upgrade to Pro if needed ($19/month)
+
+3. **Cost Breakdown:**
+   ```
+   Current: $0/month (100% FREE) ✅
+   Optional: $7-12/month (Remove all limitations)
+   ```
 
 ---
 
