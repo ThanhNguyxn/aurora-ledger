@@ -168,7 +168,11 @@
     "noExpenseData": "Нет данных о расходах",
     "failedToLoad": "Не удалось загрузить отчеты",
     "failedToExport": "Не удалось экспортировать",
-    "reportExported": "Отчет экспортирован"
+    "reportExported": "Отчет экспортирован",
+    "income": "Доход",
+    "expense": "Расходы",
+    "balance": "Баланс",
+    "amount": "Сумма"
   },
   "common": {
     "loading": "Загрузка...",

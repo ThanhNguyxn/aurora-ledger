@@ -168,7 +168,11 @@
     "noExpenseData": "Aucune donnée de dépenses",
     "failedToLoad": "Échec du chargement des rapports",
     "failedToExport": "Échec de l'exportation",
-    "reportExported": "Rapport exporté"
+    "reportExported": "Rapport exporté",
+    "income": "Revenus",
+    "expense": "Dépenses",
+    "balance": "Solde",
+    "amount": "Montant"
   },
   "common": {
     "loading": "Chargement...",

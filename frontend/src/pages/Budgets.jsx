@@ -92,7 +92,7 @@ const Budgets = () => {
       <div className="card">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('budgets.month')}
             </label>
             <select
@@ -108,7 +108,7 @@ const Budgets = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('budgets.year')}
             </label>
             <select
@@ -127,31 +127,31 @@ const Budgets = () => {
 
       {/* Overall Progress */}
       {budgets.length > 0 && (
-        <div className="card bg-gradient-to-r from-blue-50 to-purple-50">
-          <h2 className="text-lg font-bold mb-4">{t('budgets.overallBudget')}</h2>
+        <div className="card bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+          <h2 className="text-lg font-bold mb-4 dark:text-gray-100">{t('budgets.overallBudget')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <div>
-              <p className="text-sm text-gray-600">{t('budgets.totalBudget')}</p>
-              <p className="text-xl sm:text-2xl font-bold text-blue-600 break-all">{formatCurrency(totalBudget)}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('budgets.totalBudget')}</p>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 break-all">{formatCurrency(totalBudget)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">{t('budgets.totalSpent')}</p>
-              <p className="text-xl sm:text-2xl font-bold text-purple-600 break-all">{formatCurrency(totalSpent)}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('budgets.totalSpent')}</p>
+              <p className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400 break-all">{formatCurrency(totalSpent)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">{t('budgets.remaining')}</p>
-              <p className={`text-xl sm:text-2xl font-bold break-all ${totalBudget - totalSpent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('budgets.remaining')}</p>
+              <p className={`text-xl sm:text-2xl font-bold break-all ${totalBudget - totalSpent >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {totalBudget - totalSpent >= 0 ? formatCurrency(totalBudget - totalSpent) : '-' + formatCurrency(Math.abs(totalBudget - totalSpent))}
               </p>
             </div>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-4">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
             <div
               className={`h-4 rounded-full transition-all ${getProgressColor(overallPercentage)}`}
               style={{ width: `${Math.min(overallPercentage, 100)}%` }}
             ></div>
           </div>
-          <p className="text-sm text-gray-600 mt-2 text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center">
             {overallPercentage.toFixed(1)}% {t('budgets.used')}
           </p>
         </div>
@@ -176,7 +176,7 @@ const Budgets = () => {
               const percentage = (spent / amount * 100);
 
               return (
-                <div key={budget.id} className="p-3 sm:p-4 border rounded-lg hover:shadow-md transition-shadow">
+                <div key={budget.id} className="p-3 sm:p-4 border dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow">
                   <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-3">
                     <div className="flex items-start gap-3 flex-1 w-full">
                       <div
@@ -186,11 +186,11 @@ const Budgets = () => {
                         {budget.category_name?.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-base sm:text-lg truncate">{budget.category_name}</h3>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 mt-1">
+                        <h3 className="font-bold text-base sm:text-lg truncate dark:text-gray-100">{budget.category_name}</h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
                           <span className="truncate">{t('budgets.totalBudget')}: {formatCurrency(amount)}</span>
                           <span className="truncate">{t('budgets.totalSpent')}: {formatCurrency(spent)}</span>
-                          <span className={`truncate ${remaining >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <span className={`truncate ${remaining >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                             {t('budgets.remaining')}: {remaining >= 0 ? formatCurrency(remaining) : '-' + formatCurrency(Math.abs(remaining))}
                           </span>
                         </div>
@@ -200,7 +200,7 @@ const Budgets = () => {
                       {getStatusIcon(percentage)}
                       <button
                         onClick={() => handleDelete(budget.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded"
+                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                         title="Delete budget"
                       >
                         <Trash2 size={16} />
@@ -209,21 +209,21 @@ const Budgets = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 sm:h-3">
                       <div
                         className={`h-2 sm:h-3 rounded-full transition-all ${getProgressColor(percentage)}`}
                         style={{ width: `${Math.min(percentage, 100)}%` }}
                       ></div>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2 text-xs sm:text-sm">
-                      <span className="text-gray-600">{percentage.toFixed(1)}% {t('budgets.used')}</span>
+                      <span className="text-gray-600 dark:text-gray-400">{percentage.toFixed(1)}% {t('budgets.used')}</span>
                       {percentage >= 100 && (
-                        <span className="text-red-600 font-medium truncate">
+                        <span className="text-red-600 dark:text-red-400 font-medium truncate">
                           {t('budgets.overBudgetBy')} {formatCurrency(spent - amount)}
                         </span>
                       )}
                       {percentage >= 80 && percentage < 100 && (
-                        <span className="text-yellow-600 font-medium">
+                        <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                           {t('budgets.approachingLimit')}
                         </span>
                       )}
@@ -234,7 +234,7 @@ const Budgets = () => {
             })}
           </div>
         ) : (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             <p className="mb-4">{t('budgets.noBudgets')}</p>
             <button onClick={handleAdd} className="btn btn-primary">
               {t('budgets.setFirstBudget')}

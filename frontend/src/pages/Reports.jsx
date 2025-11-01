@@ -124,12 +124,12 @@ const Reports = () => {
       {/* Date Range Selector */}
       <div className="card">
         <div className="flex items-center gap-2 mb-4">
-          <Calendar size={20} className="text-gray-600" />
-          <h2 className="text-base sm:text-lg font-semibold">{t('reports.dateRange')}</h2>
+          <Calendar size={20} className="text-gray-600 dark:text-gray-400" />
+          <h2 className="text-base sm:text-lg font-semibold dark:text-gray-100">{t('reports.dateRange')}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('reports.startDate')}
             </label>
             <input
@@ -140,7 +140,7 @@ const Reports = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('reports.endDate')}
             </label>
             <input
@@ -155,27 +155,27 @@ const Reports = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-        <div className="card bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <div className="card bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs sm:text-sm text-gray-600">{t('reports.totalIncome')}</p>
-            <TrendingUp className="text-green-600" size={20} />
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('reports.totalIncome')}</p>
+            <TrendingUp className="text-green-600 dark:text-green-400" size={20} />
           </div>
-          <p className="text-2xl sm:text-3xl font-bold text-green-600 break-all">{formatCurrency(income)}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 break-all">{formatCurrency(income)}</p>
         </div>
 
-        <div className="card bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <div className="card bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200 dark:border-red-800">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs sm:text-sm text-gray-600">{t('reports.totalExpenses')}</p>
-            <TrendingDown className="text-red-600" size={20} />
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('reports.totalExpenses')}</p>
+            <TrendingDown className="text-red-600 dark:text-red-400" size={20} />
           </div>
-          <p className="text-2xl sm:text-3xl font-bold text-red-600 break-all">{formatCurrency(expense)}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400 break-all">{formatCurrency(expense)}</p>
         </div>
 
-        <div className={`card bg-gradient-to-br ${balance >= 0 ? 'from-blue-50 to-blue-100 border-blue-200' : 'from-orange-50 to-orange-100 border-orange-200'}`}>
+        <div className={`card bg-gradient-to-br ${balance >= 0 ? 'from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-800' : 'from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200 dark:border-orange-800'}`}>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs sm:text-sm text-gray-600">{t('reports.netBalance')}</p>
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('reports.netBalance')}</p>
           </div>
-          <p className={`text-2xl sm:text-3xl font-bold break-all ${balance >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
+          <p className={`text-2xl sm:text-3xl font-bold break-all ${balance >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-orange-600 dark:text-orange-400'}`}>
             {balance >= 0 ? '+' + formatCurrency(balance) : '-' + formatCurrency(Math.abs(balance))}
           </p>
         </div>
@@ -238,7 +238,7 @@ const Reports = () => {
               </div>
             </>
           ) : (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
               {t('reports.noIncomeData')}
             </div>
           )}
@@ -283,7 +283,7 @@ const Reports = () => {
               </div>
             </>
           ) : (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
               {t('reports.noExpenseData')}
             </div>
           )}

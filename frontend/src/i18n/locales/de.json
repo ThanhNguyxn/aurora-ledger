@@ -168,7 +168,11 @@
     "noExpenseData": "Keine Ausgabendaten",
     "failedToLoad": "Laden der Berichte fehlgeschlagen",
     "failedToExport": "Export fehlgeschlagen",
-    "reportExported": "Bericht exportiert"
+    "reportExported": "Bericht exportiert",
+    "income": "Einkommen",
+    "expense": "Ausgaben",
+    "balance": "Bilanz",
+    "amount": "Betrag"
   },
   "common": {
     "loading": "Wird geladen...",

@@ -168,7 +168,11 @@
     "noExpenseData": "没有支出数据",
     "failedToLoad": "加载报告失败",
     "failedToExport": "导出失败",
-    "reportExported": "报告已导出"
+    "reportExported": "报告已导出",
+    "income": "收入",
+    "expense": "支出",
+    "balance": "余额",
+    "amount": "金额"
   },
   "common": {
     "loading": "加载中...",

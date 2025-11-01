@@ -166,7 +166,11 @@
     "noExpenseData": "Sin datos de gastos",
     "failedToLoad": "Error al cargar informes",
     "failedToExport": "Error al exportar",
-    "reportExported": "Informe exportado"
+    "reportExported": "Informe exportado",
+    "income": "Ingresos",
+    "expense": "Gastos",
+    "balance": "Saldo",
+    "amount": "Cantidad"
   },
   "common": {
     "loading": "Cargando...",

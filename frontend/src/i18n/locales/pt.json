@@ -168,7 +168,11 @@
     "noExpenseData": "Sem dados de despesas",
     "failedToLoad": "Falha ao carregar relatórios",
     "failedToExport": "Falha ao exportar",
-    "reportExported": "Relatório exportado"
+    "reportExported": "Relatório exportado",
+    "income": "Receita",
+    "expense": "Despesas",
+    "balance": "Saldo",
+    "amount": "Valor"
   },
   "common": {
     "loading": "Carregando...",

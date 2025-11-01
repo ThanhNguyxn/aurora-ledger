@@ -168,7 +168,11 @@
     "noExpenseData": "支出データがありません",
     "failedToLoad": "レポートの読み込みに失敗",
     "failedToExport": "エクスポートに失敗",
-    "reportExported": "レポートがエクスポートされました"
+    "reportExported": "レポートがエクスポートされました",
+    "income": "収入",
+    "expense": "支出",
+    "balance": "残高",
+    "amount": "金額"
   },
   "common": {
     "loading": "読み込み中...",
