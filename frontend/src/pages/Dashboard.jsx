@@ -130,8 +130,8 @@ const Dashboard = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('dashboard.title')}</h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{t('dashboard.title')}</h1>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
             {t('dashboard.overviewFor')} {dateRange.label}
           </p>
         </div>
@@ -139,7 +139,7 @@ const Dashboard = () => {
           <button
             onClick={() => setViewMode('month')}
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              viewMode === 'month' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              viewMode === 'month' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             {t('dashboard.thisMonth')}
@@ -147,7 +147,7 @@ const Dashboard = () => {
           <button
             onClick={() => setViewMode('last30')}
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              viewMode === 'last30' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              viewMode === 'last30' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             {t('dashboard.last30Days')}
@@ -155,7 +155,7 @@ const Dashboard = () => {
           <button
             onClick={() => setViewMode('all')}
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              viewMode === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              viewMode === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             {t('dashboard.allTime')}
@@ -168,36 +168,36 @@ const Dashboard = () => {
         <div className="card border-l-4 border-blue-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">{t('dashboard.balance')}</p>
-              <p className={`text-2xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('dashboard.balance')}</p>
+              <p className={`text-2xl font-bold ${balance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {balance >= 0 ? formatCurrency(balance) : '-' + formatCurrency(Math.abs(balance))}
               </p>
             </div>
-            <Wallet className="text-blue-500" size={32} />
+            <Wallet className="text-blue-500 dark:text-blue-400" size={32} />
           </div>
         </div>
 
         <div className="card border-l-4 border-green-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">{t('dashboard.income')}</p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('dashboard.income')}</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                 {formatCurrency(income)}
               </p>
             </div>
-            <TrendingUp className="text-green-500" size={32} />
+            <TrendingUp className="text-green-500 dark:text-green-400" size={32} />
           </div>
         </div>
 
         <div className="card border-l-4 border-red-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">{t('dashboard.expenses')}</p>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('dashboard.expenses')}</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">
                 {formatCurrency(expense)}
               </p>
             </div>
-            <TrendingDown className="text-red-500" size={32} />
+            <TrendingDown className="text-red-500 dark:text-red-400" size={32} />
           </div>
         </div>
       </div>
@@ -239,14 +239,14 @@ const Dashboard = () => {
                       className="w-3 h-3 rounded-full flex-shrink-0"
                       style={{ backgroundColor: cat.category_color }}
                     ></div>
-                    <span className="truncate">{cat.category_name}</span>
-                    <span className="font-medium text-gray-600 ml-auto">{formatCurrency(cat.total)}</span>
+                    <span className="truncate dark:text-gray-200">{cat.category_name}</span>
+                    <span className="font-medium text-gray-600 dark:text-gray-400 ml-auto">{formatCurrency(cat.total)}</span>
                   </div>
                 ))}
               </div>
             </>
           ) : (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
               {t('dashboard.noExpenseData')}
             </div>
           )}
@@ -255,8 +255,8 @@ const Dashboard = () => {
         {/* Recent Transactions */}
         <div className="card">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">{t('dashboard.recentTransactions')}</h2>
-            <Link to="/transactions" className="text-blue-600 hover:underline text-sm flex items-center gap-1">
+            <h2 className="text-xl font-bold dark:text-gray-100">{t('dashboard.recentTransactions')}</h2>
+            <Link to="/transactions" className="text-blue-600 dark:text-blue-400 hover:underline text-sm flex items-center gap-1">
               {t('dashboard.viewAll')} <ArrowRight size={16} />
             </Link>
           </div>
@@ -274,19 +274,19 @@ const Dashboard = () => {
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium">{transaction.category_name || t('transactions.uncategorized')}</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="font-medium dark:text-gray-200">{transaction.category_name || t('transactions.uncategorized')}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {format(new Date(transaction.transaction_date), 'MMM dd, yyyy', { locale: getDateLocale() })}
                       </p>
                     </div>
                   </div>
-                  <p className={`font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className={`font-bold ${transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                     {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, transaction.currency)}
                   </p>
                 </div>
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 {t('dashboard.noTransactions')}
               </div>
             )}
@@ -297,17 +297,17 @@ const Dashboard = () => {
       {/* Top Categories */}
       {expenseByCategoryConverted.length > 0 && (
         <div className="card">
-          <h2 className="text-xl font-bold mb-4">{t('dashboard.topSpendingCategories')}</h2>
+          <h2 className="text-xl font-bold mb-4 dark:text-gray-100">{t('dashboard.topSpendingCategories')}</h2>
           <div className="space-y-3">
             {expenseByCategoryConverted.slice(0, 5).map((category) => {
               const percentage = expense > 0 ? (category.total / expense * 100).toFixed(1) : 0;
               return (
                 <div key={category.category_id}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-medium">{category.category_name}</span>
-                    <span className="text-gray-600">{formatCurrency(category.total)} ({percentage}%)</span>
+                    <span className="font-medium dark:text-gray-200">{category.category_name}</span>
+                    <span className="text-gray-600 dark:text-gray-400">{formatCurrency(category.total)} ({percentage}%)</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <div
                       className="h-2 rounded-full"
                       style={{

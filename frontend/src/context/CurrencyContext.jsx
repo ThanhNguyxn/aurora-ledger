@@ -38,17 +38,17 @@ export function CurrencyProvider({ children }) {
   useEffect(() => {
     const loadExchangeRates = async () => {
       try {
-        const response = await axios.get(`${API_URL}/currency/rates/${currency}`);
+        // Always load rates from USD as base
+        // This gives us: { VND: 25000, EUR: 0.85, ... } meaning 1 USD = X currency
+        const response = await axios.get(`${API_URL}/currency/rates/USD`);
         setExchangeRates(response.data.rates);
       } catch (error) {
         console.error('Error loading exchange rates:', error);
       }
     };
 
-    if (currency) {
-      loadExchangeRates();
-    }
-  }, [currency, API_URL]);
+    loadExchangeRates();
+  }, [API_URL]); // Remove currency dependency - always load USD rates
 
   // Update user's currency preference
   const updateCurrency = async (newCurrency) => {
@@ -72,18 +72,28 @@ export function CurrencyProvider({ children }) {
 
   // Convert amount to user's currency
   const convertAmount = (amount, fromCurrency = 'USD') => {
+    if (!amount || amount === 0) return 0;
     if (fromCurrency === currency) return amount;
     
-    // Convert from fromCurrency to USD first (if needed)
-    let amountInUSD = amount;
-    if (fromCurrency !== 'USD') {
-      const toUSDRate = exchangeRates[fromCurrency] ? 1 / exchangeRates[fromCurrency] : 1;
-      amountInUSD = amount * toUSDRate;
-    }
+    // exchangeRates contains rates from the base currency (set by API call)
+    // When we call /currency/rates/USD, we get: { VND: 25000, EUR: 0.85, ... }
+    // This means: 1 USD = 25000 VND, 1 USD = 0.85 EUR
     
-    // Then convert from USD to target currency
-    const rate = exchangeRates[currency] || 1;
-    return amountInUSD * rate;
+    if (fromCurrency === 'USD') {
+      // Direct conversion from USD to target currency
+      const rate = exchangeRates[currency] || 1;
+      return amount * rate;
+    } else if (currency === 'USD') {
+      // Reverse conversion from some currency to USD
+      const rate = exchangeRates[fromCurrency] || 1;
+      return amount / rate;
+    } else {
+      // Convert from one non-USD currency to another via USD
+      const fromRate = exchangeRates[fromCurrency] || 1;
+      const toRate = exchangeRates[currency] || 1;
+      const amountInUSD = amount / fromRate;
+      return amountInUSD * toRate;
+    }
   };
 
   // Format currency with proper symbol
