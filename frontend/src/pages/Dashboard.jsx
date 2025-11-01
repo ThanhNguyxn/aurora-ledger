@@ -17,7 +17,7 @@ import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
-  const { formatCurrency, formatAmount, currency } = useCurrency();
+  const { formatCurrency, formatAmount, convertAmount, currency } = useCurrency();
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -107,12 +107,22 @@ const Dashboard = () => {
     );
   }
 
-  // Note: Amounts are stored in USD in database
-  // They are automatically converted when displayed via formatCurrency
-  // which uses the exchange rates from CurrencyContext
-  const balance = stats?.totals?.balance || 0;
-  const income = stats?.totals?.income || 0;
-  const expense = stats?.totals?.expense || 0;
+  // Note: Backend returns amounts in USD
+  // We need to convert them to user's display currency
+  const balanceUSD = stats?.totals?.balance || 0;
+  const incomeUSD = stats?.totals?.income || 0;
+  const expenseUSD = stats?.totals?.expense || 0;
+
+  // Convert to user's currency
+  const balance = convertAmount(balanceUSD, 'USD');
+  const income = convertAmount(incomeUSD, 'USD');
+  const expense = convertAmount(expenseUSD, 'USD');
+
+  // Convert category breakdown data
+  const expenseByCategoryConverted = stats?.byCategory?.expense?.map(cat => ({
+    ...cat,
+    total: convertAmount(cat.total, 'USD')
+  })) || [];
 
   const dateRange = getDateRange();
 
@@ -196,12 +206,12 @@ const Dashboard = () => {
         {/* Expense Breakdown */}
         <div className="card">
           <h2 className="text-lg sm:text-xl font-bold mb-4">{t('dashboard.expenseBreakdown')}</h2>
-          {stats?.byCategory?.expense?.length > 0 ? (
+          {expenseByCategoryConverted.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
-                    data={stats.byCategory.expense}
+                    data={expenseByCategoryConverted}
                     dataKey="total"
                     nameKey="category_name"
                     cx="50%"
@@ -212,7 +222,7 @@ const Dashboard = () => {
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     labelLine={true}
                   >
-                    {stats.byCategory.expense.map((entry, index) => (
+                    {expenseByCategoryConverted.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.category_color} stroke="#fff" strokeWidth={2} />
                     ))}
                   </Pie>
@@ -223,7 +233,7 @@ const Dashboard = () => {
                 </PieChart>
               </ResponsiveContainer>
               <div className="mt-4 grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
-                {stats.byCategory.expense.map((cat, index) => (
+                {expenseByCategoryConverted.map((cat, index) => (
                   <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
                     <div
                       className="w-3 h-3 rounded-full flex-shrink-0"
@@ -285,12 +295,12 @@ const Dashboard = () => {
       </div>
 
       {/* Top Categories */}
-      {stats?.byCategory?.expense?.length > 0 && (
+      {expenseByCategoryConverted.length > 0 && (
         <div className="card">
           <h2 className="text-xl font-bold mb-4">{t('dashboard.topSpendingCategories')}</h2>
           <div className="space-y-3">
-            {stats.byCategory.expense.slice(0, 5).map((category) => {
-              const percentage = (category.total / expense * 100).toFixed(1);
+            {expenseByCategoryConverted.slice(0, 5).map((category) => {
+              const percentage = expense > 0 ? (category.total / expense * 100).toFixed(1) : 0;
               return (
                 <div key={category.category_id}>
                   <div className="flex items-center justify-between mb-1">
