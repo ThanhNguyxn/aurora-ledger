@@ -140,7 +140,7 @@ router.put('/users/:id/role',
   }
 );
 
-// Reset user password (admin and mod can reset)
+// Reset user password (admin can reset anyone, mod can only reset users)
 router.post('/users/:id/reset-password',
   authenticateToken,
   isMod,
@@ -154,6 +154,30 @@ router.post('/users/:id/reset-password',
 
       const { id } = req.params;
       const { newPassword } = req.body;
+
+      // Get target user's role
+      const targetUserResult = await pool.query(
+        'SELECT role FROM users WHERE id = $1',
+        [id]
+      );
+
+      if (targetUserResult.rows.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      const targetRole = targetUserResult.rows[0].role;
+
+      // Get current user's role
+      const currentUserResult = await pool.query(
+        'SELECT role FROM users WHERE id = $1',
+        [req.user.userId]
+      );
+      const currentRole = currentUserResult.rows[0].role;
+
+      // Mod can only reset users with role 'user'
+      if (currentRole === 'mod' && targetRole !== 'user') {
+        return res.status(403).json({ error: 'Moderators can only reset passwords for regular users' });
+      }
 
       // Hash new password
       const hashedPassword = await bcrypt.hash(newPassword, 10);
