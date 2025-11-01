@@ -91,7 +91,9 @@
     "saving": "Enregistrement...",
     "maxAmount": "Maximum : 999 999 999 999,99",
     "exportedSuccess": "Transactions exportées",
-    "failedToExport": "Échec de l'exportation"
+    "failedToExport": "Échec de l'exportation",
+    "willConvert": "Sera converti dans votre devise d'affichage",
+    "transactionCurrency": "Devise de transaction"
   },
   "categories": {
     "title": "Catégories",

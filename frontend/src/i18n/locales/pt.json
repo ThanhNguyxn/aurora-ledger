@@ -91,7 +91,9 @@
     "saving": "Salvando...",
     "maxAmount": "Máximo: 999.999.999.999,99",
     "exportedSuccess": "Transações exportadas",
-    "failedToExport": "Falha ao exportar"
+    "failedToExport": "Falha ao exportar",
+    "willConvert": "Será convertido para sua moeda de exibição",
+    "transactionCurrency": "Moeda da transação"
   },
   "categories": {
     "title": "Categorias",

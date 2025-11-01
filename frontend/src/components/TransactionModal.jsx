@@ -203,7 +203,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Currency
+                {t('transactions.transactionCurrency') || 'Currency'}
               </label>
               <select
                 name="currency"
@@ -213,7 +213,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
               >
                 {CURRENCIES.map(curr => (
                   <option key={curr.code} value={curr.code}>
-                    {curr.code}
+                    {curr.symbol} {curr.code}
                   </option>
                 ))}
               </select>

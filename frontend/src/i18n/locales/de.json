@@ -91,7 +91,9 @@
     "saving": "Wird gespeichert...",
     "maxAmount": "Maximum: 999.999.999.999,99",
     "exportedSuccess": "Transaktionen exportiert",
-    "failedToExport": "Export fehlgeschlagen"
+    "failedToExport": "Export fehlgeschlagen",
+    "willConvert": "Wird in Ihre Anzeigewährung umgerechnet",
+    "transactionCurrency": "Transaktionswährung"
   },
   "categories": {
     "title": "Kategorien",

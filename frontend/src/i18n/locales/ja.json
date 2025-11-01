@@ -91,7 +91,9 @@
     "saving": "保存中...",
     "maxAmount": "最大：999,999,999,999.99",
     "exportedSuccess": "取引がエクスポートされました",
-    "failedToExport": "エクスポートに失敗"
+    "failedToExport": "エクスポートに失敗",
+    "willConvert": "表示通貨に変換されます",
+    "transactionCurrency": "取引通貨"
   },
   "categories": {
     "title": "カテゴリ",
