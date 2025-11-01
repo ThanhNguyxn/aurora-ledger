@@ -148,19 +148,19 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
             {transaction ? t('transactions.editTransaction') : t('transactions.addTransaction')}
           </h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded transition-colors" title="Close">
-            <X size={20} />
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors" title="Close">
+            <X size={20} className="text-gray-600 dark:text-gray-400" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('transactions.type')}
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -170,7 +170,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
                 className={`py-2 px-4 rounded-lg font-medium transition-colors ${
                   formData.type === 'income'
                     ? 'bg-green-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 {t('transactions.income')}
@@ -181,7 +181,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
                 className={`py-2 px-4 rounded-lg font-medium transition-colors ${
                   formData.type === 'expense'
                     ? 'bg-red-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 {t('transactions.expense')}
@@ -191,7 +191,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
 
           <div className="grid grid-cols-3 gap-3">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {t('transactions.amount')}
               </label>
               <input
@@ -208,7 +208,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {t('transactions.transactionCurrency') || 'Currency'}
               </label>
               <select
@@ -225,12 +225,12 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
               </select>
             </div>
           </div>
-          <p className="text-xs text-gray-500 -mt-2">
+          <p className="text-xs text-gray-500 dark:text-gray-400 -mt-2">
             {t('transactions.maxAmount')} • {t('transactions.willConvert') || 'Will be converted to your display currency'}
           </p>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('transactions.date')}
             </label>
             <input
@@ -244,12 +244,12 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center justify-between">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center justify-between">
               <span>{t('transactions.category')}</span>
               <button
                 type="button"
                 onClick={() => setShowQuickAdd(!showQuickAdd)}
-                className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1"
               >
                 <Plus size={14} />
                 {t('categories.addCategory')}
@@ -257,7 +257,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
             </label>
             
             {showQuickAdd && (
-              <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -275,7 +275,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
                     {t('common.save')}
                   </button>
                 </div>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                   💡 Quick add {formData.type} category with random color
                 </p>
               </div>
@@ -297,7 +297,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('transactions.description')} ({t('transactions.optional')})
             </label>
             <textarea

@@ -91,7 +91,7 @@ router.post('/',
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { type, amount, transaction_date, category_id, description } = req.body;
+      const { type, amount, currency, transaction_date, category_id, description } = req.body;
 
       // Verify category belongs to user if provided
       if (category_id) {

@@ -135,8 +135,8 @@ const Transactions = () => {
       {/* Filters */}
       <div className="card">
         <div className="flex items-center gap-2 mb-4">
-          <Filter size={20} className="text-gray-600" />
-          <h2 className="text-base sm:text-lg font-semibold">{t('transactions.filters')}</h2>
+          <Filter size={20} className="text-gray-600 dark:text-gray-400" />
+          <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">{t('transactions.filters')}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <select
@@ -181,7 +181,7 @@ const Transactions = () => {
         {(filters.type || filters.category_id || filters.start_date || filters.end_date) && (
           <button
             onClick={() => setFilters({ type: '', category_id: '', start_date: '', end_date: '' })}
-            className="mt-3 text-sm text-blue-600 hover:underline"
+            className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline"
           >
             {t('transactions.clearFilters')}
           </button>
@@ -198,19 +198,19 @@ const Transactions = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 px-4 text-sm sm:text-base">{t('transactions.date')}</th>
-                  <th className="text-left py-3 px-4 text-sm sm:text-base">{t('transactions.category')}</th>
-                  <th className="text-left py-3 px-4 text-sm sm:text-base hidden sm:table-cell">{t('transactions.description')}</th>
-                  <th className="text-left py-3 px-4 text-sm sm:text-base">{t('transactions.type')}</th>
-                  <th className="text-right py-3 px-4 text-sm sm:text-base">{t('transactions.amount')}</th>
-                  <th className="text-right py-3 px-4 text-sm sm:text-base">{t('transactions.actions')}</th>
+                <tr className="border-b dark:border-gray-700">
+                  <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.date')}</th>
+                  <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.category')}</th>
+                  <th className="text-left py-3 px-4 text-sm sm:text-base hidden sm:table-cell text-gray-800 dark:text-gray-200">{t('transactions.description')}</th>
+                  <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.type')}</th>
+                  <th className="text-right py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.amount')}</th>
+                  <th className="text-right py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.actions')}</th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.map((transaction) => (
-                  <tr key={transaction.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4 text-sm">
+                  <tr key={transaction.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="py-3 px-4 text-sm text-gray-800 dark:text-gray-200">
                       {format(new Date(transaction.transaction_date), 'MMM dd, yyyy', { locale: getDateLocale() })}
                     </td>
                     <td className="py-3 px-4">
@@ -219,18 +219,18 @@ const Transactions = () => {
                           className="w-3 h-3 rounded-full"
                           style={{ backgroundColor: transaction.category_color }}
                         ></div>
-                        {transaction.category_name || t('transactions.uncategorized')}
+                        <span className="text-gray-800 dark:text-gray-200">{transaction.category_name || t('transactions.uncategorized')}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-600 hidden sm:table-cell">
+                    <td className="py-3 px-4 text-gray-600 dark:text-gray-400 hidden sm:table-cell">
                       {transaction.description || '-'}
                     </td>
                     <td className="py-3 px-4">
                       <span
                         className={`px-2 py-1 rounded text-xs font-medium ${
                           transaction.type === 'income'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
+                            : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'
                         }`}
                       >
                         {transaction.type}
@@ -239,7 +239,7 @@ const Transactions = () => {
                     <td className="py-3 px-4 text-right">
                       <span
                         className={`font-bold ${
-                          transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+                          transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                         }`}
                       >
                         {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
@@ -249,13 +249,13 @@ const Transactions = () => {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleEdit(transaction)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                          className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
                         >
                           <Pencil size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(transaction.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded"
+                          className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -267,7 +267,7 @@ const Transactions = () => {
             </table>
           </div>
         ) : (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             {t('transactions.noTransactions')}
           </div>
         )}
