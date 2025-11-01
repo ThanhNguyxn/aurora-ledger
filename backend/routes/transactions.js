@@ -81,7 +81,7 @@ router.post('/',
     body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
     body('currency').optional().isLength({ min: 3, max: 3 }),
     body('transaction_date').isDate(),
-    body('category_id').optional().isInt(),
+    body('category_id').optional({ nullable: true, checkFalsy: true }).isInt(),
     body('description').optional().trim()
   ],
   async (req, res) => {
@@ -131,7 +131,7 @@ router.put('/:id',
     body('amount').optional().isFloat({ min: 0.01, max: 999999999999.99 }),
     body('currency').optional().isLength({ min: 3, max: 3 }),
     body('transaction_date').optional().isDate(),
-    body('category_id').optional().isInt(),
+    body('category_id').optional({ nullable: true, checkFalsy: true }).isInt(),
     body('description').optional().trim()
   ],
   async (req, res) => {
