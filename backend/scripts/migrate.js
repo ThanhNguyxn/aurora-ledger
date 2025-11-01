@@ -39,6 +39,7 @@ const createTables = async () => {
         category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
         type VARCHAR(20) NOT NULL CHECK (type IN ('income', 'expense')),
         amount DECIMAL(15, 2) NOT NULL,
+        currency VARCHAR(3) DEFAULT 'USD',
         description TEXT,
         transaction_date DATE NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

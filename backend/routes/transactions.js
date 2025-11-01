@@ -79,6 +79,7 @@ router.post('/',
   [
     body('type').isIn(['income', 'expense']),
     body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
+    body('currency').optional().isLength({ min: 3, max: 3 }),
     body('transaction_date').isDate(),
     body('category_id').optional().isInt(),
     body('description').optional().trim()
@@ -104,10 +105,10 @@ router.post('/',
       }
 
       const result = await pool.query(
-        `INSERT INTO transactions (user_id, type, amount, transaction_date, category_id, description)
-         VALUES ($1, $2, $3, $4, $5, $6)
+        `INSERT INTO transactions (user_id, type, amount, currency, transaction_date, category_id, description)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
          RETURNING *`,
-        [req.user.id, type, amount, transaction_date, category_id || null, description || null]
+        [req.user.id, type, amount, currency || 'USD', transaction_date, category_id || null, description || null]
       );
 
       res.status(201).json(result.rows[0]);
@@ -123,6 +124,7 @@ router.put('/:id',
   [
     body('type').optional().isIn(['income', 'expense']),
     body('amount').optional().isFloat({ min: 0.01, max: 999999999999.99 }),
+    body('currency').optional().isLength({ min: 3, max: 3 }),
     body('transaction_date').optional().isDate(),
     body('category_id').optional().isInt(),
     body('description').optional().trim()
@@ -135,7 +137,7 @@ router.put('/:id',
       }
 
       const { id } = req.params;
-      const { type, amount, transaction_date, category_id, description } = req.body;
+      const { type, amount, currency, transaction_date, category_id, description } = req.body;
 
       const updates = [];
       const values = [];
@@ -148,6 +150,10 @@ router.put('/:id',
       if (amount) {
         updates.push(`amount = $${paramCount++}`);
         values.push(amount);
+      }
+      if (currency) {
+        updates.push(`currency = $${paramCount++}`);
+        values.push(currency);
       }
       if (transaction_date) {
         updates.push(`transaction_date = $${paramCount++}`);

@@ -89,7 +89,9 @@
     "create": "Tạo",
     "update": "Cập nhật",
     "saving": "Đang lưu...",
-    "maxAmount": "Tối đa: 999,999,999,999.99"
+    "maxAmount": "Tối đa: 999,999,999,999.99",
+    "willConvert": "Sẽ được chuyển đổi sang loại tiền hiển thị của bạn",
+    "transactionCurrency": "Loại tiền giao dịch"
   },
   "categories": {
     "title": "Danh mục",

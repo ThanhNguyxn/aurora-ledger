@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useCurrency } from '../context/CurrencyContext';
 import { X } from 'lucide-react';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
@@ -7,9 +8,11 @@ import { format } from 'date-fns';
 
 const TransactionModal = ({ transaction, categories, onClose }) => {
   const { t } = useTranslation();
+  const { currency: userCurrency } = useCurrency();
   const [formData, setFormData] = useState({
     type: 'expense',
     amount: '',
+    currency: userCurrency || 'USD',
     transaction_date: format(new Date(), 'yyyy-MM-dd'),
     category_id: '',
     description: ''
@@ -26,6 +29,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
       setFormData({
         type: transaction.type,
         amount: transaction.amount,
+        currency: transaction.currency || 'USD',
         transaction_date: date,
         category_id: transaction.category_id || '',
         description: transaction.description || ''
@@ -34,6 +38,20 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
   }, [transaction]);
 
   const filteredCategories = categories.filter(cat => cat.type === formData.type);
+  
+  const CURRENCIES = [
+    { code: 'USD', name: 'US Dollar', symbol: '$' },
+    { code: 'VND', name: 'Vietnamese Dong', symbol: '₫' },
+    { code: 'EUR', name: 'Euro', symbol: '€' },
+    { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
+    { code: 'GBP', name: 'British Pound', symbol: '£' },
+    { code: 'CNY', name: 'Chinese Yuan', symbol: '¥' },
+    { code: 'KRW', name: 'Korean Won', symbol: '₩' },
+    { code: 'THB', name: 'Thai Baht', symbol: '฿' },
+    { code: 'SGD', name: 'Singapore Dollar', symbol: 'S$' },
+    { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
+    { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$' },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +69,7 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
       const data = {
         type: formData.type,
         amount: amount,
+        currency: formData.currency,
         transaction_date: formData.transaction_date, // Already in yyyy-MM-dd format
         category_id: formData.category_id ? parseInt(formData.category_id) : null,
         description: formData.description || ''
@@ -126,24 +145,45 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t('transactions.amount')}
-            </label>
-            <input
-              type="number"
-              name="amount"
-              value={formData.amount}
-              onChange={handleChange}
-              step="any"
-              min="0.01"
-              max="999999999999.99"
-              className="input"
-              required
-              placeholder="0.00"
-            />
-            <p className="text-xs text-gray-500 mt-1">{t('transactions.maxAmount')}</p>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t('transactions.amount')}
+              </label>
+              <input
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                step="any"
+                min="0.01"
+                max="999999999999.99"
+                className="input"
+                required
+                placeholder="0.00"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Currency
+              </label>
+              <select
+                name="currency"
+                value={formData.currency}
+                onChange={handleChange}
+                className="input"
+              >
+                {CURRENCIES.map(curr => (
+                  <option key={curr.code} value={curr.code}>
+                    {curr.code}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+          <p className="text-xs text-gray-500 -mt-2">
+            {t('transactions.maxAmount')} • {t('transactions.willConvert') || 'Will be converted to your display currency'}
+          </p>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
