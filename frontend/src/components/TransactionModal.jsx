@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '../context/CurrencyContext';
-import { X } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 
-const TransactionModal = ({ transaction, categories, onClose }) => {
+const TransactionModal = ({ transaction, categories: initialCategories, onClose }) => {
   const { t } = useTranslation();
   const { currency: userCurrency } = useCurrency();
   const [formData, setFormData] = useState({
@@ -18,6 +18,9 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
     description: ''
   });
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState(initialCategories);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [quickAddName, setQuickAddName] = useState('');
 
   useEffect(() => {
     if (transaction) {
@@ -100,6 +103,41 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
       // Reset category when type changes
       ...(name === 'type' ? { category_id: '' } : {})
     }));
+  };
+
+  const handleQuickAddCategory = async () => {
+    if (!quickAddName.trim()) {
+      toast.error(t('categories.name') + ' is required');
+      return;
+    }
+
+    try {
+      const COLORS = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
+      const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+      
+      const response = await api.post('/categories', {
+        name: quickAddName,
+        type: formData.type,
+        color: randomColor,
+        icon: 'folder'
+      });
+
+      // Add new category to list
+      const newCategory = response.data;
+      setCategories([...categories, newCategory]);
+      
+      // Auto-select the new category
+      setFormData({ ...formData, category_id: newCategory.id });
+      
+      // Reset quick add
+      setQuickAddName('');
+      setShowQuickAdd(false);
+      
+      toast.success(t('categories.categoryCreated'));
+    } catch (error) {
+      toast.error(t('categories.failedToCreate'));
+      console.error(error);
+    }
   };
 
   return (
@@ -200,9 +238,43 @@ const TransactionModal = ({ transaction, categories, onClose }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t('transactions.category')}
+            <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center justify-between">
+              <span>{t('transactions.category')}</span>
+              <button
+                type="button"
+                onClick={() => setShowQuickAdd(!showQuickAdd)}
+                className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              >
+                <Plus size={14} />
+                {t('categories.addCategory')}
+              </button>
             </label>
+            
+            {showQuickAdd && (
+              <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={quickAddName}
+                    onChange={(e) => setQuickAddName(e.target.value)}
+                    className="input flex-1"
+                    placeholder={t('categories.categoryName')}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleQuickAddCategory())}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleQuickAddCategory}
+                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    {t('common.save')}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-600 mt-1">
+                  💡 Quick add {formData.type} category with random color
+                </p>
+              </div>
+            )}
+            
             <select
               name="category_id"
               value={formData.category_id}
