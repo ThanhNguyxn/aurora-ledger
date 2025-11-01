@@ -23,23 +23,40 @@ router.post('/init-admin', async (req, res) => {
       return res.status(400).json({ error: 'Email is required' });
     }
 
+    let setupPerformed = false;
+
     // Check if role column exists
-    const columnCheck = await client.query(`
+    const roleColumnCheck = await client.query(`
       SELECT column_name 
       FROM information_schema.columns 
       WHERE table_name = 'users' AND column_name = 'role';
     `);
 
-    let setupPerformed = false;
-
     // Add role column if it doesn't exist
-    if (columnCheck.rows.length === 0) {
+    if (roleColumnCheck.rows.length === 0) {
       await client.query(`
         ALTER TABLE users 
         ADD COLUMN role VARCHAR(20) DEFAULT 'user';
       `);
       setupPerformed = true;
       console.log('✅ role column added');
+    }
+
+    // Check if oauth_provider column exists
+    const oauthColumnCheck = await client.query(`
+      SELECT column_name 
+      FROM information_schema.columns 
+      WHERE table_name = 'users' AND column_name = 'oauth_provider';
+    `);
+
+    // Add oauth_provider column if it doesn't exist
+    if (oauthColumnCheck.rows.length === 0) {
+      await client.query(`
+        ALTER TABLE users 
+        ADD COLUMN oauth_provider VARCHAR(20) DEFAULT 'local';
+      `);
+      setupPerformed = true;
+      console.log('✅ oauth_provider column added');
     }
 
     // Check if user exists

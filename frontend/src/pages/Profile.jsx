@@ -79,12 +79,22 @@ const Profile = () => {
       return;
     }
 
+    // Check if user is OAuth user (Google login)
+    const isOAuthUser = user?.oauth_provider && user.oauth_provider !== 'local';
+
+    // Only require current password for non-OAuth users
+    if (!isOAuthUser && !passwordForm.currentPassword) {
+      toast.error(t('profile.currentPasswordRequired') || 'Current password is required');
+      return;
+    }
+
     setIsChangingPassword(true);
 
     try {
-      await axios.put(`${API_URL}/profile/change-password`, passwordForm);
+      const response = await axios.put(`${API_URL}/profile/change-password`, passwordForm);
       
-      toast.success(t('profile.passwordChanged') || 'Password changed successfully!');
+      const message = response.data.message + (response.data.note ? '\n' + response.data.note : '');
+      toast.success(message);
       
       // Reset password form
       setPasswordForm({
@@ -92,6 +102,13 @@ const Profile = () => {
         newPassword: '',
         confirmPassword: ''
       });
+
+      // If OAuth user just set password, update user context
+      if (isOAuthUser) {
+        const updatedUser = { ...user, oauth_provider: 'local' };
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
     } catch (error) {
       const message = error.response?.data?.error || error.response?.data?.errors?.[0]?.msg || t('profile.passwordChangeError') || 'Failed to change password';
       toast.error(message);
@@ -188,29 +205,41 @@ const Profile = () => {
           </div>
 
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t('profile.currentPassword') || 'Current Password'}
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
-                <input
-                  type={showPasswords.current ? 'text' : 'password'}
-                  value={passwordForm.currentPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                  className="w-full pl-10 pr-10 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
-                  placeholder="••••••••"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => togglePasswordVisibility('current')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-                >
-                  {showPasswords.current ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
+            {/* Show info for OAuth users */}
+            {user?.oauth_provider && user.oauth_provider !== 'local' && (
+              <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  ℹ️ {t('profile.oauthPasswordInfo') || 'You logged in with Google. Set a password to also login with email.'}
+                </p>
               </div>
-            </div>
+            )}
+
+            {/* Only show current password field for non-OAuth users */}
+            {(!user?.oauth_provider || user.oauth_provider === 'local') && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('profile.currentPassword') || 'Current Password'}
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+                  <input
+                    type={showPasswords.current ? 'text' : 'password'}
+                    value={passwordForm.currentPassword}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
+                    className="w-full pl-10 pr-10 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility('current')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    {showPasswords.current ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

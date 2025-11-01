@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, email, full_name, role, currency, created_at FROM users WHERE id = $1',
+      'SELECT id, email, full_name, role, currency, oauth_provider, created_at FROM users WHERE id = $1',
       [req.user.userId]
     );
 
@@ -53,7 +53,7 @@ router.put('/',
 
       // Update profile
       const result = await pool.query(
-        'UPDATE users SET email = $1, full_name = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING id, email, full_name, role, currency, created_at',
+        'UPDATE users SET email = $1, full_name = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING id, email, full_name, role, currency, oauth_provider, created_at',
         [email, full_name, req.user.userId]
       );
 
@@ -72,7 +72,6 @@ router.put('/',
 router.put('/change-password',
   authenticateToken,
   [
-    body('currentPassword').notEmpty().withMessage('Current password is required'),
     body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters'),
     body('confirmPassword').custom((value, { req }) => {
       if (value !== req.body.newPassword) {
@@ -90,9 +89,9 @@ router.put('/change-password',
 
       const { currentPassword, newPassword } = req.body;
 
-      // Get current user password
+      // Get current user
       const userResult = await pool.query(
-        'SELECT password FROM users WHERE id = $1',
+        'SELECT password, oauth_provider FROM users WHERE id = $1',
         [req.user.userId]
       );
 
@@ -102,28 +101,42 @@ router.put('/change-password',
 
       const user = userResult.rows[0];
 
-      // Verify current password
-      const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
-      if (!isPasswordValid) {
-        return res.status(400).json({ error: 'Current password is incorrect' });
-      }
+      // If user has oauth_provider (Google login), allow setting password without current password
+      const isOAuthUser = user.oauth_provider && user.oauth_provider !== 'local';
+      const hasNoPassword = !user.password || user.password === '';
 
-      // Check if new password is same as current
-      const isSamePassword = await bcrypt.compare(newPassword, user.password);
-      if (isSamePassword) {
-        return res.status(400).json({ error: 'New password must be different from current password' });
+      // Only require current password if user is not OAuth user and has a password
+      if (!isOAuthUser && !hasNoPassword) {
+        if (!currentPassword) {
+          return res.status(400).json({ error: 'Current password is required' });
+        }
+
+        // Verify current password
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isPasswordValid) {
+          return res.status(400).json({ error: 'Current password is incorrect' });
+        }
+
+        // Check if new password is same as current
+        const isSamePassword = await bcrypt.compare(newPassword, user.password);
+        if (isSamePassword) {
+          return res.status(400).json({ error: 'New password must be different from current password' });
+        }
       }
 
       // Hash new password
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-      // Update password
+      // Update password and set oauth_provider to 'local' if it was OAuth
       await pool.query(
-        'UPDATE users SET password = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
-        [hashedPassword, req.user.userId]
+        'UPDATE users SET password = $1, oauth_provider = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3',
+        [hashedPassword, 'local', req.user.userId]
       );
 
-      res.json({ message: 'Password changed successfully' });
+      res.json({ 
+        message: 'Password changed successfully',
+        note: isOAuthUser ? 'You can now login with email and password' : null
+      });
     } catch (error) {
       console.error('Change password error:', error);
       res.status(500).json({ error: 'Failed to change password' });
