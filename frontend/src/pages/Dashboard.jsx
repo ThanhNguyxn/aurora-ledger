@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('month'); // 'month', 'last30', 'all'
 
   const currentDate = new Date();
   const monthStart = format(startOfMonth(currentDate), 'yyyy-MM-dd');
@@ -27,13 +28,45 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, [viewMode]);
+
+  const getDateRange = () => {
+    const today = new Date();
+    switch (viewMode) {
+      case 'month':
+        return {
+          start: format(startOfMonth(today), 'yyyy-MM-dd'),
+          end: format(endOfMonth(today), 'yyyy-MM-dd'),
+          label: format(today, 'MMMM yyyy')
+        };
+      case 'last30':
+        const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+        return {
+          start: format(thirtyDaysAgo, 'yyyy-MM-dd'),
+          end: format(today, 'yyyy-MM-dd'),
+          label: 'Last 30 Days'
+        };
+      case 'all':
+        return {
+          start: '2020-01-01',
+          end: format(today, 'yyyy-MM-dd'),
+          label: 'All Time'
+        };
+      default:
+        return {
+          start: format(startOfMonth(today), 'yyyy-MM-dd'),
+          end: format(endOfMonth(today), 'yyyy-MM-dd'),
+          label: format(today, 'MMMM yyyy')
+        };
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      const dateRange = getDateRange();
       const [overviewRes, transactionsRes] = await Promise.all([
-        api.get(`/reports/overview?start_date=${monthStart}&end_date=${monthEnd}`),
+        api.get(`/reports/overview?start_date=${dateRange.start}&end_date=${dateRange.end}`),
         api.get('/transactions?limit=5')
       ]);
 
@@ -59,17 +92,47 @@ const Dashboard = () => {
   const income = stats?.totals?.income || 0;
   const expense = stats?.totals?.expense || 0;
 
+  const dateRange = getDateRange();
+
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</h1>
-        <p className="text-gray-600 mt-1">
-          {t('dashboard.overviewFor')} {format(currentDate, 'MMMM yyyy')}
-        </p>
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('dashboard.title')}</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">
+            {t('dashboard.overviewFor')} {dateRange.label}
+          </p>
+        </div>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <button
+            onClick={() => setViewMode('month')}
+            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              viewMode === 'month' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            This Month
+          </button>
+          <button
+            onClick={() => setViewMode('last30')}
+            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              viewMode === 'last30' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Last 30 Days
+          </button>
+          <button
+            onClick={() => setViewMode('all')}
+            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              viewMode === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            All Time
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
         <div className="card border-l-4 border-blue-500">
           <div className="flex items-center justify-between">
             <div>
