@@ -2,6 +2,7 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import pool from '../config/database.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { getExchangeRate, convertCurrency } from '../utils/currency.js';
 
 const router = express.Router();
 router.use(authMiddleware);
@@ -15,25 +16,110 @@ router.get('/', async (req, res) => {
       return res.status(400).json({ error: 'Month and year are required' });
     }
 
+    // Get user's preferred currency
+    const userResult = await pool.query(
+      'SELECT currency FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    const userCurrency = userResult.rows[0]?.currency || 'USD';
+
     const result = await pool.query(
-      `SELECT b.*, c.name as category_name, c.color as category_color, c.icon as category_icon,
-       COALESCE(
-         (SELECT SUM(amount) FROM transactions 
-          WHERE user_id = $1 
-          AND category_id = b.category_id 
-          AND type = 'expense'
-          AND EXTRACT(MONTH FROM transaction_date) = $2
-          AND EXTRACT(YEAR FROM transaction_date) = $3
-         ), 0
-       ) as spent
+      `SELECT 
+         b.id,
+         b.category_id,
+         b.amount as original_amount,
+         b.currency as budget_currency,
+         b.month,
+         b.year,
+         b.created_at,
+         b.updated_at,
+         c.name as category_name, 
+         c.color as category_color, 
+         c.icon as category_icon,
+         COALESCE(
+           (SELECT 
+              COALESCE(
+                SUM(
+                  CASE 
+                    WHEN t.currency = $4 THEN t.amount
+                    ELSE 0
+                  END
+                ), 0
+              )
+            FROM transactions t
+            WHERE t.user_id = $1 
+            AND t.category_id = b.category_id 
+            AND t.type = 'expense'
+            AND EXTRACT(MONTH FROM t.transaction_date) = $2
+            AND EXTRACT(YEAR FROM t.transaction_date) = $3
+           ), 0
+         ) as spent_same_currency,
+         COALESCE(
+           (SELECT 
+              json_agg(
+                json_build_object(
+                  'amount', t.amount,
+                  'currency', t.currency
+                )
+              )
+            FROM transactions t
+            WHERE t.user_id = $1 
+            AND t.category_id = b.category_id 
+            AND t.type = 'expense'
+            AND t.currency != $4
+            AND EXTRACT(MONTH FROM t.transaction_date) = $2
+            AND EXTRACT(YEAR FROM t.transaction_date) = $3
+           ), '[]'::json
+         ) as spent_other_currencies
        FROM budgets b
        LEFT JOIN categories c ON b.category_id = c.id
        WHERE b.user_id = $1 AND b.month = $2 AND b.year = $3
        ORDER BY c.name`,
-      [req.user.id, month, year]
+      [req.user.id, month, year, userCurrency]
     );
 
-    res.json(result.rows);
+    // Convert all amounts to user's currency
+    const budgetsWithConversion = await Promise.all(
+      result.rows.map(async (budget) => {
+        // Convert budget amount to user currency
+        let budgetAmount = budget.original_amount;
+        if (budget.budget_currency !== userCurrency) {
+          const rate = await getExchangeRate(budget.budget_currency, userCurrency);
+          budgetAmount = convertCurrency(budget.original_amount, rate);
+        }
+
+        // Calculate total spent (already in user currency + need to convert others)
+        let totalSpent = parseFloat(budget.spent_same_currency || 0);
+        
+        // Convert other currencies
+        const otherSpent = budget.spent_other_currencies || [];
+        for (const item of otherSpent) {
+          if (item && item.currency && item.amount) {
+            const rate = await getExchangeRate(item.currency, userCurrency);
+            totalSpent += convertCurrency(item.amount, rate);
+          }
+        }
+
+        return {
+          id: budget.id,
+          category_id: budget.category_id,
+          amount: budgetAmount,
+          currency: userCurrency, // Always return in user's currency
+          original_amount: budget.original_amount,
+          original_currency: budget.budget_currency,
+          month: budget.month,
+          year: budget.year,
+          category_name: budget.category_name,
+          category_color: budget.category_color,
+          category_icon: budget.category_icon,
+          spent: totalSpent,
+          created_at: budget.created_at,
+          updated_at: budget.updated_at
+        };
+      })
+    );
+
+    res.json(budgetsWithConversion);
   } catch (error) {
     console.error('Get budgets error:', error);
     res.status(500).json({ error: 'Server error' });
