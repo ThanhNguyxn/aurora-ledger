@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, email, full_name, currency, created_at FROM users WHERE id = $1',
+      'SELECT id, email, full_name, role, currency, created_at FROM users WHERE id = $1',
       [req.user.userId]
     );
 
@@ -53,7 +53,7 @@ router.put('/',
 
       // Update profile
       const result = await pool.query(
-        'UPDATE users SET email = $1, full_name = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING id, email, full_name, currency, created_at',
+        'UPDATE users SET email = $1, full_name = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING id, email, full_name, role, currency, created_at',
         [email, full_name, req.user.userId]
       );
 

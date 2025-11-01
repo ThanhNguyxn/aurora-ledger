@@ -14,6 +14,7 @@ import passwordResetRoutes from './routes/password-reset.js';
 import recurringRoutes from './routes/recurring.js';
 import profileRoutes from './routes/profile.js';
 import adminRoutes from './routes/admin.js';
+import setupRoutes from './routes/setup.js';
 import { processRecurringTransactions } from './utils/recurring-processor.js';
 
 dotenv.config();
@@ -61,6 +62,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', oauthRoutes);
 app.use('/api/auth', passwordResetRoutes);
+app.use('/api/setup', setupRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/categories', categoryRoutes);
