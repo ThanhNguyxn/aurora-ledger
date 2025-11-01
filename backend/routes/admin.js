@@ -2,31 +2,12 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import { body, validationResult } from 'express-validator';
 import pool from '../config/database.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, isAdmin, isMod } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Middleware to check if user is admin
-const isAdmin = async (req, res, next) => {
-  try {
-    const result = await pool.query(
-      'SELECT role FROM users WHERE id = $1',
-      [req.user.userId]
-    );
-
-    if (result.rows.length === 0 || result.rows[0].role !== 'admin') {
-      return res.status(403).json({ error: 'Access denied. Admin only.' });
-    }
-
-    next();
-  } catch (error) {
-    console.error('Admin check error:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
-};
-
-// Get all users (admin only)
-router.get('/users', authenticateToken, isAdmin, async (req, res) => {
+// Get all users (admin or mod can view)
+router.get('/users', authenticateToken, isMod, async (req, res) => {
   try {
     const { page = 1, limit = 20, search = '' } = req.query;
     const offset = (page - 1) * limit;
@@ -130,7 +111,7 @@ router.get('/users/:id', authenticateToken, isAdmin, async (req, res) => {
 router.put('/users/:id/role',
   authenticateToken,
   isAdmin,
-  [body('role').isIn(['user', 'admin'])],
+  [body('role').isIn(['user', 'mod', 'admin'])],
   async (req, res) => {
     try {
       const errors = validationResult(req);

@@ -137,14 +137,18 @@ const Profile = () => {
           </p>
         </div>
 
-        {/* Admin Button - Only visible to admin users */}
-        {user?.role === 'admin' && (
+        {/* Admin/Mod Button - Only visible to admin and mod users */}
+        {(user?.role === 'admin' || user?.role === 'mod') && (
           <Link 
             to="/admin"
-            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-medium transition-all shadow-lg hover:shadow-xl"
+            className={`flex items-center gap-2 px-4 py-2.5 ${
+              user?.role === 'admin' 
+                ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700'
+                : 'bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600'
+            } text-white rounded-lg font-medium transition-all shadow-lg hover:shadow-xl`}
           >
             <Shield size={20} />
-            <span>Admin Dashboard</span>
+            <span>{user?.role === 'admin' ? 'Admin Dashboard' : 'Moderator Panel'}</span>
           </Link>
         )}
       </div>

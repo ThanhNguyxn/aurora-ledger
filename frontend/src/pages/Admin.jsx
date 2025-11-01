@@ -52,9 +52,7 @@ const Admin = () => {
     }
   };
 
-  const handleRoleToggle = async (userId, currentRole) => {
-    const newRole = currentRole === 'admin' ? 'user' : 'admin';
-    
+  const handleRoleToggle = async (userId, newRole) => {
     if (!confirm(t('admin.confirmRoleChange') || `Change role to ${newRole}?`)) {
       return;
     }
@@ -103,7 +101,7 @@ const Admin = () => {
     }
   };
 
-  if (user?.role !== 'admin') {
+  if (user?.role !== 'admin' && user?.role !== 'mod') {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
@@ -112,7 +110,7 @@ const Admin = () => {
             {t('admin.accessDenied') || 'Access Denied'}
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            {t('admin.adminOnly') || 'This page is only accessible to administrators.'}
+            {t('admin.adminOnly') || 'This page is only accessible to administrators and moderators.'}
           </p>
         </div>
       </div>
@@ -245,17 +243,22 @@ const Admin = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleRoleToggle(u.id, u.role)}
-                        disabled={u.id === user.id}
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      <select
+                        value={u.role || 'user'}
+                        onChange={(e) => handleRoleToggle(u.id, e.target.value)}
+                        disabled={u.id === user.id || user?.role !== 'admin'}
+                        className={`px-3 py-1 rounded-lg text-xs font-semibold border ${
                           u.role === 'admin'
-                            ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
-                            : 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                        } ${u.id === user.id ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80 cursor-pointer'}`}
+                            ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 border-orange-300 dark:border-orange-700'
+                            : u.role === 'mod'
+                            ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 border-purple-300 dark:border-purple-700'
+                            : 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700'
+                        } ${(u.id === user.id || user?.role !== 'admin') ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:opacity-80'}`}
                       >
-                        {u.role || 'user'}
-                      </button>
+                        <option value="user">User</option>
+                        <option value="mod">Mod</option>
+                        <option value="admin">Admin</option>
+                      </select>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -267,26 +270,32 @@ const Admin = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedUser(u);
-                            setShowResetModal(true);
-                          }}
-                          className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                          title={t('admin.resetPassword') || 'Reset Password'}
-                        >
-                          <Lock size={18} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteUser(u.id, u.full_name)}
-                          disabled={u.id === user.id}
-                          className={`p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors ${
-                            u.id === user.id ? 'opacity-50 cursor-not-allowed' : ''
-                          }`}
-                          title={t('admin.deleteUser') || 'Delete User'}
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                        {/* Only Admin can reset password */}
+                        {user?.role === 'admin' && (
+                          <button
+                            onClick={() => {
+                              setSelectedUser(u);
+                              setShowResetModal(true);
+                            }}
+                            className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                            title={t('admin.resetPassword') || 'Reset Password'}
+                          >
+                            <Lock size={18} />
+                          </button>
+                        )}
+                        {/* Only Admin can delete users */}
+                        {user?.role === 'admin' && (
+                          <button
+                            onClick={() => handleDeleteUser(u.id, u.full_name)}
+                            disabled={u.id === user.id}
+                            className={`p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors ${
+                              u.id === user.id ? 'opacity-50 cursor-not-allowed' : ''
+                            }`}
+                            title={t('admin.deleteUser') || 'Delete User'}
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
