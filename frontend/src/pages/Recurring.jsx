@@ -62,6 +62,8 @@ const Recurring = () => {
         end_date: formData.end_date || null,
       };
 
+      console.log('📤 Submitting recurring data:', submitData);
+
       if (editingRecurring) {
         await api.put(`/recurring/${editingRecurring.id}`, submitData);
         toast.success(t('recurring.recurringUpdated'));
@@ -74,7 +76,11 @@ const Recurring = () => {
       resetForm();
       fetchRecurring();
     } catch (error) {
-      toast.error(error.response?.data?.error || t('common.error'));
+      console.error('❌ Recurring error:', error.response?.data);
+      const errorMsg = error.response?.data?.errors 
+        ? error.response.data.errors.map(e => e.msg).join(', ')
+        : error.response?.data?.error || t('common.error');
+      toast.error(errorMsg);
     }
   };
 

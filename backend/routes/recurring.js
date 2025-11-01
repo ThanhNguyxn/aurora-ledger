@@ -64,8 +64,8 @@ router.post('/',
     body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
     body('currency').optional().isLength({ min: 3, max: 3 }),
     body('frequency').isIn(['daily', 'weekly', 'monthly', 'yearly']),
-    body('start_date').isDate(),
-    body('end_date').optional().isDate(),
+    body('start_date').isISO8601().toDate(),
+    body('end_date').optional().isISO8601().toDate(),
     body('category_id').optional().isInt(),
     body('description').optional().trim()
   ],
@@ -73,6 +73,7 @@ router.post('/',
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        console.error('❌ Validation errors:', errors.array());
         return res.status(400).json({ errors: errors.array() });
       }
 
@@ -137,8 +138,8 @@ router.put('/:id',
     body('amount').optional().isFloat({ min: 0.01, max: 999999999999.99 }),
     body('currency').optional().isLength({ min: 3, max: 3 }),
     body('frequency').optional().isIn(['daily', 'weekly', 'monthly', 'yearly']),
-    body('start_date').optional().isDate(),
-    body('end_date').optional().isDate(),
+    body('start_date').optional().isISO8601().toDate(),
+    body('end_date').optional().isISO8601().toDate(),
     body('is_active').optional().isBoolean(),
     body('category_id').optional().isInt(),
     body('description').optional().trim()
