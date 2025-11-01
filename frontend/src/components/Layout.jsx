@@ -34,11 +34,6 @@ const Layout = () => {
     { to: '/profile', icon: User, label: t('nav.profile') },
   ];
 
-  // Only add Admin link if user is admin
-  const allNavItems = user?.role === 'admin' 
-    ? [...navItems, { to: '/admin', icon: Shield, label: t('nav.admin') || 'Admin' }]
-    : navItems;
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
       {/* Mobile Header */}
@@ -78,7 +73,7 @@ const Layout = () => {
         </div>
 
         <nav className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
-          {allNavItems.map((item) => (
+          {navItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { User, Mail, Lock, Save, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Save, Eye, EyeOff, Shield } from 'lucide-react';
 
 const Profile = () => {
   const { user, setUser } = useAuth();
@@ -126,12 +127,27 @@ const Profile = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">
-        {t('profile.title') || 'Profile Settings'}
-      </h1>
-      <p className="text-gray-600 dark:text-gray-400 mb-8">
-        {t('profile.subtitle') || 'Manage your account settings and preferences'}
-      </p>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+            {t('profile.title') || 'Profile Settings'}
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            {t('profile.subtitle') || 'Manage your account settings and preferences'}
+          </p>
+        </div>
+
+        {/* Admin Button - Only visible to admin users */}
+        {user?.role === 'admin' && (
+          <Link 
+            to="/admin"
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-medium transition-all shadow-lg hover:shadow-xl"
+          >
+            <Shield size={20} />
+            <span>Admin Dashboard</span>
+          </Link>
+        )}
+      </div>
 
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
         {/* Profile Information Card */}
