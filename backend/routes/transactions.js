@@ -88,10 +88,13 @@ router.post('/',
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        console.log('❌ Validation errors:', errors.array());
         return res.status(400).json({ errors: errors.array() });
       }
 
       const { type, amount, currency, transaction_date, category_id, description } = req.body;
+      
+      console.log('📥 Creating transaction:', { type, amount, currency, transaction_date, category_id, description });
 
       // Verify category belongs to user if provided
       if (category_id) {
@@ -100,6 +103,7 @@ router.post('/',
           [category_id, req.user.id]
         );
         if (catResult.rows.length === 0) {
+          console.log('❌ Invalid category:', category_id);
           return res.status(400).json({ error: 'Invalid category' });
         }
       }
@@ -111,9 +115,10 @@ router.post('/',
         [req.user.id, type, amount, currency || 'USD', transaction_date, category_id || null, description || null]
       );
 
+      console.log('✅ Transaction created:', result.rows[0]);
       res.status(201).json(result.rows[0]);
     } catch (error) {
-      console.error('Create transaction error:', error);
+      console.error('❌ Create transaction error:', error);
       res.status(500).json({ error: 'Server error' });
     }
   }

@@ -84,6 +84,8 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
         description: formData.description || ''
       };
 
+      console.log('📤 Sending transaction data:', data);
+
       if (transaction) {
         await api.put(`/transactions/${transaction.id}`, data);
         toast.success(t('transactions.transactionUpdated'));
@@ -94,8 +96,24 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
 
       onClose();
     } catch (error) {
-      toast.error(transaction ? t('transactions.failedToUpdate') : t('transactions.failedToCreate'));
-      console.error(error);
+      console.error('❌ Transaction error:', error);
+      console.error('❌ Response data:', error.response?.data);
+      console.error('❌ Status:', error.response?.status);
+      
+      // Show detailed error message
+      let errorMessage = transaction ? t('transactions.failedToUpdate') : t('transactions.failedToCreate');
+      
+      if (error.response?.data?.errors) {
+        // Backend validation errors
+        const errorDetails = error.response.data.errors.map(e => `${e.param}: ${e.msg}`).join(', ');
+        errorMessage = errorDetails;
+        console.table(error.response.data.errors);
+      } else if (error.response?.data?.error) {
+        // Backend error message
+        errorMessage = error.response.data.error;
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
