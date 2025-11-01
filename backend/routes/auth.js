@@ -59,9 +59,9 @@ router.post('/register',
         );
       }
 
-      // Generate JWT
+      // Generate JWT with userId for consistency
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { userId: user.id, id: user.id, email: user.email, role: 'user' },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN }
       );
@@ -112,9 +112,9 @@ router.post('/login',
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      // Generate JWT
+      // Generate JWT with userId and role for middleware
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { userId: user.id, id: user.id, email: user.email, role: user.role || 'user' },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN }
       );

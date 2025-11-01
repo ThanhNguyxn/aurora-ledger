@@ -24,9 +24,9 @@ if (isGoogleOAuthEnabled) {
     }),
     (req, res) => {
       try {
-        // Create JWT token
+        // Create JWT token with userId and role
         const token = jwt.sign(
-          { id: req.user.id, email: req.user.email },
+          { userId: req.user.id, id: req.user.id, email: req.user.email, role: req.user.role || 'user' },
           process.env.JWT_SECRET,
           { expiresIn: process.env.JWT_EXPIRES_IN }
         );
