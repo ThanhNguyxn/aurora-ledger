@@ -71,6 +71,17 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 
 ---
 
+## 🔐 Security
+
+- 🔒 **Password Encryption** - Bcrypt hashing with 10 salt rounds
+- 🎫 **JWT Authentication** - Secure token-based authentication (7-day expiry)
+- 🛡️ **SQL Injection Protection** - Parameterized database queries
+- 🔐 **HTTPS Only** - SSL/TLS encryption for all connections
+- 👤 **Data Isolation** - Complete user data privacy
+- 🌐 **CORS Protection** - Restricted to allowed origins
+
+---
+
 ## 🌍 Supported Currencies
 
 **29 major world currencies** with real-time exchange rates updated daily:
@@ -166,53 +177,7 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
    Current: $0/month (100% FREE) ✅
    Optional: $7-12/month (Remove all limitations)
    ```
-
----
-
-## 📊 Features
-
-### Transaction Management
-✅ Add income and expense transactions  
-✅ Categorize with custom categories  
-✅ Add notes and descriptions  
-✅ Search and filter by date, type, category  
-✅ Edit and delete transactions  
-
-### Budget Tracking
-✅ Set monthly budgets per category  
-✅ Visual progress indicators  
-✅ Automatic spending calculations  
-✅ Budget alerts at 80% and 100%  
-✅ Monthly and yearly views  
-
-### Financial Reports
-✅ Income vs Expense trends  
-✅ Spending by category (pie charts)  
-✅ Monthly comparison (bar charts)  
-✅ 6-month trend analysis  
-✅ Export data to CSV  
-
-### Multi-Currency
-✅ Choose from 29 currencies  
-✅ Real-time exchange rates  
-✅ Automatic conversion  
-✅ Currency-specific formatting  
-✅ 24-hour rate caching  
-
----
-
-## 🔐 Security
-
-- 🔒 **Password Encryption** - Bcrypt hashing with 10 salt rounds
-- 🎫 **JWT Authentication** - Secure token-based authentication (7-day expiry)
-- 🛡️ **SQL Injection Protection** - Parameterized database queries
-- 🔐 **HTTPS Only** - SSL/TLS encryption for all connections
-- 👤 **Data Isolation** - Complete user data privacy
-- 🌐 **CORS Protection** - Restricted to allowed origins
-
----
-
-
+   
 ---
 
 ## 🛠️ Built With
