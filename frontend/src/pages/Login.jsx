@@ -73,7 +73,7 @@ const Login = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1 flex justify-between">
                 <span>{t('auth.password')}</span>
-                <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline">
+                <Link to="/forgot-password" tabIndex={-1} className="text-xs text-blue-600 hover:underline">
                   {t('auth.forgotPassword')}
                 </Link>
               </label>
