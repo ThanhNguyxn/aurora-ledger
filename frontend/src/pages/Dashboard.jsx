@@ -264,9 +264,9 @@ const Dashboard = () => {
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium">{transaction.category_name || 'Uncategorized'}</p>
+                      <p className="font-medium">{transaction.category_name || t('transactions.uncategorized')}</p>
                       <p className="text-sm text-gray-600">
-                        {format(new Date(transaction.transaction_date), 'MMM dd, yyyy')}
+                        {format(new Date(transaction.transaction_date), 'MMM dd, yyyy', { locale: getDateLocale() })}
                       </p>
                     </div>
                   </div>

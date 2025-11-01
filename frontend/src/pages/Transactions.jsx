@@ -4,12 +4,18 @@ import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
 import { Plus, Pencil, Trash2, Filter, Download } from 'lucide-react';
 import { format } from 'date-fns';
+import { enUS, vi, es, fr, de, zhCN, ja, ko, pt, ru } from 'date-fns/locale';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
 
 const Transactions = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { formatCurrency } = useCurrency();
+  
+  const getDateLocale = () => {
+    const locales = { en: enUS, vi: vi, es: es, fr: fr, de: de, zh: zhCN, ja: ja, ko: ko, pt: pt, ru: ru };
+    return locales[i18n.language] || enUS;
+  };
   const [transactions, setTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -204,8 +210,8 @@ const Transactions = () => {
               <tbody>
                 {transactions.map((transaction) => (
                   <tr key={transaction.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4">
-                      {format(new Date(transaction.transaction_date), 'MMM dd, yyyy')}
+                    <td className="py-3 px-4 text-sm">
+                      {format(new Date(transaction.transaction_date), 'MMM dd, yyyy', { locale: getDateLocale() })}
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
@@ -213,7 +219,7 @@ const Transactions = () => {
                           className="w-3 h-3 rounded-full"
                           style={{ backgroundColor: transaction.category_color }}
                         ></div>
-                        {transaction.category_name || 'Uncategorized'}
+                        {transaction.category_name || t('transactions.uncategorized')}
                       </div>
                     </td>
                     <td className="py-3 px-4 text-gray-600 hidden sm:table-cell">
