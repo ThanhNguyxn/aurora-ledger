@@ -9,18 +9,23 @@ import CurrencySelector from '../components/CurrencySelector';
 
 const Budgets = () => {
   const { t } = useTranslation();
-  const { formatCurrency, convertAmount } = useCurrency();
+  const { formatCurrency, convertAmount, currency: currentCurrency } = useCurrency();
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [budgetCurrency, setBudgetCurrency] = useState(null); // Track the currency data was fetched in
 
   const fetchBudgets = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/budgets?month=${selectedMonth}&year=${selectedYear}`);
       setBudgets(response.data);
+      // Store the currency that the data was fetched in
+      if (response.data.length > 0) {
+        setBudgetCurrency(response.data[0].currency);
+      }
     } catch (error) {
       toast.error(t('budgets.failedToLoad'));
       console.error(error);
@@ -71,9 +76,23 @@ const Budgets = () => {
     return null;
   };
 
-  // Backend already converts to user's currency, no need to convert again
-  const totalBudget = budgets.reduce((sum, b) => sum + parseFloat(b.amount || 0), 0);
-  const totalSpent = budgets.reduce((sum, b) => sum + parseFloat(b.spent || 0), 0);
+  // Convert amounts from budgetCurrency to currentCurrency when currency selector changes
+  const totalBudget = budgets.reduce((sum, b) => {
+    const originalAmount = parseFloat(b.amount || 0);
+    const convertedAmount = budgetCurrency && budgetCurrency !== currentCurrency
+      ? convertAmount(originalAmount, budgetCurrency)
+      : originalAmount;
+    return sum + convertedAmount;
+  }, 0);
+  
+  const totalSpent = budgets.reduce((sum, b) => {
+    const originalSpent = parseFloat(b.spent || 0);
+    const convertedSpent = budgetCurrency && budgetCurrency !== currentCurrency
+      ? convertAmount(originalSpent, budgetCurrency)
+      : originalSpent;
+    return sum + convertedSpent;
+  }, 0);
+  
   const overallPercentage = totalBudget > 0 ? (totalSpent / totalBudget * 100) : 0;
 
   return (
@@ -167,9 +186,18 @@ const Budgets = () => {
         ) : budgets.length > 0 ? (
           <div className="space-y-4">
             {budgets.map((budget) => {
-              // Backend already converted to user's currency
-              const spent = parseFloat(budget.spent || 0);
-              const amount = parseFloat(budget.amount || 0);
+              // Convert amounts if currency selector has changed
+              const originalSpent = parseFloat(budget.spent || 0);
+              const originalAmount = parseFloat(budget.amount || 0);
+              
+              const spent = budgetCurrency && budgetCurrency !== currentCurrency
+                ? convertAmount(originalSpent, budgetCurrency)
+                : originalSpent;
+              
+              const amount = budgetCurrency && budgetCurrency !== currentCurrency
+                ? convertAmount(originalAmount, budgetCurrency)
+                : originalAmount;
+              
               const remaining = amount - spent;
               const percentage = amount > 0 ? (spent / amount * 100) : 0;
 
