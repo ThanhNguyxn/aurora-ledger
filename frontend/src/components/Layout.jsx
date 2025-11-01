@@ -52,17 +52,18 @@ const Layout = () => {
         lg:translate-x-0
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="p-4 lg:p-6 border-b mt-14 lg:mt-0">
+        <div className="p-4 lg:p-6 border-b dark:border-gray-700 mt-14 lg:mt-0">
           <h1 className="hidden lg:block text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             {t('app.name')}
           </h1>
           <div className="mt-1">
-            <p className="text-sm font-semibold text-gray-800 truncate">{user?.full_name || 'User'}</p>
-            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">{user?.full_name || 'User'}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
           </div>
           <div className="mt-3 space-y-2">
             <CurrencySelector />
             <LanguageSelector />
+            <ThemeToggle />
           </div>
         </div>
 
@@ -75,8 +76,8 @@ const Layout = () => {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-colors ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-700 hover:bg-gray-50'
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`
               }
             >
@@ -86,13 +87,13 @@ const Layout = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t dark:border-gray-700 bg-white dark:bg-gray-800">
           <button
             onClick={() => {
               logout();
               setIsMobileMenuOpen(false);
             }}
-            className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg w-full transition-colors"
+            className="flex items-center gap-3 px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg w-full transition-colors"
           >
             <LogOut size={20} />
             <span className="font-medium">{t('nav.logout')}</span>
