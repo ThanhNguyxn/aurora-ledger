@@ -5,6 +5,7 @@ import { useCurrency } from '../context/CurrencyContext';
 import { Plus, Trash2, TrendingDown, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BudgetModal from '../components/BudgetModal';
+import CurrencySelector from '../components/CurrencySelector';
 
 const Budgets = () => {
   const { t } = useTranslation();
@@ -70,18 +71,18 @@ const Budgets = () => {
     return null;
   };
 
-  // Convert amounts from backend USD to user's currency
-  const totalBudgetUSD = budgets.reduce((sum, b) => sum + parseFloat(b.amount), 0);
-  const totalSpentUSD = budgets.reduce((sum, b) => sum + parseFloat(b.spent), 0);
-  
-  const totalBudget = convertAmount(totalBudgetUSD, 'USD');
-  const totalSpent = convertAmount(totalSpentUSD, 'USD');
+  // Backend already converts to user's currency, no need to convert again
+  const totalBudget = budgets.reduce((sum, b) => sum + parseFloat(b.amount || 0), 0);
+  const totalSpent = budgets.reduce((sum, b) => sum + parseFloat(b.spent || 0), 0);
   const overallPercentage = totalBudget > 0 ? (totalSpent / totalBudget * 100) : 0;
 
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h1 className="text-2xl sm:text-3xl font-bold">{t('budgets.title')}</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold">{t('budgets.title')}</h1>
+          <CurrencySelector />
+        </div>
         <button onClick={handleAdd} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto">
           <Plus size={20} />
           <span>{t('budgets.setBudget')}</span>
@@ -166,14 +167,11 @@ const Budgets = () => {
         ) : budgets.length > 0 ? (
           <div className="space-y-4">
             {budgets.map((budget) => {
-              const spentUSD = parseFloat(budget.spent);
-              const amountUSD = parseFloat(budget.amount);
-              
-              // Convert to user's currency
-              const spent = convertAmount(spentUSD, 'USD');
-              const amount = convertAmount(amountUSD, 'USD');
+              // Backend already converted to user's currency
+              const spent = parseFloat(budget.spent || 0);
+              const amount = parseFloat(budget.amount || 0);
               const remaining = amount - spent;
-              const percentage = (spent / amount * 100);
+              const percentage = amount > 0 ? (spent / amount * 100) : 0;
 
               return (
                 <div key={budget.id} className="p-3 sm:p-4 border dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow">
