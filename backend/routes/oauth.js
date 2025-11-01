@@ -31,8 +31,17 @@ if (isGoogleOAuthEnabled) {
           { expiresIn: process.env.JWT_EXPIRES_IN }
         );
 
-        // Redirect to frontend with token
-        res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&name=${encodeURIComponent(req.user.full_name)}`);
+        // Encode user data for URL
+        const userData = encodeURIComponent(JSON.stringify({
+          id: req.user.id,
+          email: req.user.email,
+          full_name: req.user.full_name,
+          role: req.user.role || 'user',
+          oauth_provider: req.user.oauth_provider || 'google'
+        }));
+
+        // Redirect to frontend with token and user data
+        res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&user=${userData}`);
       } catch (error) {
         console.error('Error creating token:', error);
         res.redirect(`${process.env.FRONTEND_URL}/login?error=token_creation_failed`);

@@ -10,7 +10,7 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       const token = searchParams.get('token');
-      const name = searchParams.get('name');
+      const userParam = searchParams.get('user');
       const error = searchParams.get('error');
       
       if (error) {
@@ -19,27 +19,20 @@ export default function AuthCallback() {
         return;
       }
       
-      if (token) {
+      if (token && userParam) {
         try {
           // Save token and set axios header
           localStorage.setItem('token', token);
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           
-          // Decode JWT to get user info
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          
-          // Create user object
-          const userData = {
-            id: payload.id,
-            email: payload.email,
-            full_name: name || 'User'
-          };
+          // Parse user data from URL parameter
+          const userData = JSON.parse(decodeURIComponent(userParam));
           
           // Save user data
           localStorage.setItem('user', JSON.stringify(userData));
           
           // Show welcome message
-          toast.success(`Welcome back, ${name || 'User'}!`);
+          toast.success(`Welcome back, ${userData.full_name}!`);
           
           // Redirect to dashboard
           window.location.href = '/dashboard';
