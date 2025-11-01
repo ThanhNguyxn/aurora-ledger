@@ -9,6 +9,38 @@ async function ensureTables() {
   try {
     console.log('🔍 Checking database tables...');
 
+    // Check if budgets table exists
+    const budgetsCheck = await client.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'budgets'
+      );
+    `);
+
+    if (!budgetsCheck.rows[0].exists) {
+      console.log('⚠️  budgets table missing - creating now...');
+      
+      await client.query(`
+        CREATE TABLE budgets (
+          id SERIAL PRIMARY KEY,
+          user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+          category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,
+          amount DECIMAL(15, 2) NOT NULL,
+          month INTEGER NOT NULL CHECK (month BETWEEN 1 AND 12),
+          year INTEGER NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(user_id, category_id, month, year)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_budgets_user_id ON budgets(user_id);
+      `);
+      
+      console.log('✅ budgets table created');
+    } else {
+      console.log('✅ budgets table exists');
+    }
+
     // Check if password_resets table exists
     const tableCheck = await client.query(`
       SELECT EXISTS (
