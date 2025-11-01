@@ -34,9 +34,14 @@ const Recurring = () => {
   const fetchRecurring = async () => {
     try {
       const response = await api.get('/recurring');
-      setRecurring(response.data);
+      setRecurring(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
-      toast.error(t('common.error'));
+      console.error('❌ Error fetching recurring:', error);
+      setRecurring([]);
+      // Don't show error toast if backend not ready yet
+      if (error.response?.status !== 404 && error.response?.status !== 502) {
+        toast.error(t('common.error'));
+      }
     } finally {
       setLoading(false);
     }
@@ -45,9 +50,10 @@ const Recurring = () => {
   const fetchCategories = async () => {
     try {
       const response = await api.get('/categories');
-      setCategories(response.data);
+      setCategories(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('❌ Error fetching categories:', error);
+      setCategories([]);
     }
   };
 
@@ -160,13 +166,13 @@ const Recurring = () => {
     setEditingRecurring(null);
   };
 
-  const filteredRecurring = recurring.filter(rec => {
+  const filteredRecurring = Array.isArray(recurring) ? recurring.filter(rec => {
     if (filterActive === 'active') return rec.is_active;
     if (filterActive === 'inactive') return !rec.is_active;
     return true;
-  });
+  }) : [];
 
-  const filteredCategories = categories.filter(cat => cat.type === formData.type);
+  const filteredCategories = Array.isArray(categories) ? categories.filter(cat => cat.type === formData.type) : [];
 
   return (
     <div className="space-y-4 sm:space-y-6">
