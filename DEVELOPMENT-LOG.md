@@ -2,7 +2,7 @@
 
 > **Tracking progress, features implemented, current issues, and next steps**
 
-Last Updated: **November 2, 2025 - 3:45 PM** (After Reports fix + BudgetModal improvement + Cleanup)
+Last Updated: **November 2, 2025 - 4:00 PM** (After Analytics & Family fix)
 
 ---
 
@@ -314,6 +314,17 @@ forecast = slope * nextMonth + intercept
     - **Reason**: Translation complete, scripts no longer needed
     - **Impact**: Cleaner codebase, removed 10 unused files
 
+12. **Analytics & Family Pages 500 Error** ✅ FIXED (Nov 2, 2025)
+    - **Issue**: Analytics and Family pages throwing 500 Internal Server Error
+    - **Root Cause**: `POPULAR_CURRENCIES.includes(currency)` validation incorrect
+    - **Details**: POPULAR_CURRENCIES is array of objects `[{code, name}]`, not strings
+    - **Fixed In**:
+      - `routes/trends.js` - Removed unused POPULAR_CURRENCIES import (cleanup)
+      - `routes/family-shared.js` - Fixed currency validation (2 locations, lines 103 & 283)
+      - Changed to: `POPULAR_CURRENCIES.find(c => c.code === currency)`
+    - **Impact**: Family budgets/goals creation now works, Analytics loads correctly
+    - **Commit**: `f253979`
+
 ---
 
 ## 🐛 Known Issues
@@ -342,6 +353,7 @@ forecast = slope * nextMonth + intercept
 - ~~Slow page switching~~ → FIXED `a7d40b7`
 - ~~Reports page 500 error~~ → FIXED `5d11a1f` (Nov 2, 2025)
 - ~~BudgetModal static month/year~~ → FIXED `5d11a1f` (Nov 2, 2025)
+- ~~Analytics & Family 500 errors~~ → FIXED `f253979` (Nov 2, 2025)
 
 ---
 
