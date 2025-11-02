@@ -73,37 +73,44 @@ router.get('/', async (req, res) => {
       spentByCategory[catId] += convertedAmount;
     }
 
-    // Convert budget amounts and add spent data
-    const budgetsWithConversion = await Promise.all(
+    // Add spent data with proper conversion for comparison
+    const budgetsWithSpent = await Promise.all(
       result.rows.map(async (budget) => {
-        // Convert budget amount to target currency
-        const convertedBudgetAmount = await convertCurrency(
-          parseFloat(budget.amount),
-          budget.currency,
-          targetCurrency
-        );
+        const budgetCurrency = budget.currency;
         
-        // Get spent for this category (already in target currency)
-        const totalSpent = spentByCategory[budget.category_id] || 0;
+        // Get spent in budget's currency for accurate comparison
+        let totalSpentInBudgetCurrency = 0;
+        
+        // Recalculate spent specifically for this budget's currency
+        for (const t of transactionsResult.rows) {
+          if (t.category_id === budget.category_id) {
+            const convertedAmount = await convertCurrency(
+              parseFloat(t.amount),
+              t.currency,
+              budgetCurrency // Convert to budget's currency
+            );
+            totalSpentInBudgetCurrency += convertedAmount;
+          }
+        }
 
         return {
           id: budget.id,
           category_id: budget.category_id,
-          amount: convertedBudgetAmount,
-          currency: targetCurrency,
+          amount: parseFloat(budget.amount), // Original budget amount
+          currency: budgetCurrency, // Original currency
           month: budget.month,
           year: budget.year,
           category_name: budget.category_name,
           category_color: budget.category_color,
           category_icon: budget.category_icon,
-          spent: totalSpent,
+          spent: totalSpentInBudgetCurrency, // Spent in SAME currency as budget
           created_at: budget.created_at,
           updated_at: budget.updated_at
         };
       })
     );
 
-    res.json(budgetsWithConversion);
+    res.json(budgetsWithSpent);
   } catch (error) {
     console.error('Get budgets error:', error);
     res.status(500).json({ error: 'Server error' });
