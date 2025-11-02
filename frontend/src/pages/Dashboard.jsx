@@ -103,7 +103,7 @@ const Dashboard = () => {
         params: { 
           start_date: dateRange.start,
           end_date: dateRange.end,
-          limit: 1000,
+          limit: 100, // Reduced from 1000 to 100 for faster loading
           display_currency: currency, // Pass user's selected currency
           _t: Date.now() // Cache buster
         } 
