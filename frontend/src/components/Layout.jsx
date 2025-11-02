@@ -14,6 +14,7 @@ import {
   Wallet, 
   BarChart3,
   TrendingUp,
+  Users,
   User,
   Shield,
   LogOut,
@@ -35,6 +36,7 @@ const Layout = () => {
     { to: '/budgets', icon: Wallet, label: t('nav.budgets') },
     { to: '/reports', icon: BarChart3, label: t('nav.reports') },
     { to: '/analytics', icon: TrendingUp, label: t('nav.analytics') },
+    { to: '/family', icon: Users, label: t('nav.family') },
     { to: '/profile', icon: User, label: t('nav.profile') },
   ];
 
