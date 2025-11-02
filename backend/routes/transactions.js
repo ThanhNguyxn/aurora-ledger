@@ -1,8 +1,8 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 import pool from '../config/database.js';
 import { authMiddleware } from '../middleware/auth.js';
-import { getExchangeRate, convertCurrency } from '../utils/currency.js';
+import { convertCurrency } from '../utils/currency.js';
 
 const router = express.Router();
 router.use(authMiddleware);
@@ -71,8 +71,11 @@ router.get('/', async (req, res) => {
         } else {
           // Convert to target currency
           try {
-            const rate = await getExchangeRate(transaction.currency, targetCurrency);
-            const convertedAmount = convertCurrency(transaction.amount, rate);
+            const convertedAmount = await convertCurrency(
+              parseFloat(transaction.amount),
+              transaction.currency,
+              targetCurrency
+            );
             return {
               ...transaction,
               original_amount: transaction.amount,

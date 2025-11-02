@@ -1,6 +1,5 @@
 import express from 'express';
 import { 
-  getExchangeRate, 
   getAllRates, 
   convertCurrency, 
   formatCurrency,
@@ -60,8 +59,11 @@ router.post('/convert', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const rate = await getExchangeRate(from.toUpperCase(), to.toUpperCase());
-    const convertedAmount = convertCurrency(parseFloat(amount), rate);
+    const convertedAmount = await convertCurrency(
+      parseFloat(amount),
+      from.toUpperCase(),
+      to.toUpperCase()
+    );
     
     res.json({
       original: {
