@@ -200,7 +200,15 @@
     "error": "エラー",
     "success": "成功",
     "warning": "警告",
-    "info": "情報"
+    "info": "情報",
+    "showing": "表示",
+    "of": "/",
+    "previous": "前へ",
+    "next": "次へ",
+    "currency": "通貨",
+    "date": "日付",
+    "note": "メモ",
+    "amount": "金額"
   },
   "recurring": {
     "title": "定期取引",
@@ -241,6 +249,7 @@
     "changePassword": "パスワードを変更",
     "currentPassword": "現在のパスワード",
     "newPassword": "新しいパスワード",
+    "setPasswordPlaceholder": "パスワードを設定",
     "confirmPassword": "新しいパスワードを確認",
     "passwordRequirement": "6文字以上",
     "changePasswordBtn": "パスワードを変更",

@@ -198,7 +198,15 @@
     "error": "Error",
     "success": "Success",
     "warning": "Warning",
-    "info": "Info"
+    "info": "Info",
+    "showing": "Showing",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next",
+    "currency": "Currency",
+    "date": "Date",
+    "note": "Note",
+    "amount": "Amount"
   },
   "recurring": {
     "title": "Recurring Transactions",
@@ -282,6 +290,7 @@
     "changePassword": "Change Password",
     "currentPassword": "Current Password",
     "newPassword": "New Password",
+    "setPasswordPlaceholder": "Set your password",
     "confirmPassword": "Confirm New Password",
     "passwordRequirement": "At least 6 characters",
     "changePasswordBtn": "Change Password",

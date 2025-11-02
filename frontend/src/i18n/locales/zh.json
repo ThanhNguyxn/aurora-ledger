@@ -200,7 +200,15 @@
     "error": "错误",
     "success": "成功",
     "warning": "警告",
-    "info": "信息"
+    "info": "信息",
+    "showing": "显示",
+    "of": "共",
+    "previous": "上一页",
+    "next": "下一页",
+    "currency": "货币",
+    "date": "日期",
+    "note": "备注",
+    "amount": "金额"
   },
   "recurring": {
     "title": "定期交易",
@@ -241,6 +249,7 @@
     "changePassword": "更改密码",
     "currentPassword": "当前密码",
     "newPassword": "新密码",
+    "setPasswordPlaceholder": "设置您的密码",
     "confirmPassword": "确认新密码",
     "passwordRequirement": "至少6个字符",
     "changePasswordBtn": "更改密码",

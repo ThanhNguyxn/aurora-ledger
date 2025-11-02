@@ -200,7 +200,15 @@
     "error": "Fehler",
     "success": "Erfolg",
     "warning": "Warnung",
-    "info": "Information"
+    "info": "Information",
+    "showing": "Zeige",
+    "of": "von",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "currency": "Währung",
+    "date": "Datum",
+    "note": "Notiz",
+    "amount": "Betrag"
   },
   "recurring": {
     "title": "Wiederkehrende Transaktionen",
@@ -241,6 +249,7 @@
     "changePassword": "Passwort ändern",
     "currentPassword": "Aktuelles Passwort",
     "newPassword": "Neues Passwort",
+    "setPasswordPlaceholder": "Setze dein Passwort",
     "confirmPassword": "Neues Passwort bestätigen",
     "passwordRequirement": "Mindestens 6 Zeichen",
     "changePasswordBtn": "Passwort ändern",

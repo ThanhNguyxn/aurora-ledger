@@ -227,7 +227,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t('transactions.transactionCurrency') || 'Currency'}
+                {t('common.currency')}
               </label>
               <select
                 name="currency"
@@ -244,7 +244,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
             </div>
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400 -mt-2">
-            {t('transactions.maxAmount')} • {t('transactions.willConvert') || 'Will be converted to your display currency'}
+            {t('transactions.maxAmount')} • {t('transactions.willConvert')}
           </p>
 
           <div>

@@ -200,7 +200,15 @@
     "error": "오류",
     "success": "성공",
     "warning": "경고",
-    "info": "정보"
+    "info": "정보",
+    "showing": "표시",
+    "of": "중",
+    "previous": "이전",
+    "next": "다음",
+    "currency": "통화",
+    "date": "날짜",
+    "note": "메모",
+    "amount": "금액"
   },
   "recurring": {
     "title": "반복 거래",
@@ -241,6 +249,7 @@
     "changePassword": "비밀번호 변경",
     "currentPassword": "현재 비밀번호",
     "newPassword": "새 비밀번호",
+    "setPasswordPlaceholder": "비밀번호 설정",
     "confirmPassword": "새 비밀번호 확인",
     "passwordRequirement": "최소 6자",
     "changePasswordBtn": "비밀번호 변경",

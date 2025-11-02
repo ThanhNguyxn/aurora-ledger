@@ -229,12 +229,12 @@ const Profile = () => {
             {user?.oauth_provider && user.oauth_provider !== 'local' && (
               <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  ℹ️ {t('profile.oauthPasswordInfo') || 'You logged in with Google. Set a password to also login with email.'}
+                  ℹ️ {t('profile.oauthPasswordInfo') || 'You logged in with Google. You can set a password below to also login with email.'}
                 </p>
               </div>
             )}
 
-            {/* Only show current password field for non-OAuth users */}
+            {/* Only show current password field for non-OAuth users who have a password */}
             {(!user?.oauth_provider || user.oauth_provider === 'local') && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -261,6 +261,7 @@ const Profile = () => {
               </div>
             )}
 
+            {/* New Password field - available for everyone */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('profile.newPassword') || 'New Password'}
@@ -272,7 +273,10 @@ const Profile = () => {
                   value={passwordForm.newPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
                   className="w-full pl-10 pr-10 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
-                  placeholder="••••••••"
+                  placeholder={user?.oauth_provider && user.oauth_provider !== 'local' 
+                    ? (t('profile.setPasswordPlaceholder') || 'Set your password') 
+                    : '••••••••'
+                  }
                   required
                   minLength={6}
                 />
@@ -289,6 +293,7 @@ const Profile = () => {
               </p>
             </div>
 
+            {/* Confirm Password field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('profile.confirmPassword') || 'Confirm New Password'}

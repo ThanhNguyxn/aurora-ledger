@@ -198,7 +198,15 @@
     "error": "Lỗi",
     "success": "Thành công",
     "warning": "Cảnh báo",
-    "info": "Thông tin"
+    "info": "Thông tin",
+    "showing": "Hiển thị",
+    "of": "trên",
+    "previous": "Trước",
+    "next": "Tiếp",
+    "currency": "Mệnh giá",
+    "date": "Ngày",
+    "note": "Ghi chú",
+    "amount": "Số tiền"
   },
   "recurring": {
     "title": "Giao dịch định kỳ",
@@ -239,6 +247,7 @@
     "changePassword": "Đổi Mật Khẩu",
     "currentPassword": "Mật Khẩu Hiện Tại",
     "newPassword": "Mật Khẩu Mới",
+    "setPasswordPlaceholder": "Đặt mật khẩu của bạn",
     "confirmPassword": "Xác Nhận Mật Khẩu Mới",
     "passwordRequirement": "Tối thiểu 6 ký tự",
     "changePasswordBtn": "Đổi Mật Khẩu",

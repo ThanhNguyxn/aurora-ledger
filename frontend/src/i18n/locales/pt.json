@@ -200,7 +200,15 @@
     "error": "Erro",
     "success": "Sucesso",
     "warning": "Aviso",
-    "info": "Informação"
+    "info": "Informação",
+    "showing": "Mostrando",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "currency": "Moeda",
+    "date": "Data",
+    "note": "Nota",
+    "amount": "Valor"
   },
   "recurring": {
     "title": "Transações Recorrentes",
@@ -241,6 +249,7 @@
     "changePassword": "Alterar senha",
     "currentPassword": "Senha atual",
     "newPassword": "Nova senha",
+    "setPasswordPlaceholder": "Defina sua senha",
     "confirmPassword": "Confirmar nova senha",
     "passwordRequirement": "Pelo menos 6 caracteres",
     "changePasswordBtn": "Alterar senha",

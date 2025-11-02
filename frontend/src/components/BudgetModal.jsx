@@ -243,14 +243,7 @@ const BudgetModal = ({ month, year, budget = null, onClose }) => {
               ))}
             </select>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              💱 {t('budgets.inputCurrencyNote') || 'Select currency for input (will auto-convert to your display currency)'}
-            </p>
-          </div>
-
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-xs text-gray-700 dark:text-gray-200">
-              💡 <strong>{t('budgets.conversionNote') || 'Example'}:</strong><br/>
-              {t('budgets.conversionExample') || 'If you enter 10 USD and your display currency is VND, it will be saved as ~260,000 VND (based on current exchange rate)'}
+              💱 {t('budgets.inputCurrencyNote')}
             </p>
           </div>
 
