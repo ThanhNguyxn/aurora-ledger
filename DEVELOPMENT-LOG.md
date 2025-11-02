@@ -2,7 +2,7 @@
 
 > **Tracking progress, features implemented, current issues, and next steps**
 
-Last Updated: **November 2, 2025**
+Last Updated: **November 2, 2025 - 3:45 PM** (After Reports fix + BudgetModal improvement + Cleanup)
 
 ---
 
@@ -286,6 +286,34 @@ forecast = slope * nextMonth + intercept
    - **Impact**: Better UX, professional look, no year limit
    - **Commit**: `7c7268e`
 
+9. **Reports Page 500 Error** ✅ FIXED (Nov 2, 2025)
+   - **Issue**: Reports/Analytics page throwing 500 Internal Server Error
+   - **Root Cause**: Missing `convertCurrency` import in `routes/reports.js`
+   - **Impact**: Trends API completely broken, page won't load
+   - **Fix**: Added `import { convertCurrency } from '../utils/currency.js';`
+   - **Commit**: `5d11a1f`
+
+10. **BudgetModal Month/Year Selector** ✅ IMPROVED (Nov 2, 2025)
+    - **Issue**: Modal only showed static text, couldn't change month/year
+    - **Old Behavior**: Display "Setting budget for November 2025" (read-only)
+    - **New Behavior**: Editable `<input type="month">` with 2000-2100 range
+    - **Impact**: Can now change budget period directly in modal without closing
+    - **Commit**: `5d11a1f`
+
+### Code Cleanup
+
+11. **Python Translation Scripts Removed** ✅ CLEANED (Nov 2, 2025)
+    - **Action**: Deleted all *.py files used for i18n translation
+    - **Files Removed**: 
+      - `translate.py`, `translate-i18n.py`
+      - `add-budget-translations.py`, `add-common-translations.py`
+      - `add-goals-currency.py`, `add-profile-translations.py`
+      - `add-transaction-currency-translations.py`
+      - `apply-goals-translations.py`, `fix-priority-label.py`
+      - `frontend/translate-i18n.py`
+    - **Reason**: Translation complete, scripts no longer needed
+    - **Impact**: Cleaner codebase, removed 10 unused files
+
 ---
 
 ## 🐛 Known Issues
@@ -312,6 +340,8 @@ forecast = slope * nextMonth + intercept
 - ~~Family/Analytics 404 errors~~ → FIXED `2dfd38c`, `4eaef71`
 - ~~Budget edit not working~~ → FIXED `19a12c7`
 - ~~Slow page switching~~ → FIXED `a7d40b7`
+- ~~Reports page 500 error~~ → FIXED `5d11a1f` (Nov 2, 2025)
+- ~~BudgetModal static month/year~~ → FIXED `5d11a1f` (Nov 2, 2025)
 
 ---
 
