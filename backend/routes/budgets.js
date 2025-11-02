@@ -2,7 +2,7 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import pool from '../config/database.js';
 import { authMiddleware } from '../middleware/auth.js';
-import { getExchangeRate, convertCurrency } from '../utils/currency.js';
+import { convertCurrency } from '../utils/currency.js';
 
 const router = express.Router();
 router.use(authMiddleware);
@@ -134,22 +134,15 @@ router.post('/',
 
       const { category_id, amount, month, year, input_currency } = req.body;
 
-      // Get user's preferred currency
+      // Get user's preferred currency as default
       const userResult = await pool.query(
         'SELECT currency FROM users WHERE id = $1',
         [req.user.id]
       );
       const userCurrency = userResult.rows[0]?.currency || 'USD';
 
-      // Convert amount from input currency to user's currency
-      let finalAmount = amount;
-      const inputCurr = input_currency || userCurrency;
-      
-      if (inputCurr !== userCurrency) {
-        const rate = await getExchangeRate(inputCurr, userCurrency);
-        finalAmount = convertCurrency(amount, rate);
-        console.log(`💱 Converting budget: ${amount} ${inputCurr} → ${finalAmount} ${userCurrency} (rate: ${rate})`);
-      }
+      // Save budget in the currency user specified (or default to user's currency)
+      const budgetCurrency = input_currency || userCurrency;
 
       // Verify category belongs to user and is expense type
       const catResult = await pool.query(
@@ -165,14 +158,14 @@ router.post('/',
         return res.status(400).json({ error: 'Budgets can only be set for expense categories' });
       }
 
-      // Save with user's currency
+      // Save budget with the currency user specified
       const result = await pool.query(
         `INSERT INTO budgets (user_id, category_id, amount, month, year, currency)
          VALUES ($1, $2, $3, $4, $5, $6)
          ON CONFLICT (user_id, category_id, month, year)
          DO UPDATE SET amount = $3, currency = $6, updated_at = CURRENT_TIMESTAMP
          RETURNING *`,
-        [req.user.id, category_id, finalAmount, month, year, userCurrency]
+        [req.user.id, category_id, amount, month, year, budgetCurrency]
       );
 
       res.status(201).json(result.rows[0]);
