@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../lib/api';
 import toast from 'react-hot-toast';
 import { 
   Users, UserCheck, UserPlus, TrendingUp, Database, Shield, Search, Lock, Trash2, RefreshCw,
@@ -15,7 +15,7 @@ const Admin = () => {
 
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0, pages: 0 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, pages: 0 });
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -32,7 +32,7 @@ const Admin = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API_URL}/admin/stats`);
+      const response = await api.get('/admin/stats');
       setStats(response.data);
     } catch (error) {
       console.error('Failed to fetch stats:', error);
@@ -42,7 +42,7 @@ const Admin = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/admin/users`, {
+      const response = await api.get('/admin/users', {
         params: {
           page: pagination.page,
           limit: pagination.limit,
@@ -64,7 +64,7 @@ const Admin = () => {
     }
 
     try {
-      await axios.put(`${API_URL}/admin/users/${userId}/role`, { role: newRole });
+      await api.put(`/admin/users/${userId}/role`, { role: newRole });
       toast.success(t('admin.roleUpdated') || 'Role updated successfully');
       fetchUsers();
     } catch (error) {
@@ -80,7 +80,7 @@ const Admin = () => {
     }
 
     try {
-      await axios.post(`${API_URL}/admin/users/${selectedUser.id}/reset-password`, { newPassword });
+      await api.post(`/admin/users/${selectedUser.id}/reset-password`, { newPassword });
       toast.success(t('admin.passwordReset') || 'Password reset successfully');
       setShowResetModal(false);
       setNewPassword('');
@@ -97,7 +97,7 @@ const Admin = () => {
     }
 
     try {
-      await axios.delete(`${API_URL}/admin/users/${userId}`);
+      await api.delete(`/admin/users/${userId}`);
       toast.success(t('admin.userDeleted') || 'User deleted successfully');
       fetchUsers();
       fetchStats();
@@ -111,7 +111,7 @@ const Admin = () => {
     setLoadingDetails(true);
     setShowDetailsModal(true);
     try {
-      const response = await axios.get(`${API_URL}/admin/users/${userId}/details`);
+      const response = await api.get(`/admin/users/${userId}/details`);
       setUserDetails(response.data);
     } catch (error) {
       toast.error(t('admin.failedToLoadDetails') || 'Failed to load user details');
@@ -302,9 +302,6 @@ const Admin = () => {
                   {t('admin.role') || 'Role'}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  {t('admin.stats') || 'Stats'}
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t('admin.joined') || 'Joined'}
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -315,13 +312,13 @@ const Admin = () => {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan="4" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                     {t('common.loading') || 'Loading...'}
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan="4" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                     {t('admin.noUsers') || 'No users found'}
                   </td>
                 </tr>
@@ -351,25 +348,6 @@ const Admin = () => {
                         <option value="mod">Mod</option>
                         <option value="admin">Admin</option>
                       </select>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="space-y-1 text-sm">
-                        <div className="text-gray-600 dark:text-gray-400">
-                          💳 {u.transaction_count} {t('admin.transactions') || 'transactions'}
-                        </div>
-                        <div className="text-gray-600 dark:text-gray-400">
-                          📁 {u.category_count || 0} categories
-                        </div>
-                        <div className="text-gray-600 dark:text-gray-400">
-                          💰 {u.budget_count || 0} budgets
-                        </div>
-                        <div className="text-gray-600 dark:text-gray-400">
-                          🎯 {u.goal_count || 0} goals ({u.active_goal_count || 0} active)
-                        </div>
-                        <div className="text-gray-600 dark:text-gray-400">
-                          🔁 {u.recurring_count || 0} recurring ({u.active_recurring_count || 0} active)
-                        </div>
-                      </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       {new Date(u.created_at).toLocaleDateString()}
