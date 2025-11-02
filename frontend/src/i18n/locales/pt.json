@@ -310,6 +310,7 @@
     "category": "Categoria",
     "categoryPlaceholder": "ex: Casa, Carro, Viagem",
     "icon": "Ícone",
+    "priorityLabel": "Prioridade",
     "priority": {
       "low": "Baixa",
       "medium": "Média",

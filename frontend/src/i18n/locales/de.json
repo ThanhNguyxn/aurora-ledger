@@ -310,6 +310,7 @@
     "category": "Kategorie",
     "categoryPlaceholder": "z.B. Haus, Auto, Urlaub",
     "icon": "Symbol",
+    "priorityLabel": "Priorität",
     "priority": {
       "low": "Niedrig",
       "medium": "Mittel",

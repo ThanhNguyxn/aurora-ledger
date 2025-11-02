@@ -310,6 +310,7 @@
     "category": "카테고리",
     "categoryPlaceholder": "예: 집, 차, 여행",
     "icon": "아이콘",
+    "priorityLabel": "우선순위",
     "priority": {
       "low": "낮음",
       "medium": "보통",

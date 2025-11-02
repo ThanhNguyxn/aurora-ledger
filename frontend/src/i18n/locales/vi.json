@@ -308,6 +308,7 @@
     "category": "Danh mục",
     "categoryPlaceholder": "vd: Nhà, Xe, Du lịch",
     "icon": "Biểu tượng",
+    "priorityLabel": "Độ ưu tiên",
     "priority": {
       "low": "Thấp",
       "medium": "Trung bình",

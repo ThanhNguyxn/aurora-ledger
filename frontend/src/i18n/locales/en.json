@@ -239,6 +239,7 @@
     "category": "Category",
     "categoryPlaceholder": "e.g., House, Car, Vacation",
     "icon": "Icon",
+    "priorityLabel": "Priority",
     "priority": {
       "low": "Low",
       "medium": "Medium",

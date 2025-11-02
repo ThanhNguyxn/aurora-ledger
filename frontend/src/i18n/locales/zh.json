@@ -310,6 +310,7 @@
     "category": "类别",
     "categoryPlaceholder": "例如：房子、车、旅游",
     "icon": "图标",
+    "priorityLabel": "优先级",
     "priority": {
       "low": "低",
       "medium": "中",

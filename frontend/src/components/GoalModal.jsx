@@ -7,6 +7,7 @@ import { useCurrency } from '../context/CurrencyContext';
 
 const ICONS = ['🎯', '🏠', '🚗', '✈️', '💍', '📚', '💰', '🎓', '🏖️', '🎮', '📱', '⌚', '🎸', '🏋️', '🎨'];
 const PRIORITIES = ['low', 'medium', 'high'];
+const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', 'CNY', 'KRW', 'VND', 'THB', 'SGD', 'MYR', 'IDR', 'PHP', 'INR', 'AUD', 'CAD'];
 
 const GoalModal = ({ goal, onClose }) => {
   const { t } = useTranslation();
@@ -26,16 +27,27 @@ const GoalModal = ({ goal, onClose }) => {
     e.preventDefault();
     
     try {
+      // Clean up form data - convert empty strings to null
+      const submitData = {
+        ...formData,
+        deadline: formData.deadline || null,
+        category: formData.category || null,
+      };
+      
       if (goal) {
-        await api.put(`/goals/${goal.id}`, formData);
+        await api.put(`/goals/${goal.id}`, submitData);
         toast.success(t('goals.updateSuccess'));
       } else {
-        await api.post('/goals', formData);
+        await api.post('/goals', submitData);
         toast.success(t('goals.createSuccess'));
       }
       onClose();
     } catch (error) {
-      toast.error(error.response?.data?.error || t('common.error'));
+      console.error('Goal submit error:', error.response?.data);
+      const errorMsg = error.response?.data?.errors 
+        ? error.response.data.errors.map(e => e.msg).join(', ')
+        : error.response?.data?.error || t('common.error');
+      toast.error(errorMsg);
     }
   };
 
@@ -78,13 +90,15 @@ const GoalModal = ({ goal, onClose }) => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-2 dark:text-gray-200">{t('common.currency')}</label>
-              <input
-                type="text"
+              <select
                 value={formData.currency}
-                onChange={(e) => setFormData({ ...formData, currency: e.target.value.toUpperCase() })}
+                onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
                 className="input"
-                maxLength="3"
-              />
+              >
+                {SUPPORTED_CURRENCIES.map((curr) => (
+                  <option key={curr} value={curr}>{curr}</option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -130,7 +144,7 @@ const GoalModal = ({ goal, onClose }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 dark:text-gray-200">{t('goals.priority')}</label>
+            <label className="block text-sm font-medium mb-2 dark:text-gray-200">{t('goals.priorityLabel')}</label>
             <div className="flex gap-2">
               {PRIORITIES.map((priority) => (
                 <button

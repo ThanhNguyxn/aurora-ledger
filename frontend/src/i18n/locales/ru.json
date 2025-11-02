@@ -310,6 +310,7 @@
     "category": "Категория",
     "categoryPlaceholder": "напр: Дом, Машина, Отпуск",
     "icon": "Значок",
+    "priorityLabel": "Приоритет",
     "priority": {
       "low": "Низкий",
       "medium": "Средний",

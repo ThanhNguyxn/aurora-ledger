@@ -310,6 +310,7 @@
     "category": "カテゴリ",
     "categoryPlaceholder": "例：家、車、旅行",
     "icon": "アイコン",
+    "priorityLabel": "優先度",
     "priority": {
       "low": "低",
       "medium": "中",
