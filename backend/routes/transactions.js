@@ -283,5 +283,33 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Bulk delete test transactions (keep only real ones)
+router.post('/bulk-delete-test', async (req, res) => {
+  try {
+    const { keep_ids = [] } = req.body; // Array of transaction IDs to keep
+    
+    let query = 'DELETE FROM transactions WHERE user_id = $1';
+    const params = [req.user.id];
+    
+    if (keep_ids.length > 0) {
+      query += ` AND id NOT IN (${keep_ids.map((_, i) => `$${i + 2}`).join(',')})`;
+      params.push(...keep_ids);
+    }
+    
+    query += ' RETURNING id';
+    
+    const result = await pool.query(query, params);
+    
+    res.json({ 
+      message: 'Test transactions deleted successfully',
+      deleted_count: result.rows.length,
+      deleted_ids: result.rows.map(r => r.id)
+    });
+  } catch (error) {
+    console.error('Bulk delete error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 export default router;
 
