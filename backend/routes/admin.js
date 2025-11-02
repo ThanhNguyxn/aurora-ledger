@@ -22,7 +22,13 @@ router.get('/users', authenticateToken, isMod, async (req, res) => {
         created_at,
         updated_at,
         (SELECT COUNT(*) FROM transactions WHERE user_id = users.id) as transaction_count,
-        (SELECT COUNT(*) FROM categories WHERE user_id = users.id) as category_count
+        (SELECT COUNT(*) FROM categories WHERE user_id = users.id) as category_count,
+        (SELECT COUNT(*) FROM budgets WHERE user_id = users.id) as budget_count,
+        (SELECT COUNT(*) FROM recurring_transactions WHERE user_id = users.id) as recurring_count,
+        (SELECT COUNT(*) FROM recurring_transactions WHERE user_id = users.id AND is_active = true) as active_recurring_count,
+        (SELECT COUNT(*) FROM saving_goals WHERE user_id = users.id) as goal_count,
+        (SELECT COUNT(*) FROM saving_goals WHERE user_id = users.id AND is_completed = false) as active_goal_count,
+        (SELECT COUNT(*) FROM saving_goals WHERE user_id = users.id AND is_completed = true) as completed_goal_count
       FROM users
     `;
 

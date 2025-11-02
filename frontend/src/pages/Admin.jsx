@@ -316,8 +316,22 @@ const Admin = () => {
                       </select>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {u.transaction_count} {t('admin.transactions') || 'transactions'}
+                      <div className="space-y-1 text-sm">
+                        <div className="text-gray-600 dark:text-gray-400">
+                          💳 {u.transaction_count} {t('admin.transactions') || 'transactions'}
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-400">
+                          📁 {u.category_count || 0} categories
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-400">
+                          💰 {u.budget_count || 0} budgets
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-400">
+                          🎯 {u.goal_count || 0} goals ({u.active_goal_count || 0} active)
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-400">
+                          🔁 {u.recurring_count || 0} recurring ({u.active_recurring_count || 0} active)
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
