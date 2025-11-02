@@ -74,7 +74,7 @@ const Layout = () => {
           </div>
         </div>
 
-        <nav className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+        <nav className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-gray-600" style={{ maxHeight: 'calc(100vh - 280px)' }}>
           {navItems.map((item) => (
             <NavLink
               key={item.to}

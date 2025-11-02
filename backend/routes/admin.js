@@ -228,10 +228,16 @@ router.get('/stats', authenticateToken, isAdmin, async (req, res) => {
       SELECT
         (SELECT COUNT(*) FROM users) as total_users,
         (SELECT COUNT(*) FROM users WHERE role = 'admin') as admin_users,
+        (SELECT COUNT(*) FROM users WHERE role = 'mod') as mod_users,
         (SELECT COUNT(*) FROM users WHERE created_at > NOW() - INTERVAL '30 days') as new_users_30d,
         (SELECT COUNT(*) FROM transactions) as total_transactions,
         (SELECT COUNT(*) FROM categories) as total_categories,
-        (SELECT COUNT(*) FROM budgets) as total_budgets
+        (SELECT COUNT(*) FROM budgets) as total_budgets,
+        (SELECT COUNT(*) FROM recurring_transactions) as total_recurring,
+        (SELECT COUNT(*) FROM recurring_transactions WHERE is_active = true) as active_recurring,
+        (SELECT COUNT(*) FROM saving_goals) as total_goals,
+        (SELECT COUNT(*) FROM saving_goals WHERE is_completed = false) as active_goals,
+        (SELECT COUNT(*) FROM saving_goals WHERE is_completed = true) as completed_goals
     `);
 
     res.json(statsResult.rows[0]);

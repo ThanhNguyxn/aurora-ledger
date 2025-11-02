@@ -3,7 +3,10 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { Users, UserCheck, UserPlus, TrendingUp, Database, Shield, Search, Lock, Trash2, RefreshCw } from 'lucide-react';
+import { 
+  Users, UserCheck, UserPlus, TrendingUp, Database, Shield, Search, Lock, Trash2, RefreshCw,
+  DollarSign, Target, Repeat, FolderOpen, Calendar
+} from 'lucide-react';
 
 const Admin = () => {
   const { user } = useAuth();
@@ -134,11 +137,15 @@ const Admin = () => {
       {/* Stats Cards */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {/* Users Stats */}
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.totalUsers') || 'Total Users'}</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">{stats.total_users}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                  {stats.admin_users} admin · {stats.mod_users || 0} mod
+                </p>
               </div>
               <Users className="text-blue-600 dark:text-blue-400" size={32} />
             </div>
@@ -157,7 +164,7 @@ const Admin = () => {
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.totalTransactions') || 'Total Transactions'}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.totalTransactions') || 'Transactions'}</p>
                 <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">{stats.total_transactions}</p>
               </div>
               <Database className="text-purple-600 dark:text-purple-400" size={32} />
@@ -167,10 +174,58 @@ const Admin = () => {
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.adminUsers') || 'Admin Users'}</p>
-                <p className="text-3xl font-bold text-orange-600 dark:text-orange-400 mt-1">{stats.admin_users}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.totalCategories') || 'Categories'}</p>
+                <p className="text-3xl font-bold text-orange-600 dark:text-orange-400 mt-1">{stats.total_categories}</p>
               </div>
-              <UserCheck className="text-orange-600 dark:text-orange-400" size={32} />
+              <FolderOpen className="text-orange-600 dark:text-orange-400" size={32} />
+            </div>
+          </div>
+
+          {/* Financial Stats */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.totalBudgets') || 'Budgets'}</p>
+                <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-1">{stats.total_budgets}</p>
+              </div>
+              <DollarSign className="text-indigo-600 dark:text-indigo-400" size={32} />
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.totalGoals') || 'Saving Goals'}</p>
+                <p className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mt-1">{stats.total_goals || 0}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                  {stats.active_goals || 0} active · {stats.completed_goals || 0} completed
+                </p>
+              </div>
+              <Target className="text-cyan-600 dark:text-cyan-400" size={32} />
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.totalRecurring') || 'Recurring'}</p>
+                <p className="text-3xl font-bold text-teal-600 dark:text-teal-400 mt-1">{stats.total_recurring || 0}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                  {stats.active_recurring || 0} active
+                </p>
+              </div>
+              <Repeat className="text-teal-600 dark:text-teal-400" size={32} />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-md p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-blue-100">System Status</p>
+                <p className="text-2xl font-bold mt-1">All Systems</p>
+                <p className="text-sm text-blue-100 mt-1">Operational</p>
+              </div>
+              <Shield size={32} className="text-blue-100" />
             </div>
           </div>
         </div>
