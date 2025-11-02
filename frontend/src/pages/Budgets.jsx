@@ -102,37 +102,23 @@ const Budgets = () => {
           </button>
         </div>
         
-        {/* Month/Year Selector - Inline */}
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-              {t('budgets.month')}
-            </label>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-              className="input text-sm"
-            >
-              {Array.from({ length: 12 }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {new Date(2000, i, 1).toLocaleString('default', { month: 'long' })}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-              {t('budgets.year')}
-            </label>
-            <input
-              type="number"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value) || new Date().getFullYear())}
-              min="2000"
-              max="2100"
-              className="input text-sm"
-            />
-          </div>
+        {/* Month/Year Selector - Combined Input */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+            {t('budgets.monthYear') || 'Month & Year'}
+          </label>
+          <input
+            type="month"
+            value={`${selectedYear}-${String(selectedMonth).padStart(2, '0')}`}
+            onChange={(e) => {
+              if (e.target.value) {
+                const [year, month] = e.target.value.split('-');
+                setSelectedYear(parseInt(year));
+                setSelectedMonth(parseInt(month));
+              }
+            }}
+            className="input text-sm w-full"
+          />
         </div>
       </div>
 
