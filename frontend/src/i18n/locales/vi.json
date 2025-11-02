@@ -13,7 +13,8 @@
     "reports": "Báo cáo",
     "profile": "Hồ sơ",
     "logout": "Đăng xuất",
-    "admin": "Quản trị"
+    "admin": "Quản trị",
+    "goals": "Mục tiêu tiết kiệm"
   },
   "auth": {
     "login": "Đăng nhập",
@@ -289,5 +290,47 @@
     "previous": "Trước",
     "next": "Tiếp",
     "failedToLoadUsers": "Không thể tải danh sách người dùng"
+  },
+  "goals": {
+    "title": "Mục tiêu tiết kiệm",
+    "addGoal": "Thêm mục tiêu",
+    "newGoal": "Mục tiêu tiết kiệm mới",
+    "editGoal": "Chỉnh sửa mục tiêu",
+    "totalGoals": "Tổng mục tiêu",
+    "completed": "Hoàn thành",
+    "overallProgress": "Tiến độ tổng thể",
+    "active": "Đang hoạt động",
+    "noGoals": "Chưa có mục tiêu tiết kiệm",
+    "createFirst": "Tạo mục tiêu đầu tiên của bạn",
+    "name": "Tên mục tiêu",
+    "targetAmount": "Số tiền mục tiêu",
+    "deadline": "Thời hạn",
+    "category": "Danh mục",
+    "categoryPlaceholder": "vd: Nhà, Xe, Du lịch",
+    "icon": "Biểu tượng",
+    "priority": {
+      "low": "Thấp",
+      "medium": "Trung bình",
+      "high": "Cao"
+    },
+    "remaining": "Còn lại",
+    "achieved": "Đã đạt mục tiêu!",
+    "daysLeft": "ngày còn lại",
+    "today": "Hôm nay",
+    "overdue": "Quá hạn",
+    "addFunds": "Thêm tiền",
+    "add": "Thêm tiền",
+    "withdraw": "Rút tiền",
+    "confirmAdd": "Thêm",
+    "confirmWithdraw": "Rút",
+    "notePlaceholder": "Ghi chú (tùy chọn)...",
+    "goalCompleted": "Đã hoàn thành mục tiêu!",
+    "createSuccess": "Tạo mục tiêu thành công!",
+    "updateSuccess": "Cập nhật mục tiêu thành công!",
+    "deleteSuccess": "Xóa mục tiêu thành công!",
+    "deleteConfirm": "Xóa mục tiêu này? Hành động này không thể hoàn tác.",
+    "contributeSuccess": "Thêm tiền thành công!",
+    "withdrawSuccess": "Rút tiền thành công!",
+    "failedToLoad": "Không thể tải mục tiêu"
   }
 }

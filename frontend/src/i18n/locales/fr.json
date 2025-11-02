@@ -13,7 +13,8 @@
     "reports": "Rapports",
     "logout": "Déconnexion",
     "profile": "Profil",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "Objectifs d'Épargne"
   },
   "auth": {
     "login": "Connexion",
@@ -291,5 +292,47 @@
     "previous": "Précédent",
     "next": "Suivant",
     "failedToLoadUsers": "Échec du chargement des utilisateurs"
+  },
+  "goals": {
+    "title": "Objectifs d'Épargne",
+    "addGoal": "Ajouter un Objectif",
+    "newGoal": "Nouvel Objectif d'Épargne",
+    "editGoal": "Modifier l'Objectif",
+    "totalGoals": "Total des Objectifs",
+    "completed": "Terminés",
+    "overallProgress": "Progrès Global",
+    "active": "Actifs",
+    "noGoals": "Pas encore d'objectifs d'épargne",
+    "createFirst": "Créez votre premier objectif",
+    "name": "Nom de l'Objectif",
+    "targetAmount": "Montant Cible",
+    "deadline": "Date Limite",
+    "category": "Catégorie",
+    "categoryPlaceholder": "ex: Maison, Voiture, Vacances",
+    "icon": "Icône",
+    "priority": {
+      "low": "Faible",
+      "medium": "Moyenne",
+      "high": "Élevée"
+    },
+    "remaining": "Restant",
+    "achieved": "Objectif Atteint!",
+    "daysLeft": "jours restants",
+    "today": "Aujourd'hui",
+    "overdue": "En Retard",
+    "addFunds": "Ajouter des Fonds",
+    "add": "Ajouter des Fonds",
+    "withdraw": "Retirer",
+    "confirmAdd": "Ajouter",
+    "confirmWithdraw": "Retirer",
+    "notePlaceholder": "Note optionnelle...",
+    "goalCompleted": "Objectif Terminé!",
+    "createSuccess": "Objectif créé avec succès!",
+    "updateSuccess": "Objectif mis à jour avec succès!",
+    "deleteSuccess": "Objectif supprimé avec succès!",
+    "deleteConfirm": "Supprimer cet objectif? Cela ne peut pas être annulé.",
+    "contributeSuccess": "Fonds ajoutés avec succès!",
+    "withdrawSuccess": "Retrait réussi!",
+    "failedToLoad": "Échec du chargement des objectifs"
   }
 }

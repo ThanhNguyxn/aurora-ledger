@@ -13,7 +13,8 @@
     "reports": "レポート",
     "logout": "ログアウト",
     "profile": "プロフィール",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "貯蓄目標"
   },
   "auth": {
     "login": "ログイン",
@@ -291,5 +292,47 @@
     "previous": "前へ",
     "next": "次へ",
     "failedToLoadUsers": "ユーザーの読み込みに失敗しました"
+  },
+  "goals": {
+    "title": "貯蓄目標",
+    "addGoal": "目標を追加",
+    "newGoal": "新しい貯蓄目標",
+    "editGoal": "目標を編集",
+    "totalGoals": "総目標数",
+    "completed": "完了",
+    "overallProgress": "全体の進捗",
+    "active": "アクティブ",
+    "noGoals": "まだ貯蓄目標がありません",
+    "createFirst": "最初の目標を作成",
+    "name": "目標名",
+    "targetAmount": "目標金額",
+    "deadline": "期限",
+    "category": "カテゴリ",
+    "categoryPlaceholder": "例：家、車、旅行",
+    "icon": "アイコン",
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "remaining": "残り",
+    "achieved": "目標達成！",
+    "daysLeft": "日残り",
+    "today": "今日",
+    "overdue": "期限超過",
+    "addFunds": "資金を追加",
+    "add": "資金を追加",
+    "withdraw": "引き出す",
+    "confirmAdd": "追加",
+    "confirmWithdraw": "引き出す",
+    "notePlaceholder": "メモ（任意）...",
+    "goalCompleted": "目標完了！",
+    "createSuccess": "目標の作成に成功しました！",
+    "updateSuccess": "目標の更新に成功しました！",
+    "deleteSuccess": "目標の削除に成功しました！",
+    "deleteConfirm": "この目標を削除しますか？これは元に戻せません。",
+    "contributeSuccess": "資金の追加に成功しました！",
+    "withdrawSuccess": "引き出しに成功しました！",
+    "failedToLoad": "目標の読み込みに失敗しました"
   }
 }

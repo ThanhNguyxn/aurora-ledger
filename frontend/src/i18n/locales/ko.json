@@ -13,7 +13,8 @@
     "reports": "보고서",
     "logout": "로그아웃",
     "profile": "프로필",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "저축 목표"
   },
   "auth": {
     "login": "로그인",
@@ -291,5 +292,47 @@
     "previous": "이전",
     "next": "다음",
     "failedToLoadUsers": "사용자 로드 실패"
+  },
+  "goals": {
+    "title": "저축 목표",
+    "addGoal": "목표 추가",
+    "newGoal": "새 저축 목표",
+    "editGoal": "목표 편집",
+    "totalGoals": "전체 목표",
+    "completed": "완료됨",
+    "overallProgress": "전체 진행률",
+    "active": "활성",
+    "noGoals": "아직 저축 목표가 없습니다",
+    "createFirst": "첫 번째 목표 만들기",
+    "name": "목표 이름",
+    "targetAmount": "목표 금액",
+    "deadline": "마감일",
+    "category": "카테고리",
+    "categoryPlaceholder": "예: 집, 차, 여행",
+    "icon": "아이콘",
+    "priority": {
+      "low": "낮음",
+      "medium": "보통",
+      "high": "높음"
+    },
+    "remaining": "남은 금액",
+    "achieved": "목표 달성!",
+    "daysLeft": "일 남음",
+    "today": "오늘",
+    "overdue": "기한 초과",
+    "addFunds": "자금 추가",
+    "add": "자금 추가",
+    "withdraw": "인출",
+    "confirmAdd": "추가",
+    "confirmWithdraw": "인출",
+    "notePlaceholder": "메모 (선택사항)...",
+    "goalCompleted": "목표 완료!",
+    "createSuccess": "목표가 성공적으로 생성되었습니다!",
+    "updateSuccess": "목표가 성공적으로 업데이트되었습니다!",
+    "deleteSuccess": "목표가 성공적으로 삭제되었습니다!",
+    "deleteConfirm": "이 목표를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+    "contributeSuccess": "자금이 성공적으로 추가되었습니다!",
+    "withdrawSuccess": "인출에 성공했습니다!",
+    "failedToLoad": "목표를 로드하지 못했습니다"
   }
 }

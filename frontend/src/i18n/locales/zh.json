@@ -13,7 +13,8 @@
     "reports": "报告",
     "logout": "登出",
     "profile": "个人资料",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "储蓄目标"
   },
   "auth": {
     "login": "登录",
@@ -291,5 +292,47 @@
     "previous": "上一页",
     "next": "下一页",
     "failedToLoadUsers": "加载用户失败"
+  },
+  "goals": {
+    "title": "储蓄目标",
+    "addGoal": "添加目标",
+    "newGoal": "新储蓄目标",
+    "editGoal": "编辑目标",
+    "totalGoals": "总目标",
+    "completed": "已完成",
+    "overallProgress": "总体进度",
+    "active": "活跃",
+    "noGoals": "暂无储蓄目标",
+    "createFirst": "创建您的第一个目标",
+    "name": "目标名称",
+    "targetAmount": "目标金额",
+    "deadline": "截止日期",
+    "category": "类别",
+    "categoryPlaceholder": "例如：房子、车、旅游",
+    "icon": "图标",
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "remaining": "剩余",
+    "achieved": "目标已达成！",
+    "daysLeft": "天剩余",
+    "today": "今天",
+    "overdue": "逾期",
+    "addFunds": "添加资金",
+    "add": "添加资金",
+    "withdraw": "提取",
+    "confirmAdd": "添加",
+    "confirmWithdraw": "提取",
+    "notePlaceholder": "备注（可选）...",
+    "goalCompleted": "目标已完成！",
+    "createSuccess": "目标创建成功！",
+    "updateSuccess": "目标更新成功！",
+    "deleteSuccess": "目标删除成功！",
+    "deleteConfirm": "删除此目标？此操作无法撤销。",
+    "contributeSuccess": "资金添加成功！",
+    "withdrawSuccess": "提取成功！",
+    "failedToLoad": "无法加载目标"
   }
 }

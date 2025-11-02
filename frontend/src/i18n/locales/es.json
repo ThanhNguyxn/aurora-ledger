@@ -13,7 +13,8 @@
     "reports": "Informes",
     "logout": "Cerrar sesión",
     "profile": "Perfil",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "Metas de Ahorro"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -289,5 +290,47 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "failedToLoadUsers": "Error al cargar usuarios"
+  },
+  "goals": {
+    "title": "Metas de Ahorro",
+    "addGoal": "Agregar Meta",
+    "newGoal": "Nueva Meta de Ahorro",
+    "editGoal": "Editar Meta",
+    "totalGoals": "Total de Metas",
+    "completed": "Completadas",
+    "overallProgress": "Progreso General",
+    "active": "Activas",
+    "noGoals": "Aún no hay metas de ahorro",
+    "createFirst": "Crea tu primera meta",
+    "name": "Nombre de la Meta",
+    "targetAmount": "Cantidad Objetivo",
+    "deadline": "Fecha Límite",
+    "category": "Categoría",
+    "categoryPlaceholder": "ej: Casa, Auto, Vacaciones",
+    "icon": "Ícono",
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "remaining": "Restante",
+    "achieved": "¡Meta Alcanzada!",
+    "daysLeft": "días restantes",
+    "today": "Hoy",
+    "overdue": "Vencida",
+    "addFunds": "Agregar Fondos",
+    "add": "Agregar Fondos",
+    "withdraw": "Retirar",
+    "confirmAdd": "Agregar",
+    "confirmWithdraw": "Retirar",
+    "notePlaceholder": "Nota opcional...",
+    "goalCompleted": "¡Meta Completada!",
+    "createSuccess": "¡Meta creada exitosamente!",
+    "updateSuccess": "¡Meta actualizada exitosamente!",
+    "deleteSuccess": "¡Meta eliminada exitosamente!",
+    "deleteConfirm": "¿Eliminar esta meta? Esto no se puede deshacer.",
+    "contributeSuccess": "¡Fondos agregados exitosamente!",
+    "withdrawSuccess": "¡Retiro exitoso!",
+    "failedToLoad": "Error al cargar metas"
   }
 }

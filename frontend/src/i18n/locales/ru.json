@@ -13,7 +13,8 @@
     "reports": "Отчеты",
     "logout": "Выйти",
     "profile": "Профиль",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "Цели Сбережений"
   },
   "auth": {
     "login": "Войти",
@@ -291,5 +292,47 @@
     "previous": "Назад",
     "next": "Далее",
     "failedToLoadUsers": "Не удалось загрузить пользователей"
+  },
+  "goals": {
+    "title": "Цели Сбережений",
+    "addGoal": "Добавить Цель",
+    "newGoal": "Новая Цель Сбережений",
+    "editGoal": "Редактировать Цель",
+    "totalGoals": "Всего Целей",
+    "completed": "Завершено",
+    "overallProgress": "Общий Прогресс",
+    "active": "Активные",
+    "noGoals": "Пока нет целей сбережений",
+    "createFirst": "Создайте свою первую цель",
+    "name": "Название Цели",
+    "targetAmount": "Целевая Сумма",
+    "deadline": "Срок",
+    "category": "Категория",
+    "categoryPlaceholder": "напр: Дом, Машина, Отпуск",
+    "icon": "Значок",
+    "priority": {
+      "low": "Низкий",
+      "medium": "Средний",
+      "high": "Высокий"
+    },
+    "remaining": "Осталось",
+    "achieved": "Цель Достигнута!",
+    "daysLeft": "дней осталось",
+    "today": "Сегодня",
+    "overdue": "Просрочено",
+    "addFunds": "Добавить Средства",
+    "add": "Добавить Средства",
+    "withdraw": "Снять",
+    "confirmAdd": "Добавить",
+    "confirmWithdraw": "Снять",
+    "notePlaceholder": "Примечание (необязательно)...",
+    "goalCompleted": "Цель Выполнена!",
+    "createSuccess": "Цель успешно создана!",
+    "updateSuccess": "Цель успешно обновлена!",
+    "deleteSuccess": "Цель успешно удалена!",
+    "deleteConfirm": "Удалить эту цель? Это действие нельзя отменить.",
+    "contributeSuccess": "Средства успешно добавлены!",
+    "withdrawSuccess": "Снятие выполнено успешно!",
+    "failedToLoad": "Не удалось загрузить цели"
   }
 }

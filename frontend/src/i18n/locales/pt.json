@@ -13,7 +13,8 @@
     "reports": "Relatórios",
     "logout": "Sair",
     "profile": "Perfil",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "Metas de Poupança"
   },
   "auth": {
     "login": "Entrar",
@@ -291,5 +292,47 @@
     "previous": "Anterior",
     "next": "Próximo",
     "failedToLoadUsers": "Falha ao carregar usuários"
+  },
+  "goals": {
+    "title": "Metas de Poupança",
+    "addGoal": "Adicionar Meta",
+    "newGoal": "Nova Meta de Poupança",
+    "editGoal": "Editar Meta",
+    "totalGoals": "Total de Metas",
+    "completed": "Concluídas",
+    "overallProgress": "Progresso Geral",
+    "active": "Ativas",
+    "noGoals": "Ainda não há metas de poupança",
+    "createFirst": "Crie sua primeira meta",
+    "name": "Nome da Meta",
+    "targetAmount": "Valor Alvo",
+    "deadline": "Prazo",
+    "category": "Categoria",
+    "categoryPlaceholder": "ex: Casa, Carro, Viagem",
+    "icon": "Ícone",
+    "priority": {
+      "low": "Baixa",
+      "medium": "Média",
+      "high": "Alta"
+    },
+    "remaining": "Restante",
+    "achieved": "Meta Alcançada!",
+    "daysLeft": "dias restantes",
+    "today": "Hoje",
+    "overdue": "Atrasada",
+    "addFunds": "Adicionar Fundos",
+    "add": "Adicionar Fundos",
+    "withdraw": "Retirar",
+    "confirmAdd": "Adicionar",
+    "confirmWithdraw": "Retirar",
+    "notePlaceholder": "Nota opcional...",
+    "goalCompleted": "Meta Concluída!",
+    "createSuccess": "Meta criada com sucesso!",
+    "updateSuccess": "Meta atualizada com sucesso!",
+    "deleteSuccess": "Meta excluída com sucesso!",
+    "deleteConfirm": "Excluir esta meta? Isso não pode ser desfeito.",
+    "contributeSuccess": "Fundos adicionados com sucesso!",
+    "withdrawSuccess": "Retirada bem-sucedida!",
+    "failedToLoad": "Falha ao carregar metas"
   }
 }

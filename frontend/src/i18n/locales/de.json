@@ -13,7 +13,8 @@
     "reports": "Berichte",
     "logout": "Abmelden",
     "profile": "Profil",
-    "admin": "Admin"
+    "admin": "Admin",
+    "goals": "Sparziele"
   },
   "auth": {
     "login": "Anmelden",
@@ -291,5 +292,47 @@
     "previous": "Zurück",
     "next": "Weiter",
     "failedToLoadUsers": "Benutzer konnten nicht geladen werden"
+  },
+  "goals": {
+    "title": "Sparziele",
+    "addGoal": "Ziel hinzufügen",
+    "newGoal": "Neues Sparziel",
+    "editGoal": "Ziel bearbeiten",
+    "totalGoals": "Gesamtziele",
+    "completed": "Abgeschlossen",
+    "overallProgress": "Gesamtfortschritt",
+    "active": "Aktiv",
+    "noGoals": "Noch keine Sparziele",
+    "createFirst": "Erstellen Sie Ihr erstes Ziel",
+    "name": "Zielname",
+    "targetAmount": "Zielbetrag",
+    "deadline": "Frist",
+    "category": "Kategorie",
+    "categoryPlaceholder": "z.B. Haus, Auto, Urlaub",
+    "icon": "Symbol",
+    "priority": {
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch"
+    },
+    "remaining": "Verbleibend",
+    "achieved": "Ziel erreicht!",
+    "daysLeft": "Tage verbleibend",
+    "today": "Heute",
+    "overdue": "Überfällig",
+    "addFunds": "Geld hinzufügen",
+    "add": "Geld hinzufügen",
+    "withdraw": "Abheben",
+    "confirmAdd": "Hinzufügen",
+    "confirmWithdraw": "Abheben",
+    "notePlaceholder": "Optionale Notiz...",
+    "goalCompleted": "Ziel abgeschlossen!",
+    "createSuccess": "Ziel erfolgreich erstellt!",
+    "updateSuccess": "Ziel erfolgreich aktualisiert!",
+    "deleteSuccess": "Ziel erfolgreich gelöscht!",
+    "deleteConfirm": "Dieses Ziel löschen? Dies kann nicht rückgängig gemacht werden.",
+    "contributeSuccess": "Geld erfolgreich hinzugefügt!",
+    "withdrawSuccess": "Abhebung erfolgreich!",
+    "failedToLoad": "Ziele konnten nicht geladen werden"
   }
 }
