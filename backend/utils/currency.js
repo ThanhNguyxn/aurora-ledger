@@ -66,7 +66,14 @@ export async function getAllRates(baseCurrency) {
 }
 
 // Convert amount from one currency to another
-export function convertCurrency(amount, rate) {
+export async function convertCurrency(amount, fromCurrency, toCurrency) {
+  // Handle same currency conversion
+  if (fromCurrency === toCurrency) {
+    return amount;
+  }
+  
+  // Get exchange rate and convert
+  const rate = await getExchangeRate(fromCurrency, toCurrency);
   return amount * rate;
 }
 
