@@ -57,12 +57,19 @@ const Reports = () => {
       const transactionsData = transactionsRes.data;
       const transactions = transactionsData.transactions || transactionsData || [];
       
-      console.log('🔍 Reports DEBUG:', {
-        currency,
-        transactionsCount: transactions.length,
-        firstTransaction: transactions[0],
-        allTransactions: transactions
-      });
+      console.log('🔍 Reports DEBUG - Currency:', currency);
+      console.log('🔍 Reports DEBUG - Transactions Count:', transactions.length);
+      if (transactions.length > 0) {
+        console.log('🔍 Reports DEBUG - First Transaction:', {
+          id: transactions[0].id,
+          type: transactions[0].type,
+          amount: transactions[0].amount,
+          currency: transactions[0].currency,
+          original_amount: transactions[0].original_amount,
+          original_currency: transactions[0].original_currency,
+          display_currency: transactions[0].display_currency
+        });
+      }
       
       // Calculate overview from converted transactions
       let totalIncome = 0;
@@ -71,6 +78,13 @@ const Reports = () => {
       
       transactions.forEach(t => {
         const amount = parseFloat(t.amount || 0);
+        console.log('💰 Processing transaction:', {
+          id: t.id,
+          type: t.type,
+          amount: t.amount,
+          parsed: amount,
+          currency: t.currency
+        });
         const catName = t.category_name || 'Uncategorized';
         
         if (t.type === 'income') {
