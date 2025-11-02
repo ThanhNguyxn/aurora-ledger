@@ -92,7 +92,8 @@ const Dashboard = () => {
           start_date: dateRange.start,
           end_date: dateRange.end,
           limit: 1000,
-          display_currency: currency // Pass user's selected currency
+          display_currency: currency, // Pass user's selected currency
+          _t: Date.now() // Cache buster
         } 
       });
       

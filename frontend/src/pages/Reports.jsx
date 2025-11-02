@@ -47,7 +47,8 @@ const Reports = () => {
             start_date: dateRange.start_date,
             end_date: dateRange.end_date,
             limit: 1000,
-            display_currency: currency // Use currency from hook
+            display_currency: currency, // Use currency from hook
+            _t: Date.now() // Cache buster to prevent stale data
           }
         }),
         api.get('/reports/trends?months=6')
