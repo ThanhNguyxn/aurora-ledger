@@ -176,6 +176,70 @@ router.post('/',
   }
 );
 
+// Update budget (PUT method)
+router.put('/:id',
+  [
+    body('category_id').isInt(),
+    body('amount').isFloat({ min: 0.01, max: 999999999999.99 }),
+    body('month').isInt({ min: 1, max: 12 }),
+    body('year').isInt({ min: 2000 }),
+    body('input_currency').optional().isString().isLength({ min: 3, max: 3 })
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { id } = req.params;
+      const { category_id, amount, month, year, input_currency } = req.body;
+
+      // Get user's preferred currency as default
+      const userResult = await pool.query(
+        'SELECT currency FROM users WHERE id = $1',
+        [req.user.id]
+      );
+      const userCurrency = userResult.rows[0]?.currency || 'USD';
+
+      // Save budget in the currency user specified (or default to user's currency)
+      const budgetCurrency = input_currency || userCurrency;
+
+      // Verify category belongs to user and is expense type
+      const catResult = await pool.query(
+        'SELECT id, type FROM categories WHERE id = $1 AND user_id = $2',
+        [category_id, req.user.id]
+      );
+      
+      if (catResult.rows.length === 0) {
+        return res.status(400).json({ error: 'Invalid category' });
+      }
+
+      if (catResult.rows[0].type !== 'expense') {
+        return res.status(400).json({ error: 'Budgets can only be set for expense categories' });
+      }
+
+      // Update budget
+      const result = await pool.query(
+        `UPDATE budgets 
+         SET category_id = $2, amount = $3, month = $4, year = $5, currency = $6, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1 AND user_id = $7
+         RETURNING *`,
+        [id, category_id, amount, month, year, budgetCurrency, req.user.id]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Budget not found' });
+      }
+
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('Update budget error:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  }
+);
+
 // Delete budget
 router.delete('/:id', async (req, res) => {
   try {
