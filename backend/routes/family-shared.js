@@ -100,7 +100,9 @@ router.post('/:familyId/budgets', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Name, amount, and start_date are required' });
     }
 
-    if (!POPULAR_CURRENCIES.includes(currency)) {
+    // Validate currency (POPULAR_CURRENCIES is array of objects)
+    const validCurrency = POPULAR_CURRENCIES.find(c => c.code === currency);
+    if (!validCurrency) {
       return res.status(400).json({ error: 'Invalid currency' });
     }
 
@@ -278,7 +280,9 @@ router.post('/:familyId/goals', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Name and target amount are required' });
     }
 
-    if (!POPULAR_CURRENCIES.includes(currency)) {
+    // Validate currency (POPULAR_CURRENCIES is array of objects)
+    const validCurrency = POPULAR_CURRENCIES.find(c => c.code === currency);
+    if (!validCurrency) {
       return res.status(400).json({ error: 'Invalid currency' });
     }
 
