@@ -78,6 +78,7 @@ router.get('/', async (req, res) => {
               original_amount: transaction.amount,
               original_currency: transaction.currency,
               amount: convertedAmount, // Override amount with converted value
+              currency: targetCurrency, // Override currency to display currency
               converted_amount: convertedAmount,
               display_currency: targetCurrency
             };
