@@ -344,7 +344,11 @@
     "familyMembers": "Membres",
     "thisUser": "Cet utilisateur",
     "noFamilyMemberships": "Cet utilisateur n'est membre d'aucune famille",
-    "failedToLoadDetails": "Échec du chargement des détails"
+    "failedToLoadDetails": "Échec du chargement des détails",
+    "oauth": {
+      "local": "Email/Mot de passe",
+      "google": "Google"
+    }
   },
   "goals": {
     "title": "Objectifs d'Épargne",

@@ -344,7 +344,11 @@
     "familyMembers": "メンバー",
     "thisUser": "このユーザー",
     "noFamilyMemberships": "このユーザーは家族のメンバーではありません",
-    "failedToLoadDetails": "詳細の読み込みに失敗しました"
+    "failedToLoadDetails": "詳細の読み込みに失敗しました",
+    "oauth": {
+      "local": "メール/パスワード",
+      "google": "Google"
+    }
   },
   "goals": {
     "title": "貯蓄目標",

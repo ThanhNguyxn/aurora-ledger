@@ -485,8 +485,11 @@ const Admin = () => {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.registrationMethod') || 'Registration'}</p>
-                        <p className="font-medium text-gray-900 dark:text-gray-100 capitalize">
-                          {userDetails.user.oauth_provider || 'Email/Password'}
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                          {userDetails.user.oauth_provider && userDetails.user.oauth_provider !== 'null'
+                            ? t(`admin.oauth.${userDetails.user.oauth_provider}`) || userDetails.user.oauth_provider
+                            : t('admin.oauth.local') || 'Email/Password'
+                          }
                         </p>
                       </div>
                       <div>

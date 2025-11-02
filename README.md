@@ -176,10 +176,18 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 - 👨‍💼 **Role-Based Access** - Admin, moderator, and user roles
 
 ### 👨‍💼 Admin Features
-- 📊 **User Management** - View all users and their statistics
-- 📈 **Analytics Dashboard** - Track total transactions, categories, budgets, goals
-- 👥 **User Details** - See per-user breakdowns (active/completed goals, recurring transactions)
-- 🔐 **Access Control** - Admin and moderator roles with restricted access
+- 📊 **User Management** - View all users with pagination (10 users/page)
+- 📈 **Analytics Dashboard** - Track total users, transactions, categories, budgets, goals
+- �️ **User Details Modal** - Click to view comprehensive user information:
+  - Account info (email, name, role, currency, registration method, joined date)
+  - Statistics (transactions, categories, budgets, goals, recurring count)
+  - Family memberships with role badges (Head/Manager/Contributor/Observer)
+  - Family members list with expandable details
+- 🔄 **Role Management** - Toggle user roles (admin/moderator/user)
+- � **Password Reset** - Reset any user's password
+- 🗑️ **User Deletion** - Remove users with confirmation
+- �🔐 **Access Control** - Admin and moderator roles with restricted access
+- 🌐 **Multi-language** - All admin features translated to 10 languages
 
 ---
 

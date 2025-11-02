@@ -392,7 +392,11 @@
     "familyMembers": "Members",
     "thisUser": "This user",
     "noFamilyMemberships": "This user is not a member of any family",
-    "failedToLoadDetails": "Failed to load user details"
+    "failedToLoadDetails": "Failed to load user details",
+    "oauth": {
+      "local": "Email/Password",
+      "google": "Google"
+    }
   },
   "family": {
     "title": "Family & Group Sharing",

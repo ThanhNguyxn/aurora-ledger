@@ -344,7 +344,11 @@
     "familyMembers": "Thành viên",
     "thisUser": "Người dùng này",
     "noFamilyMemberships": "Người dùng này không phải thành viên của gia đình nào",
-    "failedToLoadDetails": "Không thể tải chi tiết người dùng"
+    "failedToLoadDetails": "Không thể tải chi tiết người dùng",
+    "oauth": {
+      "local": "Email/Mật khẩu",
+      "google": "Google"
+    }
   },
   "goals": {
     "title": "Mục tiêu tiết kiệm",

@@ -344,7 +344,11 @@
     "familyMembers": "Участники",
     "thisUser": "Этот пользователь",
     "noFamilyMemberships": "Этот пользователь не является членом семьи",
-    "failedToLoadDetails": "Не удалось загрузить детали"
+    "failedToLoadDetails": "Не удалось загрузить детали",
+    "oauth": {
+      "local": "Email/Пароль",
+      "google": "Google"
+    }
   },
   "goals": {
     "title": "Цели Сбережений",

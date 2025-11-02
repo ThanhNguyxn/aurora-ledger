@@ -344,7 +344,11 @@
     "familyMembers": "Mitglieder",
     "thisUser": "Dieser Benutzer",
     "noFamilyMemberships": "Dieser Benutzer ist kein Mitglied einer Familie",
-    "failedToLoadDetails": "Details konnten nicht geladen werden"
+    "failedToLoadDetails": "Details konnten nicht geladen werden",
+    "oauth": {
+      "local": "E-Mail/Passwort",
+      "google": "Google"
+    }
   },
   "goals": {
     "title": "Sparziele",

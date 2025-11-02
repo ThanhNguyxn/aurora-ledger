@@ -344,7 +344,11 @@
     "familyMembers": "成员",
     "thisUser": "此用户",
     "noFamilyMemberships": "该用户不是任何家庭的成员",
-    "failedToLoadDetails": "加载详情失败"
+    "failedToLoadDetails": "加载详情失败",
+    "oauth": {
+      "local": "邮箱/密码",
+      "google": "Google"
+    }
   },
   "goals": {
     "title": "储蓄目标",

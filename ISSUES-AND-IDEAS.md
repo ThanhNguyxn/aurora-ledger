@@ -3,10 +3,28 @@
 ## 🐛 Known Issues (To Fix)
 
 ### High Priority
-- [ ] **Dashboard forecast variable error** - Fixed ✅
+- [x] **Dashboard forecast variable error** - Fixed ✅
   - Issue: Variable `forecast` was referenced but declared as `forecastData`
   - Location: `frontend/src/pages/Dashboard.jsx` line 286
   - Status: FIXED - Changed all `forecast` references to `forecastData`
+
+- [x] **Admin User Details Modal** - Completed ✅
+  - Feature: Click eye icon on users to view detailed information
+  - Implementation:
+    - Backend endpoint: `GET /api/admin/users/:id/details`
+    - User Details Modal with 3 sections:
+      1. Account Information (email, name, role, currency, registration method, joined date)
+      2. Statistics (transaction/category/budget/goal/recurring counts)
+      3. Family Memberships (families, roles, members with expandable lists)
+    - Role badges with icons (Crown/Shield/UserCheck/Eye)
+    - "This user" tag to highlight current user in member lists
+    - Translated to 10 languages (en, vi, de, es, fr, ja, ko, pt, ru, zh)
+    - OAuth provider translation (Email/Password vs Google)
+  - UX Improvements:
+    - Removed Stats column from table (less clutter)
+    - Reduced pagination from 20 → 10 users/page
+    - Fixed API authentication (axios → api helper)
+  - Status: COMPLETE and committed ✅
 
 - [ ] **Analytics & Family pages showing blank screen** - FAILED ATTEMPTS ❌
   - Root Cause: Double Layout wrapper (Layout in App.jsx + Layout in page components)

@@ -344,7 +344,11 @@
     "familyMembers": "Membros",
     "thisUser": "Este usuário",
     "noFamilyMemberships": "Este usuário não é membro de nenhuma família",
-    "failedToLoadDetails": "Falha ao carregar detalhes"
+    "failedToLoadDetails": "Falha ao carregar detalhes",
+    "oauth": {
+      "local": "Email/Senha",
+      "google": "Google"
+    }
   },
   "goals": {
     "title": "Metas de Poupança",
