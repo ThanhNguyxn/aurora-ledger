@@ -209,5 +209,287 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// ==================== SMART BUDGETS ====================
+
+// Get budget suggestions based on last 3 months spending
+router.get('/suggestions', async (req, res) => {
+  try {
+    const { month, year } = req.query;
+    
+    if (!month || !year) {
+      return res.status(400).json({ error: 'Month and year are required' });
+    }
+
+    // Get user's preferred currency
+    const userResult = await pool.query(
+      'SELECT currency FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    const userCurrency = userResult.rows[0]?.currency || 'USD';
+
+    // Calculate 3 months before the target month
+    const targetDate = new Date(year, month - 1, 1);
+    const threeMonthsAgo = new Date(targetDate);
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+    // Get spending for last 3 months grouped by category
+    const spendingResult = await pool.query(
+      `SELECT 
+         t.category_id,
+         c.name as category_name,
+         c.color as category_color,
+         c.icon as category_icon,
+         AVG(monthly_totals.total) as avg_spent,
+         MAX(monthly_totals.total) as max_spent,
+         MIN(monthly_totals.total) as min_spent,
+         COUNT(DISTINCT monthly_totals.month_year) as months_with_spending
+       FROM (
+         SELECT 
+           category_id,
+           TO_CHAR(transaction_date, 'YYYY-MM') as month_year,
+           SUM(
+             CASE 
+               WHEN currency = $2 THEN amount
+               ELSE 0
+             END
+           ) as total
+         FROM transactions
+         WHERE user_id = $1
+         AND type = 'expense'
+         AND transaction_date >= $3
+         AND transaction_date < $4
+         GROUP BY category_id, month_year
+       ) monthly_totals
+       JOIN transactions t ON t.category_id = monthly_totals.category_id
+       JOIN categories c ON c.id = t.category_id
+       WHERE t.user_id = $1
+       GROUP BY t.category_id, c.name, c.color, c.icon
+       HAVING COUNT(DISTINCT monthly_totals.month_year) >= 1
+       ORDER BY AVG(monthly_totals.total) DESC`,
+      [req.user.id, userCurrency, threeMonthsAgo, targetDate]
+    );
+
+    // Calculate suggested budgets with 10% buffer
+    const suggestions = spendingResult.rows.map(row => ({
+      category_id: row.category_id,
+      category_name: row.category_name,
+      category_color: row.category_color,
+      category_icon: row.category_icon,
+      avg_spent: parseFloat(row.avg_spent || 0),
+      max_spent: parseFloat(row.max_spent || 0),
+      min_spent: parseFloat(row.min_spent || 0),
+      months_with_data: parseInt(row.months_with_spending),
+      suggested_amount: Math.ceil(parseFloat(row.avg_spent || 0) * 1.1), // Add 10% buffer
+      currency: userCurrency,
+      confidence: row.months_with_spending >= 3 ? 'high' : 
+                  row.months_with_spending >= 2 ? 'medium' : 'low'
+    }));
+
+    res.json({ 
+      suggestions,
+      analysis_period: {
+        from: threeMonthsAgo.toISOString().split('T')[0],
+        to: targetDate.toISOString().split('T')[0],
+        months_analyzed: 3
+      },
+      currency: userCurrency
+    });
+  } catch (error) {
+    console.error('Budget suggestions error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get budget templates (50/30/20 rule, etc.)
+router.get('/templates', async (req, res) => {
+  try {
+    const { monthly_income } = req.query;
+    
+    if (!monthly_income || isNaN(monthly_income)) {
+      return res.status(400).json({ error: 'Valid monthly_income is required' });
+    }
+
+    // Get user's preferred currency
+    const userResult = await pool.query(
+      'SELECT currency FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    const userCurrency = userResult.rows[0]?.currency || 'USD';
+
+    const income = parseFloat(monthly_income);
+
+    const templates = [
+      {
+        name: '50/30/20 Rule',
+        description: '50% Needs, 30% Wants, 20% Savings',
+        allocations: {
+          needs: { percentage: 50, amount: income * 0.5 },
+          wants: { percentage: 30, amount: income * 0.3 },
+          savings: { percentage: 20, amount: income * 0.2 }
+        },
+        suggested_categories: {
+          needs: ['Housing', 'Food', 'Transportation', 'Utilities', 'Healthcare'],
+          wants: ['Entertainment', 'Shopping', 'Dining Out', 'Hobbies'],
+          savings: ['Emergency Fund', 'Investments', 'Savings']
+        }
+      },
+      {
+        name: '60/20/20 Rule',
+        description: '60% Living Expenses, 20% Savings, 20% Discretionary',
+        allocations: {
+          living: { percentage: 60, amount: income * 0.6 },
+          savings: { percentage: 20, amount: income * 0.2 },
+          discretionary: { percentage: 20, amount: income * 0.2 }
+        },
+        suggested_categories: {
+          living: ['Housing', 'Food', 'Transportation', 'Utilities', 'Healthcare'],
+          savings: ['Emergency Fund', 'Investments', 'Savings'],
+          discretionary: ['Entertainment', 'Shopping', 'Dining Out', 'Travel']
+        }
+      },
+      {
+        name: '70/20/10 Rule',
+        description: '70% Living Expenses, 20% Savings, 10% Fun',
+        allocations: {
+          living: { percentage: 70, amount: income * 0.7 },
+          savings: { percentage: 20, amount: income * 0.2 },
+          fun: { percentage: 10, amount: income * 0.1 }
+        },
+        suggested_categories: {
+          living: ['Housing', 'Food', 'Transportation', 'Utilities', 'Healthcare'],
+          savings: ['Emergency Fund', 'Investments', 'Savings'],
+          fun: ['Entertainment', 'Dining Out', 'Hobbies', 'Travel']
+        }
+      },
+      {
+        name: 'Zero-Based Budget',
+        description: 'Allocate every dollar to a category',
+        allocations: {
+          essentials: { percentage: 55, amount: income * 0.55 },
+          financial: { percentage: 25, amount: income * 0.25 },
+          lifestyle: { percentage: 20, amount: income * 0.2 }
+        },
+        suggested_categories: {
+          essentials: ['Housing', 'Food', 'Transportation', 'Utilities'],
+          financial: ['Debt Repayment', 'Emergency Fund', 'Investments', 'Savings'],
+          lifestyle: ['Entertainment', 'Shopping', 'Dining Out', 'Personal Care']
+        }
+      }
+    ];
+
+    res.json({ 
+      templates,
+      monthly_income: income,
+      currency: userCurrency
+    });
+  } catch (error) {
+    console.error('Budget templates error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Apply rollover: carry over remaining budget from previous month
+router.post('/rollover', async (req, res) => {
+  try {
+    const { from_month, from_year, to_month, to_year, category_ids } = req.body;
+    
+    if (!from_month || !from_year || !to_month || !to_year) {
+      return res.status(400).json({ error: 'All date parameters are required' });
+    }
+
+    // Get user's preferred currency
+    const userResult = await pool.query(
+      'SELECT currency FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    const userCurrency = userResult.rows[0]?.currency || 'USD';
+
+    // Get budgets and spending from previous month
+    const budgetsQuery = category_ids && category_ids.length > 0
+      ? `SELECT b.id, b.category_id, b.amount, b.currency,
+           COALESCE((SELECT SUM(amount) FROM transactions t 
+             WHERE t.user_id = $1 AND t.category_id = b.category_id 
+             AND t.type = 'expense' AND t.currency = $5
+             AND EXTRACT(MONTH FROM t.transaction_date) = $2
+             AND EXTRACT(YEAR FROM t.transaction_date) = $3), 0) as spent
+         FROM budgets b
+         WHERE b.user_id = $1 AND b.month = $2 AND b.year = $3
+         AND b.category_id = ANY($6)`
+      : `SELECT b.id, b.category_id, b.amount, b.currency,
+           COALESCE((SELECT SUM(amount) FROM transactions t 
+             WHERE t.user_id = $1 AND t.category_id = b.category_id 
+             AND t.type = 'expense' AND t.currency = $5
+             AND EXTRACT(MONTH FROM t.transaction_date) = $2
+             AND EXTRACT(YEAR FROM t.transaction_date) = $3), 0) as spent
+         FROM budgets b
+         WHERE b.user_id = $1 AND b.month = $2 AND b.year = $3`;
+
+    const params = category_ids && category_ids.length > 0
+      ? [req.user.id, from_month, from_year, to_month, userCurrency, category_ids]
+      : [req.user.id, from_month, from_year, to_month, userCurrency];
+
+    const oldBudgets = await pool.query(budgetsQuery, params);
+
+    const rollovers = [];
+
+    for (const budget of oldBudgets.rows) {
+      const remaining = parseFloat(budget.amount) - parseFloat(budget.spent);
+      
+      if (remaining > 0) {
+        // Check if budget already exists for target month
+        const existingBudget = await pool.query(
+          `SELECT id, amount FROM budgets 
+           WHERE user_id = $1 AND category_id = $2 AND month = $3 AND year = $4`,
+          [req.user.id, budget.category_id, to_month, to_year]
+        );
+
+        if (existingBudget.rows.length > 0) {
+          // Update existing budget by adding rollover amount
+          const newAmount = parseFloat(existingBudget.rows[0].amount) + remaining;
+          await pool.query(
+            `UPDATE budgets SET amount = $1, updated_at = NOW()
+             WHERE id = $2`,
+            [newAmount, existingBudget.rows[0].id]
+          );
+
+          rollovers.push({
+            category_id: budget.category_id,
+            rollover_amount: remaining,
+            previous_amount: parseFloat(existingBudget.rows[0].amount),
+            new_amount: newAmount,
+            action: 'updated'
+          });
+        } else {
+          // Create new budget with rollover amount
+          await pool.query(
+            `INSERT INTO budgets (user_id, category_id, amount, currency, month, year)
+             VALUES ($1, $2, $3, $4, $5, $6)`,
+            [req.user.id, budget.category_id, remaining, userCurrency, to_month, to_year]
+          );
+
+          rollovers.push({
+            category_id: budget.category_id,
+            rollover_amount: remaining,
+            new_amount: remaining,
+            action: 'created'
+          });
+        }
+      }
+    }
+
+    res.json({ 
+      message: 'Budgets rolled over successfully',
+      rollovers,
+      from: { month: from_month, year: from_year },
+      to: { month: to_month, year: to_year },
+      currency: userCurrency
+    });
+  } catch (error) {
+    console.error('Budget rollover error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 export default router;
+
 
