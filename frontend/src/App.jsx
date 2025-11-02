@@ -12,6 +12,7 @@ import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Recurring from './pages/Recurring';
+import Goals from './pages/Goals';
 import Categories from './pages/Categories';
 import Budgets from './pages/Budgets';
 import Reports from './pages/Reports';
@@ -66,6 +67,7 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="transactions" element={<Transactions />} />
               <Route path="recurring" element={<Recurring />} />
+              <Route path="goals" element={<Goals />} />
               <Route path="categories" element={<Categories />} />
               <Route path="budgets" element={<Budgets />} />
               <Route path="reports" element={<Reports />} />

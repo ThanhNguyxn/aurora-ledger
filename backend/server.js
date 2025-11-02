@@ -12,6 +12,7 @@ import currencyRoutes from './routes/currency.js';
 import oauthRoutes from './routes/oauth.js';
 import passwordResetRoutes from './routes/password-reset.js';
 import recurringRoutes from './routes/recurring.js';
+import goalsRoutes from './routes/goals.js';
 import profileRoutes from './routes/profile.js';
 import adminRoutes from './routes/admin.js';
 import setupRoutes from './routes/setup.js';
@@ -71,6 +72,7 @@ app.use('/api/budgets', budgetRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/currency', currencyRoutes);
 app.use('/api/recurring', recurringRoutes);
+app.use('/api/goals', goalsRoutes);
 
 // 404 handler
 app.use((req, res) => {
