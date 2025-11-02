@@ -12,8 +12,6 @@ router.get('/', async (req, res) => {
   try {
     const { type, category_id, start_date, end_date, limit = 100, offset = 0, display_currency } = req.query;
     
-    console.log('[Transactions API] Request params:', { display_currency, type, start_date, end_date });
-    
     // Get user's preferred currency if not specified
     let targetCurrency = display_currency;
     if (!targetCurrency) {
@@ -23,8 +21,6 @@ router.get('/', async (req, res) => {
       );
       targetCurrency = userResult.rows[0]?.currency || 'USD';
     }
-    
-    console.log('[Transactions API] Target currency:', targetCurrency);
     
     let query = `
       SELECT t.*, c.name as category_name, c.color as category_color, c.icon as category_icon
@@ -60,16 +56,6 @@ router.get('/', async (req, res) => {
 
     const result = await pool.query(query, params);
     
-    console.log('[Transactions API] Found transactions:', result.rows.length);
-    if (result.rows.length > 0) {
-      console.log('[Transactions API] First transaction:', {
-        id: result.rows[0].id,
-        amount: result.rows[0].amount,
-        currency: result.rows[0].currency,
-        targetCurrency
-      });
-    }
-    
     // Convert amounts to target currency
     const convertedTransactions = await Promise.all(
       result.rows.map(async (transaction) => {
@@ -87,14 +73,6 @@ router.get('/', async (req, res) => {
           try {
             const rate = await getExchangeRate(transaction.currency, targetCurrency);
             const convertedAmount = convertCurrency(transaction.amount, rate);
-            console.log('[Transactions API] Converting:', {
-              id: transaction.id,
-              from: transaction.currency,
-              to: targetCurrency,
-              originalAmount: transaction.amount,
-              rate,
-              convertedAmount
-            });
             return {
               ...transaction,
               original_amount: transaction.amount,

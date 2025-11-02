@@ -29,7 +29,7 @@ const Recurring = () => {
   useEffect(() => {
     fetchRecurring();
     fetchCategories();
-  }, []);
+  }, [currency]); // Add currency dependency
 
   const fetchRecurring = async () => {
     try {

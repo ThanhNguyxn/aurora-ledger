@@ -34,7 +34,7 @@ const Transactions = () => {
     setCurrentPage(1); // Reset to page 1 when filters change
     fetchTransactions();
     fetchCategories();
-  }, [filters]);
+  }, [filters, currency]); // Add currency dependency
 
   const fetchTransactions = async () => {
     try {

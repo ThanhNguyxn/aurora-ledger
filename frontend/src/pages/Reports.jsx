@@ -40,8 +40,6 @@ const Reports = () => {
     try {
       setLoading(true);
       
-      console.log('Reports - Fetching with currency:', currency);
-      
       // Fetch transactions with currency conversion
       const [transactionsRes, trendsRes] = await Promise.all([
         api.get('/transactions', {
@@ -57,17 +55,6 @@ const Reports = () => {
       
       const transactionsData = transactionsRes.data;
       const transactions = transactionsData.transactions || transactionsData || [];
-      
-      console.log('Reports - Received transactions:', transactions.length);
-      console.log('Reports - First transaction:', transactions[0]);
-      console.log('Reports - ALL transactions:', transactions.map(t => ({
-        id: t.id,
-        type: t.type,
-        amount: t.amount,
-        original_amount: t.original_amount,
-        currency: t.currency,
-        display_currency: t.display_currency
-      })));
       
       // Calculate overview from converted transactions
       let totalIncome = 0;
