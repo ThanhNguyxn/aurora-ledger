@@ -89,15 +89,15 @@
     "uncategorized": "Без категории",
     "addNote": "Добавить заметку...",
     "optional": "Необязательно",
+    "transactionCurrency": "Валюта транзакции",
+    "willConvert": "Будет конвертировано в вашу валюту отображения",
     "cancel": "Отмена",
     "create": "Создать",
     "update": "Обновить",
     "saving": "Сохранение...",
     "maxAmount": "Максимум: 999 999 999 999,99",
     "exportedSuccess": "Транзакции экспортированы",
-    "failedToExport": "Не удалось экспортировать",
-    "willConvert": "Будет конвертировано в вашу валюту отображения",
-    "transactionCurrency": "Валюта транзакции"
+    "failedToExport": "Не удалось экспортировать"
   },
   "categories": {
     "title": "Категории",

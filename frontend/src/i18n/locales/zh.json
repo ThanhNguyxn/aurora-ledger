@@ -89,15 +89,15 @@
     "uncategorized": "未分类",
     "addNote": "添加备注...",
     "optional": "可选",
+    "transactionCurrency": "交易货币",
+    "willConvert": "将转换为您的显示货币",
     "cancel": "取消",
     "create": "创建",
     "update": "更新",
     "saving": "保存中...",
     "maxAmount": "最大：999,999,999,999.99",
     "exportedSuccess": "交易已导出",
-    "failedToExport": "导出失败",
-    "willConvert": "将转换为您的显示货币",
-    "transactionCurrency": "交易货币"
+    "failedToExport": "导出失败"
   },
   "categories": {
     "title": "类别",

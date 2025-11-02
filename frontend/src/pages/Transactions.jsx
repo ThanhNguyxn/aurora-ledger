@@ -21,6 +21,8 @@ const Transactions = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   const [filters, setFilters] = useState({
     type: '',
     category_id: '',
@@ -29,6 +31,7 @@ const Transactions = () => {
   });
 
   useEffect(() => {
+    setCurrentPage(1); // Reset to page 1 when filters change
     fetchTransactions();
     fetchCategories();
   }, [filters]);
@@ -195,20 +198,23 @@ const Transactions = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : transactions.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b dark:border-gray-700">
-                  <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.date')}</th>
-                  <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.category')}</th>
-                  <th className="text-left py-3 px-4 text-sm sm:text-base hidden sm:table-cell text-gray-800 dark:text-gray-200">{t('transactions.description')}</th>
-                  <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.type')}</th>
-                  <th className="text-right py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.amount')}</th>
-                  <th className="text-right py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.actions')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((transaction) => (
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b dark:border-gray-700">
+                    <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.date')}</th>
+                    <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.category')}</th>
+                    <th className="text-left py-3 px-4 text-sm sm:text-base hidden sm:table-cell text-gray-800 dark:text-gray-200">{t('transactions.description')}</th>
+                    <th className="text-left py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.type')}</th>
+                    <th className="text-right py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.amount')}</th>
+                    <th className="text-right py-3 px-4 text-sm sm:text-base text-gray-800 dark:text-gray-200">{t('transactions.actions')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactions
+                    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                    .map((transaction) => (
                   <tr key={transaction.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                     <td className="py-3 px-4 text-sm text-gray-800 dark:text-gray-200">
                       {format(new Date(transaction.transaction_date), 'MMM dd, yyyy', { locale: getDateLocale() })}
@@ -265,7 +271,38 @@ const Transactions = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+
+            {/* Pagination */}
+            {transactions.length > itemsPerPage && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t dark:border-gray-700">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('common.showing')} {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, transactions.length)} {t('common.of')} {transactions.length}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 border dark:border-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    {t('common.previous')}
+                  </button>
+                  <div className="flex items-center gap-2 px-4 py-2 border dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800">
+                    <span className="text-sm font-medium">{currentPage}</span>
+                    <span className="text-sm text-gray-500">/</span>
+                    <span className="text-sm text-gray-500">{Math.ceil(transactions.length / itemsPerPage)}</span>
+                  </div>
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(Math.ceil(transactions.length / itemsPerPage), p + 1))}
+                    disabled={currentPage >= Math.ceil(transactions.length / itemsPerPage)}
+                    className="px-4 py-2 border dark:border-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    {t('common.next')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             {t('transactions.noTransactions')}

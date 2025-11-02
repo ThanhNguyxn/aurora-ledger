@@ -89,15 +89,15 @@
     "uncategorized": "미분류",
     "addNote": "메모 추가...",
     "optional": "선택사항",
+    "transactionCurrency": "거래 통화",
+    "willConvert": "표시 통화로 변환됩니다",
     "cancel": "취소",
     "create": "생성",
     "update": "업데이트",
     "saving": "저장 중...",
     "maxAmount": "최대: 999,999,999,999.99",
     "exportedSuccess": "거래가 내보내졌습니다",
-    "failedToExport": "내보내기 실패",
-    "willConvert": "표시 통화로 변환됩니다",
-    "transactionCurrency": "거래 통화"
+    "failedToExport": "내보내기 실패"
   },
   "categories": {
     "title": "카테고리",

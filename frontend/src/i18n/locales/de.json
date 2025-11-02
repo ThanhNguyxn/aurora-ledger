@@ -89,15 +89,15 @@
     "uncategorized": "Unkategorisiert",
     "addNote": "Notiz hinzufügen...",
     "optional": "Optional",
+    "transactionCurrency": "Transaktionswährung",
+    "willConvert": "Wird in Ihre Anzeigewährung umgerechnet",
     "cancel": "Abbrechen",
     "create": "Erstellen",
     "update": "Aktualisieren",
     "saving": "Wird gespeichert...",
     "maxAmount": "Maximum: 999.999.999.999,99",
     "exportedSuccess": "Transaktionen exportiert",
-    "failedToExport": "Export fehlgeschlagen",
-    "willConvert": "Wird in Ihre Anzeigewährung umgerechnet",
-    "transactionCurrency": "Transaktionswährung"
+    "failedToExport": "Export fehlgeschlagen"
   },
   "categories": {
     "title": "Kategorien",

@@ -89,13 +89,13 @@
     "uncategorized": "Chưa phân loại",
     "addNote": "Thêm ghi chú...",
     "optional": "Tùy chọn",
+    "transactionCurrency": "Loại tiền giao dịch",
+    "willConvert": "Sẽ được chuyển đổi sang loại tiền hiển thị của bạn",
     "cancel": "Hủy",
     "create": "Tạo",
     "update": "Cập nhật",
     "saving": "Đang lưu...",
-    "maxAmount": "Tối đa: 999,999,999,999.99",
-    "willConvert": "Sẽ được chuyển đổi sang loại tiền hiển thị của bạn",
-    "transactionCurrency": "Loại tiền giao dịch"
+    "maxAmount": "Tối đa: 999,999,999,999.99"
   },
   "categories": {
     "title": "Danh mục",

@@ -89,11 +89,13 @@
     "uncategorized": "Uncategorized",
     "addNote": "Add a note...",
     "optional": "Optional",
+    "transactionCurrency": "Transaction Currency",
+    "willConvert": "Will be converted to your display currency",
+    "maxAmount": "Maximum: 999,999,999,999.99",
     "cancel": "Cancel",
     "create": "Create",
     "update": "Update",
-    "saving": "Saving...",
-    "maxAmount": "Maximum: 999,999,999,999.99"
+    "saving": "Saving..."
   },
   "categories": {
     "title": "Categories",

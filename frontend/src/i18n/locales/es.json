@@ -89,6 +89,8 @@
     "uncategorized": "Sin categoría",
     "addNote": "Añade una nota...",
     "optional": "Opcional",
+    "transactionCurrency": "Moneda de Transacción",
+    "willConvert": "Se convertirá a su moneda de visualización",
     "cancel": "Cancelar",
     "create": "Crear",
     "update": "Actualizar",
