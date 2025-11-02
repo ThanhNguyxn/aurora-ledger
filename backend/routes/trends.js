@@ -1,12 +1,12 @@
 import express from 'express';
 import pool from '../config/database.js';
-import { requireAuth } from '../middleware/auth.js';
+import { authMiddleware } from '../middleware/auth.js';
 import { convertCurrency, POPULAR_CURRENCIES } from '../utils/currency.js';
 
 const router = express.Router();
 
 // Get spending anomalies (transactions significantly above average)
-router.get('/anomalies', requireAuth, async (req, res) => {
+router.get('/anomalies', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const { period = '3', currency: displayCurrency } = req.query; // Default 3 months
@@ -114,7 +114,7 @@ router.get('/anomalies', requireAuth, async (req, res) => {
 });
 
 // Get year-over-year comparison
-router.get('/yoy-comparison', requireAuth, async (req, res) => {
+router.get('/yoy-comparison', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const { currency: displayCurrency } = req.query;
@@ -264,7 +264,7 @@ router.get('/yoy-comparison', requireAuth, async (req, res) => {
 });
 
 // Get spending velocity (burn rate)
-router.get('/velocity', requireAuth, async (req, res) => {
+router.get('/velocity', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const { period = '30', currency: displayCurrency } = req.query; // Default 30 days
@@ -368,7 +368,7 @@ router.get('/velocity', requireAuth, async (req, res) => {
 });
 
 // Get spending patterns (weekday vs weekend, time of month)
-router.get('/patterns', requireAuth, async (req, res) => {
+router.get('/patterns', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const { period = '6', currency: displayCurrency } = req.query; // Default 6 months
