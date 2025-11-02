@@ -16,6 +16,7 @@ import goalsRoutes from './routes/goals.js';
 import profileRoutes from './routes/profile.js';
 import adminRoutes from './routes/admin.js';
 import dashboardRoutes from './routes/dashboard.js';
+import insightsRoutes from './routes/insights.js';
 import setupRoutes from './routes/setup.js';
 import { processRecurringTransactions } from './utils/recurring-processor.js';
 
@@ -68,6 +69,7 @@ app.use('/api/setup', setupRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/insights', insightsRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
