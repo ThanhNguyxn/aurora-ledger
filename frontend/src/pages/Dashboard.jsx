@@ -84,13 +84,42 @@ const Dashboard = () => {
     try {
       setLoading(true);
       
-      // Use new dashboard stats API with currency conversion
-      const response = await api.get(`/dashboard/stats?currency=${currency}`);
-      setStats(response.data);
-      
-      // Recent transactions are included in the dashboard stats
-      if (response.data.recentActivity) {
-        setRecentTransactions(response.data.recentActivity.transactions || []);
+      // Try new dashboard stats API first
+      try {
+        const response = await api.get(`/dashboard/stats?currency=${currency}`);
+        setStats(response.data);
+        
+        // Recent transactions are included in the dashboard stats
+        if (response.data.recentActivity) {
+          setRecentTransactions(response.data.recentActivity.transactions || []);
+        }
+      } catch (dashboardError) {
+        console.warn('Dashboard stats API failed, falling back to reports API:', dashboardError);
+        
+        // Fallback to old reports API
+        const dateRange = getDateRange();
+        const [overviewRes, transactionsRes] = await Promise.all([
+          api.get(`/reports/overview?start_date=${dateRange.start}&end_date=${dateRange.end}`),
+          api.get('/transactions', { params: { limit: 5, sort: 'date_desc' } })
+        ]);
+        
+        // Transform old API response to match new structure
+        const overviewData = overviewRes.data;
+        setStats({
+          month: {
+            income: overviewData.totals?.income || 0,
+            expense: overviewData.totals?.expense || 0,
+            savings: (overviewData.totals?.income || 0) - (overviewData.totals?.expense || 0),
+            savingsRate: overviewData.totals?.income > 0 
+              ? (((overviewData.totals?.income - overviewData.totals?.expense) / overviewData.totals?.income) * 100).toFixed(1)
+              : 0
+          },
+          topCategories: overviewData.byCategory?.expense || [],
+          recentActivity: {
+            transactions: transactionsRes.data.transactions || []
+          }
+        });
+        setRecentTransactions(transactionsRes.data.transactions || []);
       }
     } catch (error) {
       toast.error(t('dashboard.failedToLoad') || 'Failed to load dashboard data');
