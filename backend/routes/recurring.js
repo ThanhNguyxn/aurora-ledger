@@ -267,6 +267,7 @@ router.delete('/:id', async (req, res) => {
 router.patch('/:id/toggle', async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(`🔄 Toggle recurring ${id} for user ${req.user.id}`);
 
     const result = await pool.query(
       `UPDATE recurring_transactions 
@@ -277,9 +278,11 @@ router.patch('/:id/toggle', async (req, res) => {
     );
 
     if (result.rows.length === 0) {
+      console.log(`❌ Recurring ${id} not found for user ${req.user.id}`);
       return res.status(404).json({ error: 'Recurring transaction not found' });
     }
 
+    console.log(`✅ Toggled recurring ${id}, is_active: ${result.rows[0].is_active}`);
     res.json(result.rows[0]);
   } catch (error) {
     console.error('Toggle recurring transaction error:', error);

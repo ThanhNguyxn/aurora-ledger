@@ -125,11 +125,14 @@ const Recurring = () => {
 
   const handleToggle = async (id) => {
     try {
-      await api.patch(`/recurring/${id}/toggle`);
+      console.log('🔄 Toggling recurring:', id);
+      const response = await api.patch(`/recurring/${id}/toggle`);
+      console.log('✅ Toggle response:', response.data);
       toast.success(t('common.success'));
       fetchRecurring();
     } catch (error) {
-      toast.error(t('common.error'));
+      console.error('❌ Toggle error:', error);
+      toast.error(error.response?.data?.error || t('common.error'));
     }
   };
 
