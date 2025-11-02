@@ -35,9 +35,30 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 ### 💰 Transaction Management
 - ✅ **Income & Expense Tracking** - Record all your financial activities
 - 🏷️ **Smart Categorization** - Organize with custom categories and colors
-- � **Detailed Notes** - Add descriptions and context to every transaction
+- 📝 **Detailed Notes** - Add descriptions and context to every transaction
 - 🔍 **Advanced Filters** - Search by date, type, category, and amount
 - ✏️ **Quick Edit** - Modify or delete transactions anytime
+- 📄 **Smart Pagination** - Browse through transactions 10 items at a time
+- 💱 **Multi-Currency Transactions** - Record in any currency with auto-conversion
+
+### 🔁 Recurring Transactions
+- ⏰ **Automated Scheduling** - Set up daily, weekly, monthly, or yearly recurring transactions
+- 🎯 **Smart Execution** - Auto-creates transactions on scheduled dates
+- 📅 **Flexible Timing** - Customize start date and optional end date
+- ✏️ **Easy Management** - Edit or delete recurring schedules anytime
+- 🔔 **Active Tracking** - Monitor upcoming and past recurring transactions
+- 💰 **Budget Integration** - Recurring expenses automatically tracked in budgets
+
+### 🎯 Saving Goals
+- 💰 **Target Setting** - Create goals with target amounts and deadlines
+- 📊 **Progress Tracking** - Visual progress bars and percentage completion
+- 🏆 **Priority Levels** - Mark goals as low, medium, or high priority
+- 🎨 **Custom Icons** - Choose from 15+ goal icons (house, car, vacation, etc.)
+- 💸 **Contribution System** - Add funds or withdraw from goals
+- 📝 **Transaction Linking** - Optionally link contributions to transactions
+- 📈 **Overall Statistics** - Track total saved, goals completed, and overall progress
+- 🎯 **Goal Filtering** - View active, completed, or all goals
+- 💱 **Multi-Currency** - Set goals in any currency with auto-conversion
 
 ### 📈 Budget Management
 - 🎯 **Monthly Budgets** - Set spending limits per category
@@ -45,7 +66,8 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 - ⚡ **Auto Tracking** - Spending calculated automatically
 - 🔔 **Smart Alerts** - Warnings at 80% and 100% thresholds
 - 🗓️ **Flexible Views** - Monthly and yearly budget planning
-- � **Multi-Currency Input** - Create budgets in any currency
+- 💱 **Multi-Currency Input** - Create budgets in any currency
+- ✏️ **Easy Editing** - Modify existing budgets anytime
 
 ### 📉 Financial Reports
 - 📊 **Income vs Expense** - Track your financial health over time
@@ -53,6 +75,21 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 - 📊 **Monthly Comparison** - Bar charts for trend analysis
 - 📈 **6-Month Trends** - Identify patterns in your spending
 - 💾 **Export Data** - Download reports as CSV
+
+### 🌐 Internationalization (i18n)
+- 🌍 **10 Languages** - English, Vietnamese, Chinese, German, Spanish, French, Japanese, Korean, Portuguese, Russian
+- 🔄 **Live Switching** - Change language instantly without refresh
+- 📱 **Fully Translated** - All UI elements, messages, and notifications
+- 🎯 **Context-Aware** - Proper translations for technical terms
+- 💰 **Currency Localization** - Amounts formatted per language/region
+
+### 🎨 User Experience
+- 🌗 **Dark/Light Mode** - Toggle between themes instantly
+- 📱 **Fully Responsive** - Perfect on desktop, tablet, and mobile
+- ⚡ **Fast Performance** - Optimized rendering and data fetching
+- 🎯 **Intuitive UI** - Clean, modern interface with smooth animations
+- 🔍 **Smart Search** - Find anything quickly with filters
+- 📊 **Data Visualization** - Beautiful charts and progress indicators
 
 ### 🌍 Multi-Currency Support
 - 💱 **29+ Currencies** - Support for all major global currencies
@@ -68,6 +105,14 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 - 🔐 **HTTPS Only** - All data encrypted in transit
 - 👤 **Data Privacy** - Complete isolation between user accounts
 - 🌐 **CORS Security** - Restricted API access
+- 🔑 **OAuth Integration** - Login with Google (password optional)
+- 👨‍💼 **Role-Based Access** - Admin, moderator, and user roles
+
+### 👨‍💼 Admin Features
+- 📊 **User Management** - View all users and their statistics
+- 📈 **Analytics Dashboard** - Track total transactions, categories, budgets, goals
+- 👥 **User Details** - See per-user breakdowns (active/completed goals, recurring transactions)
+- 🔐 **Access Control** - Admin and moderator roles with restricted access
 
 ---
 
