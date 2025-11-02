@@ -92,7 +92,7 @@ const Dashboard = () => {
           params: { 
             start_date: dateRange.start,
             end_date: dateRange.end,
-            limit: 5,
+            limit: 100, // Get more to ensure we have data
             sort: 'date_desc'
           } 
         })
@@ -100,6 +100,8 @@ const Dashboard = () => {
       
       const overviewData = overviewRes.data;
       const transactions = transactionsRes.data.transactions || [];
+      
+      console.log('Dashboard data:', { overviewData, transactions }); // Debug
       
       // Transform to expected format
       setStats({
@@ -113,10 +115,10 @@ const Dashboard = () => {
         },
         topCategories: (overviewData.byCategory?.expense || []).slice(0, 5),
         recentActivity: {
-          transactions: transactions
+          transactions: transactions.slice(0, 5) // Show first 5
         }
       });
-      setRecentTransactions(transactions);
+      setRecentTransactions(transactions.slice(0, 5));
     } catch (error) {
       console.error('Dashboard fetch error:', error);
       toast.error(t('dashboard.failedToLoad') || 'Failed to load dashboard data');
