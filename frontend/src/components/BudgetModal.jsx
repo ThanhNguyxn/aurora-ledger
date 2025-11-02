@@ -140,12 +140,31 @@ const BudgetModal = ({ month, year, budget = null, onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {t('budgets.settingBudgetFor')}{' '}
-              <span className="font-bold">
-                {new Date(year, month - 1, 1).toLocaleString('default', { month: 'long' })} {year}
-              </span>
+          {/* Month/Year Selector */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              {t('budgets.monthYear') || 'Month & Year'}
+            </label>
+            <input
+              type="month"
+              value={`${formData.year}-${String(formData.month).padStart(2, '0')}`}
+              onChange={(e) => {
+                if (e.target.value) {
+                  const [year, month] = e.target.value.split('-');
+                  setFormData({
+                    ...formData,
+                    year: parseInt(year),
+                    month: parseInt(month)
+                  });
+                }
+              }}
+              className="input text-sm"
+              min="2000-01"
+              max="2100-12"
+              required
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              📅 {t('budgets.selectMonthYear') || 'Select month and year for this budget'}
             </p>
           </div>
 

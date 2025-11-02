@@ -1,6 +1,7 @@
 import express from 'express';
 import pool from '../config/database.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { convertCurrency } from '../utils/currency.js';
 
 const router = express.Router();
 router.use(authMiddleware);
