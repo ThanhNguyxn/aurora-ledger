@@ -57,22 +57,6 @@ router.get('/', async (req, res) => {
       [req.user.id, month, year]
     );
 
-    // Group transactions by category and convert to target currency
-    const spentByCategory = {};
-    for (const t of transactionsResult.rows) {
-      const catId = t.category_id || null;
-      if (!spentByCategory[catId]) {
-        spentByCategory[catId] = 0;
-      }
-      
-      const convertedAmount = await convertCurrency(
-        parseFloat(t.amount),
-        t.currency,
-        targetCurrency
-      );
-      spentByCategory[catId] += convertedAmount;
-    }
-
     // Add spent data with proper conversion for comparison
     const budgetsWithSpent = await Promise.all(
       result.rows.map(async (budget) => {
@@ -81,29 +65,44 @@ router.get('/', async (req, res) => {
         // Get spent in budget's currency for accurate comparison
         let totalSpentInBudgetCurrency = 0;
         
-        // Recalculate spent specifically for this budget's currency
+        // Calculate spent in budget's original currency
         for (const t of transactionsResult.rows) {
           if (t.category_id === budget.category_id) {
             const convertedAmount = await convertCurrency(
               parseFloat(t.amount),
               t.currency,
-              budgetCurrency // Convert to budget's currency
+              budgetCurrency // Convert to budget's original currency
             );
             totalSpentInBudgetCurrency += convertedAmount;
           }
         }
+        
+        // Convert both budget amount and spent to display currency
+        const budgetAmountInDisplayCurrency = await convertCurrency(
+          parseFloat(budget.amount),
+          budgetCurrency,
+          targetCurrency
+        );
+        
+        const spentInDisplayCurrency = await convertCurrency(
+          totalSpentInBudgetCurrency,
+          budgetCurrency,
+          targetCurrency
+        );
 
         return {
           id: budget.id,
           category_id: budget.category_id,
-          amount: parseFloat(budget.amount), // Original budget amount
-          currency: budgetCurrency, // Original currency
+          amount: budgetAmountInDisplayCurrency, // Display in selected currency
+          original_amount: parseFloat(budget.amount), // Keep original for reference
+          original_currency: budgetCurrency, // Original currency
+          currency: targetCurrency, // Display currency
           month: budget.month,
           year: budget.year,
           category_name: budget.category_name,
           category_color: budget.category_color,
           category_icon: budget.category_icon,
-          spent: totalSpentInBudgetCurrency, // Spent in SAME currency as budget
+          spent: spentInDisplayCurrency, // Spent in display currency
           created_at: budget.created_at,
           updated_at: budget.updated_at
         };
