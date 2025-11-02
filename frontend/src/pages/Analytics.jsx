@@ -199,6 +199,19 @@ export default function Analytics() {
           </div>
         )}
 
+        {/* Empty state for anomalies */}
+        {activeTab === 'anomalies' && !anomalies && (
+          <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
+            <AlertTriangle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              No Data Available
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              Add some transactions to see spending anomalies analysis.
+            </p>
+          </div>
+        )}
+
         {activeTab === 'yoy' && yoyData && (
           <div className="space-y-6">
             {/* Yearly Totals */}
@@ -317,6 +330,19 @@ export default function Analytics() {
           </div>
         )}
 
+        {/* Empty state for YoY */}
+        {activeTab === 'yoy' && !yoyData && (
+          <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
+            <Calendar className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              No Data Available
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              Need at least 2 years of transaction data for year-over-year comparison.
+            </p>
+          </div>
+        )}
+
         {activeTab === 'velocity' && velocity && (
           <div className="space-y-6">
             {/* Velocity Summary */}
@@ -400,6 +426,19 @@ export default function Analytics() {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
+          </div>
+        )}
+
+        {/* Empty state for Velocity */}
+        {activeTab === 'velocity' && !velocity && (
+          <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
+            <Zap className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              No Data Available
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              Add transactions to see spending velocity trends.
+            </p>
           </div>
         )}
 
@@ -490,6 +529,19 @@ export default function Analytics() {
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Empty state for Patterns */}
+        {activeTab === 'patterns' && !patterns && (
+          <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
+            <Activity className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              No Data Available
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              Need at least 6 months of transaction data to identify spending patterns.
+            </p>
           </div>
         )}
       </div>
