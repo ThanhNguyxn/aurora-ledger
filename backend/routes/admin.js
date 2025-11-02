@@ -227,6 +227,97 @@ router.delete('/users/:id', authenticateToken, isAdmin, async (req, res) => {
   }
 });
 
+// Get user details with family info (admin/mod only)
+router.get('/users/:id/details', authenticateToken, isMod, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Get user info with stats
+    const userResult = await pool.query(`
+      SELECT 
+        u.id, 
+        u.email, 
+        u.full_name, 
+        u.role, 
+        u.currency,
+        u.oauth_provider,
+        u.created_at,
+        u.updated_at,
+        (SELECT COUNT(*) FROM transactions WHERE user_id = u.id) as transaction_count,
+        (SELECT COUNT(*) FROM categories WHERE user_id = u.id) as category_count,
+        (SELECT COUNT(*) FROM budgets WHERE user_id = u.id) as budget_count,
+        (SELECT COUNT(*) FROM recurring_transactions WHERE user_id = u.id) as recurring_count,
+        (SELECT COUNT(*) FROM recurring_transactions WHERE user_id = u.id AND is_active = true) as active_recurring_count,
+        (SELECT COUNT(*) FROM saving_goals WHERE user_id = u.id) as goal_count,
+        (SELECT COUNT(*) FROM saving_goals WHERE user_id = u.id AND is_completed = false) as active_goal_count,
+        (SELECT COUNT(*) FROM saving_goals WHERE user_id = u.id AND is_completed = true) as completed_goal_count
+      FROM users u
+      WHERE u.id = $1
+    `, [id]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = userResult.rows[0];
+
+    // Get family memberships
+    const familyResult = await pool.query(`
+      SELECT 
+        f.id as family_id,
+        f.name as family_name,
+        f.description as family_description,
+        fm.role as family_role,
+        fm.joined_at,
+        (SELECT COUNT(*) FROM family_members WHERE family_id = f.id) as member_count,
+        creator.full_name as created_by
+      FROM family_members fm
+      JOIN families f ON fm.family_id = f.id
+      LEFT JOIN users creator ON f.created_by = creator.id
+      WHERE fm.user_id = $1
+      ORDER BY fm.joined_at DESC
+    `, [id]);
+
+    // Get family members if user is in a family
+    const familyMembers = [];
+    for (const family of familyResult.rows) {
+      const membersResult = await pool.query(`
+        SELECT 
+          u.id,
+          u.full_name,
+          u.email,
+          fm.role,
+          fm.joined_at
+        FROM family_members fm
+        JOIN users u ON fm.user_id = u.id
+        WHERE fm.family_id = $1
+        ORDER BY 
+          CASE fm.role
+            WHEN 'head' THEN 1
+            WHEN 'manager' THEN 2
+            WHEN 'contributor' THEN 3
+            WHEN 'observer' THEN 4
+          END,
+          fm.joined_at
+      `, [family.family_id]);
+
+      familyMembers.push({
+        family_id: family.family_id,
+        members: membersResult.rows
+      });
+    }
+
+    res.json({
+      user,
+      families: familyResult.rows,
+      familyMembers
+    });
+  } catch (error) {
+    console.error('Get user details error:', error);
+    res.status(500).json({ error: 'Failed to get user details' });
+  }
+});
+
 // Get admin stats (admin only)
 router.get('/stats', authenticateToken, isAdmin, async (req, res) => {
   try {

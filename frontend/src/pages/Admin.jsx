@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { 
   Users, UserCheck, UserPlus, TrendingUp, Database, Shield, Search, Lock, Trash2, RefreshCw,
-  DollarSign, Target, Repeat, FolderOpen, Calendar
+  DollarSign, Target, Repeat, FolderOpen, Calendar, Eye, X, Crown, UserCircle
 } from 'lucide-react';
 
 const Admin = () => {
@@ -20,6 +20,9 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
   const [newPassword, setNewPassword] = useState('');
 
   useEffect(() => {
@@ -101,6 +104,40 @@ const Admin = () => {
     } catch (error) {
       const message = error.response?.data?.error || t('admin.failedToDeleteUser') || 'Failed to delete user';
       toast.error(message);
+    }
+  };
+
+  const fetchUserDetails = async (userId) => {
+    setLoadingDetails(true);
+    setShowDetailsModal(true);
+    try {
+      const response = await axios.get(`${API_URL}/admin/users/${userId}/details`);
+      setUserDetails(response.data);
+    } catch (error) {
+      toast.error(t('admin.failedToLoadDetails') || 'Failed to load user details');
+      setShowDetailsModal(false);
+    } finally {
+      setLoadingDetails(false);
+    }
+  };
+
+  const getRoleIcon = (role) => {
+    switch(role) {
+      case 'head': return <Crown className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />;
+      case 'manager': return <Shield className="h-4 w-4 text-blue-600 dark:text-blue-400" />;
+      case 'contributor': return <UserCheck className="h-4 w-4 text-green-600 dark:text-green-400" />;
+      case 'observer': return <Eye className="h-4 w-4 text-gray-600 dark:text-gray-400" />;
+      default: return null;
+    }
+  };
+
+  const getRoleBadgeColor = (role) => {
+    switch(role) {
+      case 'head': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 border-yellow-300 dark:border-yellow-700';
+      case 'manager': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700';
+      case 'contributor': return 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 border-green-300 dark:border-green-700';
+      case 'observer': return 'bg-gray-100 dark:bg-gray-900/30 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700';
+      default: return '';
     }
   };
 
@@ -339,6 +376,14 @@ const Admin = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
+                        {/* View Details Button */}
+                        <button
+                          onClick={() => fetchUserDetails(u.id)}
+                          className="p-2 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 rounded-lg transition-colors"
+                          title={t('admin.viewDetails') || 'View Details'}
+                        >
+                          <Eye size={18} />
+                        </button>
                         {/* Admin can reset anyone, Mod can only reset regular users */}
                         {(user?.role === 'admin' || (user?.role === 'mod' && u.role === 'user')) && (
                           <button
@@ -399,6 +444,233 @@ const Admin = () => {
           </div>
         )}
       </div>
+
+      {/* User Details Modal */}
+      {showDetailsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-4xl w-full my-8">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
+              <div className="flex items-center gap-3">
+                <UserCircle className="text-blue-600 dark:text-blue-400" size={32} />
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    {t('admin.userDetails') || 'User Details'}
+                  </h3>
+                  {userDetails && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {userDetails.user.full_name}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setUserDetails(null);
+                }}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <X size={20} className="text-gray-500 dark:text-gray-400" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 max-h-[70vh] overflow-y-auto">
+              {loadingDetails ? (
+                <div className="flex justify-center items-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                </div>
+              ) : userDetails ? (
+                <div className="space-y-6">
+                  {/* User Info */}
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                      {t('admin.accountInfo') || 'Account Information'}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.email') || 'Email'}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{userDetails.user.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.fullName') || 'Full Name'}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{userDetails.user.full_name}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.systemRole') || 'System Role'}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100 capitalize">{userDetails.user.role}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.currency') || 'Currency'}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{userDetails.user.currency}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.registrationMethod') || 'Registration'}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100 capitalize">
+                          {userDetails.user.oauth_provider || 'Email/Password'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('admin.joinedDate') || 'Joined'}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                          {new Date(userDetails.user.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                      {t('admin.statistics') || 'Statistics'}
+                    </h4>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                          {userDetails.user.transaction_count}
+                        </p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {t('admin.transactions') || 'Transactions'}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                          {userDetails.user.category_count}
+                        </p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {t('admin.categories') || 'Categories'}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                          {userDetails.user.budget_count}
+                        </p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {t('admin.budgets') || 'Budgets'}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
+                          {userDetails.user.goal_count}
+                        </p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {t('admin.goals') || 'Goals'}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-teal-600 dark:text-teal-400">
+                          {userDetails.user.recurring_count}
+                        </p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {t('admin.recurring') || 'Recurring'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Family Info */}
+                  {userDetails.families && userDetails.families.length > 0 ? (
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                        {t('admin.familyMemberships') || 'Family Memberships'}
+                      </h4>
+                      <div className="space-y-4">
+                        {userDetails.families.map((family) => {
+                          const familyMembers = userDetails.familyMembers.find(
+                            fm => fm.family_id === family.family_id
+                          );
+                          return (
+                            <div key={family.family_id} className="bg-white dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <h5 className="font-semibold text-gray-900 dark:text-gray-100">
+                                      {family.family_name}
+                                    </h5>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium border flex items-center gap-1 ${getRoleBadgeColor(family.family_role)}`}>
+                                      {getRoleIcon(family.family_role)}
+                                      {t(`family.roles.${family.family_role}`) || family.family_role}
+                                    </span>
+                                  </div>
+                                  {family.family_description && (
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                      {family.family_description}
+                                    </p>
+                                  )}
+                                  <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                    <span>{t('admin.createdBy') || 'Created by'}: {family.created_by}</span>
+                                    <span>•</span>
+                                    <span>{family.member_count} {t('admin.members') || 'members'}</span>
+                                    <span>•</span>
+                                    <span>{t('admin.joined') || 'Joined'}: {new Date(family.joined_at).toLocaleDateString()}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Family Members */}
+                              {familyMembers && familyMembers.members.length > 0 && (
+                                <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    {t('admin.familyMembers') || 'Members'}:
+                                  </p>
+                                  <div className="space-y-2">
+                                    {familyMembers.members.map((member) => (
+                                      <div key={member.id} className="flex items-center justify-between text-sm">
+                                        <div className="flex items-center gap-2">
+                                          <span className={`px-2 py-0.5 rounded text-xs font-medium border flex items-center gap-1 ${getRoleBadgeColor(member.role)}`}>
+                                            {getRoleIcon(member.role)}
+                                            {t(`family.roles.${member.role}`) || member.role}
+                                          </span>
+                                          <span className="font-medium text-gray-900 dark:text-gray-100">
+                                            {member.full_name}
+                                          </span>
+                                          {member.id === userDetails.user.id && (
+                                            <span className="text-blue-600 dark:text-blue-400 text-xs">
+                                              ({t('admin.thisUser') || 'This user'})
+                                            </span>
+                                          )}
+                                        </div>
+                                        <span className="text-gray-500 dark:text-gray-400 text-xs">
+                                          {member.email}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 text-center">
+                      <Users className="mx-auto h-12 w-12 text-gray-400 mb-3" />
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {t('admin.noFamilyMemberships') || 'This user is not a member of any family'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-200 dark:border-gray-800 flex justify-end">
+              <button
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setUserDetails(null);
+                }}
+                className="px-6 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 rounded-lg font-medium transition-colors"
+              >
+                {t('common.close') || 'Close'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Reset Password Modal */}
       {showResetModal && (
