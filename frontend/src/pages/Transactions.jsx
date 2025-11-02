@@ -44,8 +44,12 @@ const Transactions = () => {
         if (value) params.append(key, value);
       });
       
+      // Add display_currency parameter for conversion
+      params.append('display_currency', currency);
+      
       const response = await api.get(`/transactions?${params}`);
-      setTransactions(response.data);
+      const data = response.data;
+      setTransactions(data.transactions || data || []);
     } catch (error) {
       toast.error(t('transactions.failedToLoad'));
       console.error(error);

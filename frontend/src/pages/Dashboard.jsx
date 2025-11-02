@@ -86,21 +86,22 @@ const Dashboard = () => {
       
       const dateRange = getDateRange();
       
-      // Fetch all transactions (they already have currency conversion in Transactions page)
+      // Fetch transactions with currency conversion
       const transactionsRes = await api.get('/transactions', { 
         params: { 
           start_date: dateRange.start,
           end_date: dateRange.end,
-          limit: 1000 // Get all for accurate calculation
+          limit: 1000,
+          display_currency: currency // Pass user's selected currency
         } 
       });
       
-      const transactions = transactionsRes.data.transactions || [];
+      const transactionsData = transactionsRes.data;
+      const transactions = transactionsData.transactions || transactionsData || [];
       
       console.log('Dashboard transactions:', transactions); // Debug
       
-      // Manual calculation with currency-aware amounts
-      // The transactions API already converts amounts to display currency
+      // Manual calculation - amounts are already converted
       let totalIncome = 0;
       let totalExpense = 0;
       const categorySpending = {};

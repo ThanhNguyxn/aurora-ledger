@@ -40,22 +40,23 @@ const Reports = () => {
     try {
       setLoading(true);
       
-      // Fetch transactions instead of using reports API
-      // Transactions API already handles currency conversion
+      // Fetch transactions with currency conversion
       const [transactionsRes, trendsRes] = await Promise.all([
         api.get('/transactions', {
           params: {
             start_date: dateRange.start_date,
             end_date: dateRange.end_date,
-            limit: 1000
+            limit: 1000,
+            display_currency: formatCurrency.currency || 'USD' // Pass selected currency
           }
         }),
         api.get('/reports/trends?months=6')
       ]);
       
-      const transactions = transactionsRes.data.transactions || [];
+      const transactionsData = transactionsRes.data;
+      const transactions = transactionsData.transactions || transactionsData || [];
       
-      // Calculate overview from transactions (currency-aware)
+      // Calculate overview from converted transactions
       let totalIncome = 0;
       let totalExpense = 0;
       const categoryBreakdown = { income: {}, expense: {} };
