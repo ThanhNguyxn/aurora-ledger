@@ -2,11 +2,15 @@ import { Edit2, Trash2, Plus, TrendingDown, Calendar, CheckCircle, AlertCircle }
 import { useTranslation } from 'react-i18next';
 import { differenceInDays } from 'date-fns';
 
-const GoalCard = ({ goal, onEdit, onDelete, onContribute, formatCurrency }) => {
+const GoalCard = ({ goal, onEdit, onDelete, onContribute, formatCurrency, convertAmount, currentCurrency }) => {
   const { t } = useTranslation();
   
-  const progress = goal.target_amount > 0 ? (goal.current_amount / goal.target_amount) * 100 : 0;
-  const remaining = goal.target_amount - goal.current_amount;
+  // Convert amounts to display currency
+  const targetAmount = convertAmount(goal.target_amount, goal.currency);
+  const currentAmount = convertAmount(goal.current_amount, goal.currency);
+  
+  const progress = targetAmount > 0 ? (currentAmount / targetAmount) * 100 : 0;
+  const remaining = targetAmount - currentAmount;
   
   const daysUntilDeadline = goal.deadline 
     ? differenceInDays(new Date(goal.deadline), new Date())
@@ -49,7 +53,7 @@ const GoalCard = ({ goal, onEdit, onDelete, onContribute, formatCurrency }) => {
       <div className="mb-3">
         <div className="flex justify-between text-sm mb-1">
           <span className="text-gray-600 dark:text-gray-400">
-            {formatCurrency(goal.current_amount)} / {formatCurrency(goal.target_amount)}
+            {formatCurrency(currentAmount, currentCurrency)} / {formatCurrency(targetAmount, currentCurrency)}
           </span>
           <span className="font-medium dark:text-gray-100">{Math.min(progress, 100).toFixed(1)}%</span>
         </div>
@@ -66,7 +70,7 @@ const GoalCard = ({ goal, onEdit, onDelete, onContribute, formatCurrency }) => {
         <div className="flex items-center justify-between">
           <span className="text-gray-600 dark:text-gray-400">{t('goals.remaining')}:</span>
           <span className={`font-medium ${remaining > 0 ? 'text-orange-600 dark:text-orange-400' : 'text-green-600 dark:text-green-400'}`}>
-            {remaining > 0 ? formatCurrency(remaining) : t('goals.achieved')}
+            {remaining > 0 ? formatCurrency(remaining, currentCurrency) : t('goals.achieved')}
           </span>
         </div>
         {goal.deadline && (

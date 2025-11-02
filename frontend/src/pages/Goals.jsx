@@ -10,7 +10,7 @@ import ContributionModal from '../components/ContributionModal';
 
 const Goals = () => {
   const { t } = useTranslation();
-  const { formatCurrency } = useCurrency();
+  const { formatCurrency, currency: currentCurrency, convertAmount } = useCurrency();
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showGoalModal, setShowGoalModal] = useState(false);
@@ -21,7 +21,7 @@ const Goals = () => {
 
   useEffect(() => {
     fetchGoals();
-  }, [filter]);
+  }, [filter, currentCurrency]); // Re-fetch when currency changes
 
   const fetchGoals = async () => {
     try {
@@ -75,11 +75,11 @@ const Goals = () => {
     fetchGoals();
   };
 
-  // Calculate stats
+  // Calculate overall stats with currency conversion
   const stats = goals.reduce(
     (acc, goal) => {
-      const target = parseFloat(goal.target_amount);
-      const current = parseFloat(goal.current_amount);
+      const target = convertAmount(parseFloat(goal.target_amount), goal.currency);
+      const current = convertAmount(parseFloat(goal.current_amount), goal.currency);
       acc.totalTarget += target;
       acc.totalSaved += current;
       if (goal.is_completed) acc.completedCount++;
@@ -179,6 +179,8 @@ const Goals = () => {
                 onDelete={handleDelete}
                 onContribute={handleContribute}
                 formatCurrency={formatCurrency}
+                convertAmount={convertAmount}
+                currentCurrency={currentCurrency}
               />
             ))}
           </div>
