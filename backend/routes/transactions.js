@@ -2,6 +2,7 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import pool from '../config/database.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { getExchangeRate, convertCurrency } from '../utils/currency.js';
 
 const router = express.Router();
 router.use(authMiddleware);
@@ -9,7 +10,17 @@ router.use(authMiddleware);
 // Get all transactions
 router.get('/', async (req, res) => {
   try {
-    const { type, category_id, start_date, end_date, limit = 100, offset = 0 } = req.query;
+    const { type, category_id, start_date, end_date, limit = 100, offset = 0, display_currency } = req.query;
+    
+    // Get user's preferred currency if not specified
+    let targetCurrency = display_currency;
+    if (!targetCurrency) {
+      const userResult = await pool.query(
+        'SELECT currency FROM users WHERE id = $1',
+        [req.user.id]
+      );
+      targetCurrency = userResult.rows[0]?.currency || 'USD';
+    }
     
     let query = `
       SELECT t.*, c.name as category_name, c.color as category_color, c.icon as category_icon
@@ -44,7 +55,48 @@ router.get('/', async (req, res) => {
     params.push(limit, offset);
 
     const result = await pool.query(query, params);
-    res.json(result.rows);
+    
+    // Convert amounts to target currency
+    const convertedTransactions = await Promise.all(
+      result.rows.map(async (transaction) => {
+        if (transaction.currency === targetCurrency) {
+          // No conversion needed
+          return {
+            ...transaction,
+            original_amount: transaction.amount,
+            original_currency: transaction.currency,
+            converted_amount: transaction.amount,
+            display_currency: targetCurrency
+          };
+        } else {
+          // Convert to target currency
+          try {
+            const rate = await getExchangeRate(transaction.currency, targetCurrency);
+            const convertedAmount = convertCurrency(transaction.amount, rate);
+            return {
+              ...transaction,
+              original_amount: transaction.amount,
+              original_currency: transaction.currency,
+              amount: convertedAmount, // Override amount with converted value
+              converted_amount: convertedAmount,
+              display_currency: targetCurrency
+            };
+          } catch (error) {
+            console.error(`Currency conversion error for transaction ${transaction.id}:`, error);
+            // Return original if conversion fails
+            return {
+              ...transaction,
+              original_amount: transaction.amount,
+              original_currency: transaction.currency,
+              converted_amount: transaction.amount,
+              display_currency: transaction.currency
+            };
+          }
+        }
+      })
+    );
+    
+    res.json({ transactions: convertedTransactions, count: convertedTransactions.length });
   } catch (error) {
     console.error('Get transactions error:', error);
     res.status(500).json({ error: 'Server error' });
