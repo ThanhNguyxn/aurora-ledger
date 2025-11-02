@@ -21,14 +21,14 @@ router.get('/anomalies', authMiddleware, async (req, res) => {
 
     // Get all transactions for the period
     const { rows: transactions } = await pool.query(
-      `SELECT t.id, t.amount, t.description, t.category_id, t.date, t.currency,
+      `SELECT t.id, t.amount, t.description, t.category_id, t.transaction_date, t.currency,
               c.name as category_name
        FROM transactions t
        LEFT JOIN categories c ON t.category_id = c.id
        WHERE t.user_id = $1 
          AND t.type = 'expense'
-         AND t.date >= $2
-       ORDER BY t.date DESC`,
+         AND t.transaction_date >= $2
+       ORDER BY t.transaction_date DESC`,
       [userId, startDate]
     );
 
@@ -91,7 +91,7 @@ router.get('/anomalies', authMiddleware, async (req, res) => {
           originalCurrency: t.currency,
           description: t.description,
           category: t.category_name || 'Uncategorized',
-          date: t.date,
+          date: t.transaction_date,
           averageForCategory: stat.average,
           deviationPercent: ((t.convertedAmount - stat.average) / stat.average * 100).toFixed(1),
           severity: t.convertedAmount > stat.average * 3 ? 'high' : 'medium'
@@ -128,14 +128,14 @@ router.get('/yoy-comparison', authMiddleware, async (req, res) => {
     // Get current year data
     const { rows: currentYearData } = await pool.query(
       `SELECT 
-         EXTRACT(MONTH FROM date) as month,
+         EXTRACT(MONTH FROM transaction_date) as month,
          type,
          SUM(amount) as total,
          currency
        FROM transactions
        WHERE user_id = $1 
-         AND EXTRACT(YEAR FROM date) = $2
-       GROUP BY EXTRACT(MONTH FROM date), type, currency
+         AND EXTRACT(YEAR FROM transaction_date) = $2
+       GROUP BY EXTRACT(MONTH FROM transaction_date), type, currency
        ORDER BY month`,
       [userId, currentYear]
     );
@@ -143,14 +143,14 @@ router.get('/yoy-comparison', authMiddleware, async (req, res) => {
     // Get last year data
     const { rows: lastYearData } = await pool.query(
       `SELECT 
-         EXTRACT(MONTH FROM date) as month,
+         EXTRACT(MONTH FROM transaction_date) as month,
          type,
          SUM(amount) as total,
          currency
        FROM transactions
        WHERE user_id = $1 
-         AND EXTRACT(YEAR FROM date) = $2
-       GROUP BY EXTRACT(MONTH FROM date), type, currency
+         AND EXTRACT(YEAR FROM transaction_date) = $2
+       GROUP BY EXTRACT(MONTH FROM transaction_date), type, currency
        ORDER BY month`,
       [userId, lastYear]
     );
@@ -278,14 +278,14 @@ router.get('/velocity', authMiddleware, async (req, res) => {
     // Get daily spending
     const { rows } = await pool.query(
       `SELECT 
-         DATE(date) as day,
+         DATE(transaction_date) as day,
          SUM(amount) as total,
          currency
        FROM transactions
        WHERE user_id = $1 
          AND type = 'expense'
-         AND date >= $2
-       GROUP BY DATE(date), currency
+         AND transaction_date >= $2
+       GROUP BY DATE(transaction_date), currency
        ORDER BY day DESC`,
       [userId, startDate]
     );
@@ -380,15 +380,15 @@ router.get('/patterns', authMiddleware, async (req, res) => {
 
     const { rows } = await pool.query(
       `SELECT 
-         date,
+         transaction_date,
          amount,
          currency,
-         EXTRACT(DOW FROM date) as day_of_week,
-         EXTRACT(DAY FROM date) as day_of_month
+         EXTRACT(DOW FROM transaction_date) as day_of_week,
+         EXTRACT(DAY FROM transaction_date) as day_of_month
        FROM transactions
        WHERE user_id = $1 
          AND type = 'expense'
-         AND date >= $2`,
+         AND transaction_date >= $2`,
       [userId, startDate]
     );
 
