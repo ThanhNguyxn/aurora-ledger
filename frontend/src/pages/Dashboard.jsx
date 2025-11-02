@@ -119,7 +119,9 @@ const Dashboard = () => {
           if (!categorySpending[catName]) {
             categorySpending[catName] = {
               name: catName,
+              category_name: catName, // Add this for consistency
               color: t.category_color || '#6B7280',
+              category_color: t.category_color || '#6B7280', // Add this for PieChart
               icon: t.category_icon || '📦',
               total: 0,
               transaction_count: 0

@@ -10,7 +10,7 @@ import TransactionModal from '../components/TransactionModal';
 
 const Transactions = () => {
   const { t, i18n } = useTranslation();
-  const { formatAmount } = useCurrency();
+  const { formatAmount, currency } = useCurrency();
   
   const getDateLocale = () => {
     const locales = { en: enUS, vi: vi, es: es, fr: fr, de: de, zh: zhCN, ja: ja, ko: ko, pt: pt, ru: ru };

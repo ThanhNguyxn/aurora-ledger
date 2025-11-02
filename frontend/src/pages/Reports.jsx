@@ -23,7 +23,7 @@ import toast from 'react-hot-toast';
 
 const Reports = () => {
   const { t } = useTranslation();
-  const { formatCurrency, convertAmount } = useCurrency();
+  const { formatCurrency, convertAmount, currency } = useCurrency();
   const [dateRange, setDateRange] = useState({
     start_date: format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd'),
     end_date: format(endOfMonth(new Date()), 'yyyy-MM-dd')
@@ -47,7 +47,7 @@ const Reports = () => {
             start_date: dateRange.start_date,
             end_date: dateRange.end_date,
             limit: 1000,
-            display_currency: formatCurrency.currency || 'USD' // Pass selected currency
+            display_currency: currency // Use currency from hook
           }
         }),
         api.get('/reports/trends?months=6')
