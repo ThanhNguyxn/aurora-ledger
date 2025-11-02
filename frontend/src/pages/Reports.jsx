@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
-import { Calendar, Download, TrendingUp, TrendingDown } from 'lucide-react';
+import { Calendar, Download, TrendingUp, TrendingDown, FileText, FileSpreadsheet } from 'lucide-react';
 import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import {
   LineChart,
   Line,
@@ -31,6 +33,7 @@ const Reports = () => {
   const [overview, setOverview] = useState(null);
   const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
   useEffect(() => {
     fetchReports();
@@ -135,10 +138,80 @@ const Reports = () => {
       link.click();
       link.remove();
       
+      setExportMenuOpen(false);
       toast.success(t('reports.reportExported'));
     } catch (error) {
       toast.error(t('reports.failedToExport'));
       console.error(error);
+    }
+  };
+
+  const handleExportPDF = async () => {
+    try {
+      setExportMenuOpen(false);
+      toast.loading('Generating PDF...');
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      
+      // Header
+      pdf.setFontSize(20);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Financial Report', pageWidth / 2, 20, { align: 'center' });
+      
+      pdf.setFontSize(12);
+      pdf.setFont(undefined, 'normal');
+      pdf.text(`Period: ${dateRange.start_date} to ${dateRange.end_date}`, pageWidth / 2, 28, { align: 'center' });
+      pdf.text(`Currency: ${currency}`, pageWidth / 2, 34, { align: 'center' });
+      
+      // Summary
+      let yPos = 45;
+      pdf.setFontSize(14);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Summary', 15, yPos);
+      
+      yPos += 8;
+      pdf.setFontSize(11);
+      pdf.setFont(undefined, 'normal');
+      pdf.text(`Total Income: ${formatCurrency(income)}`, 20, yPos);
+      yPos += 6;
+      pdf.text(`Total Expenses: ${formatCurrency(expense)}`, 20, yPos);
+      yPos += 6;
+      pdf.text(`Net Balance: ${formatCurrency(balance)}`, 20, yPos);
+      
+      // Expense Breakdown
+      if (expenseByCategory.length > 0) {
+        yPos += 12;
+        pdf.setFontSize(14);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('Top Expense Categories', 15, yPos);
+        
+        yPos += 8;
+        pdf.setFontSize(10);
+        pdf.setFont(undefined, 'normal');
+        
+        expenseByCategory.slice(0, 10).forEach((cat, index) => {
+          const percentage = ((cat.total / expense) * 100).toFixed(1);
+          pdf.text(`${index + 1}. ${cat.category_name}: ${formatCurrency(cat.total)} (${percentage}%)`, 20, yPos);
+          yPos += 6;
+          
+          if (yPos > pageHeight - 20) {
+            pdf.addPage();
+            yPos = 20;
+          }
+        });
+      }
+      
+      // Save PDF
+      pdf.save(`financial-report-${Date.now()}.pdf`);
+      
+      toast.dismiss();
+      toast.success('PDF exported successfully!');
+    } catch (error) {
+      console.error('PDF export error:', error);
+      toast.dismiss();
+      toast.error('Failed to export PDF');
     }
   };
 
@@ -170,10 +243,48 @@ const Reports = () => {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <h1 className="text-2xl sm:text-3xl font-bold">{t('reports.title')}</h1>
-        <button onClick={handleExport} className="btn btn-primary flex items-center gap-2 w-full sm:w-auto justify-center">
-          <Download size={20} />
-          <span>{t('reports.exportCSV')}</span>
-        </button>
+        
+        {/* Export Dropdown */}
+        <div className="relative w-full sm:w-auto">
+          <button 
+            onClick={() => setExportMenuOpen(!exportMenuOpen)} 
+            className="btn btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
+            <Download size={20} />
+            <span>Export</span>
+            <svg className={`w-4 h-4 transition-transform ${exportMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          {exportMenuOpen && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setExportMenuOpen(false)} />
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-20">
+                <button
+                  onClick={handleExport}
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
+                >
+                  <FileSpreadsheet size={20} className="text-green-600 dark:text-green-400" />
+                  <div className="text-left">
+                    <div className="font-medium text-gray-900 dark:text-gray-100">Export CSV</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Spreadsheet format</div>
+                  </div>
+                </button>
+                <button
+                  onClick={handleExportPDF}
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded-b-lg border-t border-gray-200 dark:border-gray-700"
+                >
+                  <FileText size={20} className="text-red-600 dark:text-red-400" />
+                  <div className="text-left">
+                    <div className="font-medium text-gray-900 dark:text-gray-100">Export PDF</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Printable report</div>
+                  </div>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Date Range Selector */}
