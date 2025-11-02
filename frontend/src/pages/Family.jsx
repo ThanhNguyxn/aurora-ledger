@@ -5,7 +5,8 @@ import api from '../lib/api';
 import toast from 'react-hot-toast';
 import {
   Users, Plus, Mail, Shield, Trash2, Settings,
-  UserPlus, X, Check, Crown, UserCheck, Eye, AlertTriangle
+  UserPlus, X, Check, Crown, UserCheck, Eye, AlertTriangle,
+  Copy, Link as LinkIcon, Ticket
 } from 'lucide-react';
 
 export default function Family() {
@@ -15,9 +16,12 @@ export default function Family() {
   const [selectedFamily, setSelectedFamily] = useState(null);
   const [familyDetails, setFamilyDetails] = useState(null);
   const [invitations, setInvitations] = useState([]);
+  const [inviteCodes, setInviteCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showGenerateCodeModal, setShowGenerateCodeModal] = useState(false);
+  const [showJoinFamilyModal, setShowJoinFamilyModal] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -46,8 +50,12 @@ export default function Family() {
 
   const selectFamily = async (familyId) => {
     try {
-      const res = await api.get(`/families/${familyId}`);
-      setFamilyDetails(res.data);
+      const [detailsRes, codesRes] = await Promise.all([
+        api.get(`/families/${familyId}`),
+        api.get(`/families/${familyId}/invite-codes`)
+      ]);
+      setFamilyDetails(detailsRes.data);
+      setInviteCodes(codesRes.data.codes || []);
       setSelectedFamily(familyId);
     } catch (error) {
       console.error('Error fetching family details:', error);
@@ -168,6 +176,67 @@ export default function Family() {
     }
   };
 
+  const handleGenerateInviteCode = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+    try {
+      await api.post(`/families/${selectedFamily}/invite-codes`, {
+        max_uses: formData.get('max_uses') ? parseInt(formData.get('max_uses')) : null,
+        expires_in_days: formData.get('expires_in_days') ? parseInt(formData.get('expires_in_days')) : null
+      });
+      toast.success(t('family.inviteCode.codeGenerated'));
+      setShowGenerateCodeModal(false);
+      selectFamily(selectedFamily);
+    } catch (error) {
+      console.error('Error generating invite code:', error);
+      toast.error(error.response?.data?.error || t('family.inviteCode.failedToGenerate'));
+    }
+  };
+
+  const handleDeactivateCode = async (codeId) => {
+    if (!confirm('Are you sure you want to deactivate this invite code?')) {
+      return;
+    }
+    
+    try {
+      await api.delete(`/families/${selectedFamily}/invite-codes/${codeId}`);
+      toast.success(t('family.inviteCode.codeDeactivated'));
+      selectFamily(selectedFamily);
+    } catch (error) {
+      console.error('Error deactivating code:', error);
+      toast.error(error.response?.data?.error || t('family.inviteCode.failedToDeactivate'));
+    }
+  };
+
+  const handleCopyCode = (code) => {
+    navigator.clipboard.writeText(code);
+    toast.success(t('family.inviteCode.copied'));
+  };
+
+  const handleCopyLink = (code) => {
+    const link = `${window.location.origin}/join-family?code=${code}`;
+    navigator.clipboard.writeText(link);
+    toast.success(t('family.inviteCode.copied'));
+  };
+
+  const handleJoinFamily = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const code = formData.get('code').trim();
+    
+    try {
+      await api.post('/families/join', { code });
+      toast.success(t('family.inviteCode.joinSuccess'));
+      setShowJoinFamilyModal(false);
+      fetchData();
+    } catch (error) {
+      console.error('Error joining family:', error);
+      const errorMsg = error.response?.data?.error || t('family.inviteCode.failedToJoin');
+      toast.error(errorMsg);
+    }
+  };
+
   const getRoleIcon = (role) => {
     switch (role) {
       case 'head': return <Crown className="h-4 w-4 text-yellow-500" />;
@@ -208,13 +277,24 @@ export default function Family() {
               {t('family.subtitle')}
             </p>
           </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-            {t('family.createFamily')}
-          </button>
+          <div className="flex gap-3">
+            {families.length === 0 && (
+              <button
+                onClick={() => setShowJoinFamilyModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <UserPlus className="h-5 w-5" />
+                {t('family.inviteCode.joinFamily')}
+              </button>
+            )}
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Plus className="h-5 w-5" />
+              {t('family.createFamily')}
+            </button>
+          </div>
         </div>
 
         {/* Pending Invitations */}
@@ -337,13 +417,22 @@ export default function Family() {
                     </div>
                     <div className="flex items-center gap-2">
                       {['head', 'manager'].includes(familyDetails.currentUserRole) && (
-                        <button
-                          onClick={() => setShowInviteModal(true)}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                        >
-                          <UserPlus className="h-4 w-4" />
-                          {t('family.inviteMember')}
-                        </button>
+                        <>
+                          <button
+                            onClick={() => setShowInviteModal(true)}
+                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                          >
+                            <Mail className="h-4 w-4" />
+                            {t('family.inviteMember')}
+                          </button>
+                          <button
+                            onClick={() => setShowGenerateCodeModal(true)}
+                            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                          >
+                            <Ticket className="h-4 w-4" />
+                            {t('family.inviteCode.generate')}
+                          </button>
+                        </>
                       )}
                       {familyDetails.currentUserRole === 'head' && (
                         <button
@@ -463,6 +552,104 @@ export default function Family() {
                     ))}
                   </div>
                 </div>
+
+                {/* Invite Codes Section */}
+                {['head', 'manager'].includes(familyDetails.currentUserRole) && (
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      {t('family.inviteCode.title')}
+                    </h3>
+                    {inviteCodes.length === 0 ? (
+                      <div className="text-center py-8">
+                        <Ticket className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">
+                          {t('family.inviteCode.noActiveCodes')}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">
+                          {t('family.inviteCode.createFirst')}
+                        </p>
+                        <button
+                          onClick={() => setShowGenerateCodeModal(true)}
+                          className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                        >
+                          {t('family.inviteCode.generate')}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {inviteCodes.map((code) => (
+                          <div
+                            key={code.id}
+                            className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                          >
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <code className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded font-mono text-lg font-semibold">
+                                  {code.code}
+                                </code>
+                                {code.is_active ? (
+                                  <span className="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 rounded text-xs font-semibold">
+                                    Active
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-1 bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300 rounded text-xs">
+                                    Inactive
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <p>
+                                  {t('family.inviteCode.createdBy')}: {code.created_by_name}
+                                </p>
+                                <div className="flex gap-4">
+                                  {code.max_uses ? (
+                                    <span>
+                                      {t('family.inviteCode.usesCount')}: {code.uses_count || 0}/{code.max_uses}
+                                    </span>
+                                  ) : (
+                                    <span>
+                                      {t('family.inviteCode.usesCount')}: {code.uses_count || 0} ({t('family.inviteCode.unlimited')})
+                                    </span>
+                                  )}
+                                  {code.expires_at && (
+                                    <span>
+                                      {t('family.inviteCode.expiresAt')}: {new Date(code.expires_at).toLocaleDateString()}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleCopyCode(code.code)}
+                                className="p-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg"
+                                title={t('family.inviteCode.copyCode')}
+                              >
+                                <Copy className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => handleCopyLink(code.code)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg"
+                                title={t('family.inviteCode.copyLink')}
+                              >
+                                <LinkIcon className="h-4 w-4" />
+                              </button>
+                              {code.is_active && (
+                                <button
+                                  onClick={() => handleDeactivateCode(code.id)}
+                                  className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                                  title={t('family.inviteCode.deactivate')}
+                                >
+                                  <X className="h-4 w-4" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -582,6 +769,125 @@ export default function Family() {
                   className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   {t('family.sendInvite')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Generate Invite Code Modal */}
+      {showGenerateCodeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                {t('family.inviteCode.generate')}
+              </h3>
+              <button
+                onClick={() => setShowGenerateCodeModal(false)}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <form onSubmit={handleGenerateInviteCode} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('family.inviteCode.maxUses')}
+                </label>
+                <input
+                  type="number"
+                  name="max_uses"
+                  min="1"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder={t('family.inviteCode.unlimited')}
+                />
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  Leave empty for unlimited uses
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('family.inviteCode.expiresIn')} ({t('family.inviteCode.days')})
+                </label>
+                <input
+                  type="number"
+                  name="expires_in_days"
+                  min="1"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Leave empty for no expiration"
+                />
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  Leave empty for no expiration
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowGenerateCodeModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                >
+                  {t('family.inviteCode.generate')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Join Family Modal */}
+      {showJoinFamilyModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                {t('family.inviteCode.joinFamily')}
+              </h3>
+              <button
+                onClick={() => setShowJoinFamilyModal(false)}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <form onSubmit={handleJoinFamily} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('family.inviteCode.enterCode')} *
+                </label>
+                <input
+                  type="text"
+                  name="code"
+                  required
+                  maxLength="8"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-lg tracking-wider uppercase"
+                  placeholder={t('family.inviteCode.codePlaceholder')}
+                  style={{ textTransform: 'uppercase' }}
+                />
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                  {t('family.inviteCode.shareTitle')}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowJoinFamilyModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  {t('family.inviteCode.join')}
                 </button>
               </div>
             </form>
