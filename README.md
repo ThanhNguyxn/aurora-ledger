@@ -32,7 +32,21 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 
 ## 📊 Features
 
-### 💰 Transaction Management
+### � Dashboard & Insights
+- 📈 **Financial Overview** - Complete snapshot of your finances
+- 📅 **Week-over-Week** - Income & expense comparison with % change
+- 💰 **Monthly Summary** - Total income, expense, savings, savings rate
+- 🏆 **Top Categories** - Top 5 spending categories with totals
+- 💎 **Net Worth** - Goals saved + budget remaining
+- ❤️ **Financial Health Score** - Algorithm-based 0-100 score:
+  - 40% Savings Score (based on savings rate)
+  - 30% Budget Score (% of budgets not exceeded)
+  - 30% Goals Score (average goal completion)
+- 🔔 **Recent Activity** - Last 5 transactions, upcoming recurring, goals near deadline
+- 💱 **Multi-Currency** - All amounts auto-converted to display currency
+- 🔄 **Real-time Updates** - Auto-refresh on currency change
+
+### �💰 Transaction Management
 - ✅ **Income & Expense Tracking** - Record all your financial activities
 - 🏷️ **Smart Categorization** - Organize with custom categories and colors
 - 📝 **Detailed Notes** - Add descriptions and context to every transaction
@@ -68,6 +82,19 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 - 🗓️ **Flexible Views** - Monthly and yearly budget planning
 - 💱 **Multi-Currency Input** - Create budgets in any currency
 - ✏️ **Easy Editing** - Modify existing budgets anytime
+
+### 🧠 Smart Budgets (AI-Powered)
+- 💡 **Auto Suggestions** - Budget recommendations based on 3-month spending history
+- 📊 **Confidence Levels** - High/Medium/Low confidence based on data availability
+- 📈 **Statistical Analysis** - Average, min, max spending per category
+- 🔄 **Budget Rollover** - Carry over unused budget to next month
+- 📝 **Budget Templates** - Pre-built allocation rules:
+  - **50/30/20 Rule** - 50% Needs, 30% Wants, 20% Savings
+  - **60/20/20 Rule** - 60% Living, 20% Savings, 20% Discretionary
+  - **70/20/10 Rule** - 70% Living, 20% Savings, 10% Fun
+  - **Zero-Based** - Allocate every dollar to a category
+- 🎯 **Smart Buffer** - Auto-adds 10% safety margin to suggestions
+- 💱 **Multi-Currency** - All suggestions in your preferred currency
 
 ### 📉 Financial Reports
 - 📊 **Income vs Expense** - Track your financial health over time
