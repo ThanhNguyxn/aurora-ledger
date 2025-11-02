@@ -79,8 +79,7 @@ const Budgets = () => {
     return null;
   };
 
-  // Calculate totals (keep original currencies, don't mix)
-  // Note: This is approximate if budgets have different currencies
+  // Calculate totals (backend already converted to display currency)
   const totalBudget = budgets.reduce((sum, b) => {
     return sum + parseFloat(b.amount || 0);
   }, 0);
@@ -90,9 +89,6 @@ const Budgets = () => {
   }, 0);
   
   const overallPercentage = totalBudget > 0 ? (totalSpent / totalBudget * 100) : 0;
-  
-  // For overall display, use first budget's currency or user's default
-  const displayCurrency = budgets[0]?.currency || currentCurrency;
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -149,16 +145,16 @@ const Budgets = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('budgets.totalBudget')}</p>
-              <p className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 break-all">{formatCurrency(totalBudget, displayCurrency)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 break-all">{formatCurrency(totalBudget)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('budgets.totalSpent')}</p>
-              <p className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400 break-all">{formatCurrency(totalSpent, displayCurrency)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400 break-all">{formatCurrency(totalSpent)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('budgets.remaining')}</p>
               <p className={`text-xl sm:text-2xl font-bold break-all ${totalBudget - totalSpent >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                {totalBudget - totalSpent >= 0 ? formatCurrency(totalBudget - totalSpent, displayCurrency) : '-' + formatCurrency(Math.abs(totalBudget - totalSpent), displayCurrency)}
+                {totalBudget - totalSpent >= 0 ? formatCurrency(totalBudget - totalSpent) : '-' + formatCurrency(Math.abs(totalBudget - totalSpent))}
               </p>
             </div>
           </div>
@@ -183,12 +179,11 @@ const Budgets = () => {
         ) : budgets.length > 0 ? (
           <div className="space-y-4">
             {budgets.map((budget) => {
-              // Each budget keeps its original currency
+              // Backend already converted to display currency
               const amount = parseFloat(budget.amount || 0);
               const spent = parseFloat(budget.spent || 0);
               const remaining = amount - spent;
               const percentage = amount > 0 ? (spent / amount * 100) : 0;
-              const budgetCurrency = budget.currency; // Use budget's currency
 
               return (
                 <div key={budget.id} className="p-3 sm:p-4 border dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow">
@@ -203,10 +198,10 @@ const Budgets = () => {
                       <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-base sm:text-lg truncate dark:text-gray-100">{budget.category_name}</h3>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
-                          <span className="truncate">{t('budgets.totalBudget')}: {formatCurrency(amount, budgetCurrency)}</span>
-                          <span className="truncate">{t('budgets.totalSpent')}: {formatCurrency(spent, budgetCurrency)}</span>
+                          <span className="truncate">{t('budgets.totalBudget')}: {formatCurrency(amount)}</span>
+                          <span className="truncate">{t('budgets.totalSpent')}: {formatCurrency(spent)}</span>
                           <span className={`truncate ${remaining >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                            {t('budgets.remaining')}: {remaining >= 0 ? formatCurrency(remaining, budgetCurrency) : '-' + formatCurrency(Math.abs(remaining), budgetCurrency)}
+                            {t('budgets.remaining')}: {remaining >= 0 ? formatCurrency(remaining) : '-' + formatCurrency(Math.abs(remaining))}
                           </span>
                         </div>
                       </div>
