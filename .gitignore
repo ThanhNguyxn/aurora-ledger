@@ -56,3 +56,5 @@ coverage/
 .eslintcache
 .parcel-cache
 
+# Personal development tracking (local only)
+DEVELOPMENT-LOG.md
