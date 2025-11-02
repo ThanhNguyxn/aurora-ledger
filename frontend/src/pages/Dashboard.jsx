@@ -96,69 +96,85 @@ const Dashboard = () => {
       } catch (dashboardError) {
         console.warn('Dashboard stats API failed, falling back to manual calculation:', dashboardError);
         
-        // Fallback: Get transactions and calculate manually
-        const dateRange = getDateRange();
-        const transactionsRes = await api.get('/transactions', { 
-          params: { 
-            start_date: dateRange.start,
-            end_date: dateRange.end,
-            limit: 1000 // Get all transactions for accurate calculation
-          } 
-        });
-        
-        const transactions = transactionsRes.data.transactions || [];
-        
-        // Manual calculation with currency filtering
-        let totalIncome = 0;
-        let totalExpense = 0;
-        const categorySpending = {};
-        
-        transactions.forEach(t => {
-          // Only count transactions in user's display currency
-          if (t.currency === currency) {
-            if (t.type === 'income') {
-              totalIncome += parseFloat(t.amount || 0);
-            } else if (t.type === 'expense') {
-              totalExpense += parseFloat(t.amount || 0);
-              
-              // Aggregate by category
-              if (t.category_name) {
-                if (!categorySpending[t.category_name]) {
-                  categorySpending[t.category_name] = {
-                    name: t.category_name,
-                    color: t.category_color || '#6B7280',
-                    icon: t.category_icon || '📦',
-                    total: 0,
-                    transaction_count: 0
-                  };
+        try {
+          // Fallback: Get transactions and calculate manually
+          const dateRange = getDateRange();
+          const transactionsRes = await api.get('/transactions', { 
+            params: { 
+              start_date: dateRange.start,
+              end_date: dateRange.end,
+              limit: 1000 // Get all transactions for accurate calculation
+            } 
+          });
+          
+          const transactions = transactionsRes.data.transactions || [];
+          
+          // If no transactions in user's currency, show all transactions anyway
+          const hasUserCurrencyTransactions = transactions.some(t => t.currency === currency);
+          
+          // Manual calculation with currency filtering
+          let totalIncome = 0;
+          let totalExpense = 0;
+          const categorySpending = {};
+          
+          transactions.forEach(t => {
+            // Count transaction if: (1) matches user currency OR (2) no transactions match user currency
+            const shouldCount = !hasUserCurrencyTransactions || t.currency === currency;
+            
+            if (shouldCount) {
+              if (t.type === 'income') {
+                totalIncome += parseFloat(t.amount || 0);
+              } else if (t.type === 'expense') {
+                totalExpense += parseFloat(t.amount || 0);
+                
+                // Aggregate by category
+                if (t.category_name) {
+                  if (!categorySpending[t.category_name]) {
+                    categorySpending[t.category_name] = {
+                      name: t.category_name,
+                      color: t.category_color || '#6B7280',
+                      icon: t.category_icon || '📦',
+                      total: 0,
+                      transaction_count: 0
+                    };
+                  }
+                  categorySpending[t.category_name].total += parseFloat(t.amount || 0);
+                  categorySpending[t.category_name].transaction_count += 1;
                 }
-                categorySpending[t.category_name].total += parseFloat(t.amount || 0);
-                categorySpending[t.category_name].transaction_count += 1;
               }
             }
-          }
-        });
-        
-        // Convert category spending to array and sort
-        const topCategories = Object.values(categorySpending)
-          .sort((a, b) => b.total - a.total)
-          .slice(0, 5);
-        
-        setStats({
-          month: {
-            income: totalIncome,
-            expense: totalExpense,
-            savings: totalIncome - totalExpense,
-            savingsRate: totalIncome > 0 
-              ? (((totalIncome - totalExpense) / totalIncome) * 100).toFixed(1)
-              : 0
-          },
-          topCategories: topCategories,
-          recentActivity: {
-            transactions: transactions.slice(0, 5) // Recent 5
-          }
-        });
-        setRecentTransactions(transactions.slice(0, 5));
+          });
+          
+          // Convert category spending to array and sort
+          const topCategories = Object.values(categorySpending)
+            .sort((a, b) => b.total - a.total)
+            .slice(0, 5);
+          
+          setStats({
+            month: {
+              income: totalIncome,
+              expense: totalExpense,
+              savings: totalIncome - totalExpense,
+              savingsRate: totalIncome > 0 
+                ? (((totalIncome - totalExpense) / totalIncome) * 100).toFixed(1)
+                : 0
+            },
+            topCategories: topCategories,
+            recentActivity: {
+              transactions: transactions.slice(0, 5) // Recent 5
+            }
+          });
+          setRecentTransactions(transactions.slice(0, 5));
+        } catch (fallbackError) {
+          console.error('Fallback also failed:', fallbackError);
+          // Set empty data to prevent blank screen
+          setStats({
+            month: { income: 0, expense: 0, savings: 0, savingsRate: 0 },
+            topCategories: [],
+            recentActivity: { transactions: [] }
+          });
+          setRecentTransactions([]);
+        }
       }
     } catch (error) {
       toast.error(t('dashboard.failedToLoad') || 'Failed to load dashboard data');
