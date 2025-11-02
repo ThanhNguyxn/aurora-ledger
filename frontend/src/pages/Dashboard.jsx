@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
+import { useDashboardData, useForecast } from '../hooks/useTransactions';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -18,32 +18,9 @@ import toast from 'react-hot-toast';
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
   const { formatCurrency, formatAmount, convertAmount, currency } = useCurrency();
-  const [stats, setStats] = useState(null);
-  const [recentTransactions, setRecentTransactions] = useState([]);
-  const [forecast, setForecast] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('month'); // 'month', 'last30', 'all'
 
-  const currentDate = new Date();
-  const monthStart = format(startOfMonth(currentDate), 'yyyy-MM-dd');
-  const monthEnd = format(endOfMonth(currentDate), 'yyyy-MM-dd');
-
-  useEffect(() => {
-    fetchDashboardData();
-    fetchForecast();
-  }, [viewMode, currency]); // Add currency dependency
-
-  const fetchForecast = async () => {
-    try {
-      const response = await api.get('/forecast/categories');
-      setForecast(response.data);
-    } catch (error) {
-      console.error('Forecast fetch error:', error);
-      setForecast(null);
-    }
-  };
-
-  const getDateLocale = () => {
+  const currentDate = new Date();  const getDateLocale = () => {
     const locales = {
       en: enUS,
       vi: vi,
@@ -92,96 +69,75 @@ const Dashboard = () => {
     }
   };
 
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      
-      const dateRange = getDateRange();
-      
-      // Fetch transactions with currency conversion
-      const transactionsRes = await api.get('/transactions', { 
-        params: { 
-          start_date: dateRange.start,
-          end_date: dateRange.end,
-          limit: 100, // Reduced from 1000 to 100 for faster loading
-          display_currency: currency, // Pass user's selected currency
-          _t: Date.now() // Cache buster
-        } 
-      });
-      
-      const transactionsData = transactionsRes.data;
-      const transactions = transactionsData.transactions || transactionsData || [];
-      
-      console.log('Dashboard transactions:', transactions); // Debug
-      
-      // Manual calculation - amounts are already converted
-      let totalIncome = 0;
-      let totalExpense = 0;
-      const categorySpending = {};
-      
-      transactions.forEach(t => {
-        const amount = parseFloat(t.amount || 0);
+  const dateRange = useMemo(() => getDateRange(), [viewMode]);
+
+  // Use React Query hooks - data is automatically cached!
+  const { data: transactions = [], isLoading: transactionsLoading } = useDashboardData(dateRange);
+  const { data: forecastData, isLoading: forecastLoading } = useForecast();
+
+  const loading = transactionsLoading || forecastLoading;
+
+  // Calculate stats from cached data
+  const stats = useMemo(() => {
+    if (!transactions.length) return null;
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+    const categorySpending = {};
+    
+    transactions.forEach(t => {
+      const amount = parseFloat(t.amount || 0);
         
-        if (t.type === 'income') {
-          totalIncome += amount;
-        } else if (t.type === 'expense') {
-          totalExpense += amount;
-          
-          // Aggregate by category
-          const catName = t.category_name || 'Uncategorized';
-          if (!categorySpending[catName]) {
-            categorySpending[catName] = {
-              name: catName,
-              category_name: catName, // Add this for consistency
-              color: t.category_color || '#6B7280',
-              category_color: t.category_color || '#6B7280', // Add this for PieChart
-              icon: t.category_icon || '📦',
-              total: 0,
-              transaction_count: 0
-            };
-          }
-          categorySpending[catName].total += amount;
-          categorySpending[catName].transaction_count += 1;
+      if (t.type === 'income') {
+        totalIncome += amount;
+      } else if (t.type === 'expense') {
+        totalExpense += amount;
+        
+        // Aggregate by category
+        const catName = t.category_name || 'Uncategorized';
+        if (!categorySpending[catName]) {
+          categorySpending[catName] = {
+            name: catName,
+            category_name: catName,
+            color: t.category_color || '#6B7280',
+            category_color: t.category_color || '#6B7280',
+            icon: t.category_icon || '📦',
+            total: 0,
+            transaction_count: 0
+          };
         }
-      });
-      
-      // Convert category spending to array and sort
-      const topCategories = Object.values(categorySpending)
-        .sort((a, b) => b.total - a.total)
-        .slice(0, 5);
-      
-      const savings = totalIncome - totalExpense;
-      
-      // Transform to expected format
-      setStats({
-        month: {
-          income: totalIncome,
-          expense: totalExpense,
-          savings: savings,
-          savingsRate: totalIncome > 0 
-            ? ((savings / totalIncome) * 100).toFixed(1)
-            : 0
-        },
-        topCategories: topCategories,
-        recentActivity: {
-          transactions: transactions.slice(0, 5) // Show first 5
-        }
-      });
-      setRecentTransactions(transactions.slice(0, 5));
-    } catch (error) {
-      console.error('Dashboard fetch error:', error);
-      toast.error(t('dashboard.failedToLoad') || 'Failed to load dashboard data');
-      // Set empty data to prevent blank screen
-      setStats({
-        month: { income: 0, expense: 0, savings: 0, savingsRate: 0 },
-        topCategories: [],
-        recentActivity: { transactions: [] }
-      });
-      setRecentTransactions([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+        categorySpending[catName].total += amount;
+        categorySpending[catName].transaction_count += 1;
+      }
+    });
+    
+    // Convert category spending to array and sort
+    const topCategories = Object.values(categorySpending)
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 5);
+    
+    const savings = totalIncome - totalExpense;
+    
+    return {
+      month: {
+        income: totalIncome,
+        expense: totalExpense,
+        savings: savings,
+        savingsRate: totalIncome > 0 
+          ? ((savings / totalIncome) * 100).toFixed(1)
+          : 0
+      },
+      topCategories: topCategories,
+      recentActivity: {
+        transactions: transactions.slice(0, 5)
+      }
+    };
+  }, [transactions]);
+
+  const recentTransactions = useMemo(() => 
+    transactions.slice(0, 5), 
+    [transactions]
+  );
 
   if (loading) {
     return (
@@ -191,16 +147,14 @@ const Dashboard = () => {
     );
   }
 
-  // Extract data from new API structure
+  // Extract data from computed stats
   const month = stats?.month || {};
   const balance = (month.income || 0) - (month.expense || 0);
   const income = month.income || 0;
   const expense = month.expense || 0;
 
-  // Map top categories from new API
+  // Map top categories from computed stats
   const expenseByCategoryConverted = stats?.topCategories || [];
-
-  const dateRange = getDateRange();
 
   return (
     <div className="space-y-6">
