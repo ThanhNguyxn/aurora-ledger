@@ -480,7 +480,7 @@ export default function Family() {
                             </p>
                             {member.status === 'pending' && (
                               <span className="text-xs text-yellow-600 dark:text-yellow-400">
-                                Pending invitation
+                                {t('family.inviteCode.pendingInvitation')}
                               </span>
                             )}
                           </div>
@@ -511,11 +511,11 @@ export default function Family() {
                                 className="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                               >
                                 {familyDetails.currentUserRole === 'head' && (
-                                  <option value="head">{t('family.roles.head')} - Transfer leadership (you become Manager)</option>
+                                  <option value="head">{t('family.roles.head')} - {t('family.inviteCode.roleTransferDescription')}</option>
                                 )}
-                                <option value="manager">{t('family.roles.manager')} - Can manage budgets and members</option>
-                                <option value="contributor">{t('family.roles.contributor')} - Can add transactions</option>
-                                <option value="observer">{t('family.roles.observer')} - View only</option>
+                                <option value="manager">{t('family.roles.manager')} - {t('family.inviteCode.managerRoleDescription')}</option>
+                                <option value="contributor">{t('family.roles.contributor')} - {t('family.inviteCode.contributorRoleDescription')}</option>
+                                <option value="observer">{t('family.roles.observer')} - {t('family.inviteCode.observerRoleDescription')}</option>
                               </select>
                             );
                           })()}
@@ -804,7 +804,7 @@ export default function Family() {
                   placeholder={t('family.inviteCode.unlimited')}
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Leave empty for unlimited uses
+                  {t('family.inviteCode.unlimitedUsesHelp')}
                 </p>
               </div>
               <div>
@@ -816,10 +816,10 @@ export default function Family() {
                   name="expires_in_days"
                   min="1"
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Leave empty for no expiration"
+                  placeholder={t('family.inviteCode.noExpirationHelp')}
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Leave empty for no expiration
+                  {t('family.inviteCode.noExpirationHelp')}
                 </p>
               </div>
               <div className="flex gap-3">

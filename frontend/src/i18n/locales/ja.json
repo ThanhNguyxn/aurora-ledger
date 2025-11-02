@@ -477,7 +477,14 @@
       "joinSuccess": "家族に参加しました!",
       "invalidCode": "無効または期限切れのコード",
       "alreadyMember": "既にメンバーです",
-      "failedToJoin": "参加失敗"
+      "failedToJoin": "参加失敗",
+      "unlimitedUsesHelp": "空白のままにすると無制限になります",
+      "noExpirationHelp": "空白のままにすると期限なしになります",
+      "pendingInvitation": "保留中の招待",
+      "roleTransferDescription": "リーダーシップの移譲（あなたはマネージャーになります）",
+      "managerRoleDescription": "予算とメンバーを管理できます",
+      "contributorRoleDescription": "取引を追加できます",
+      "observerRoleDescription": "表示のみ"
     }
   },
   "analytics": {

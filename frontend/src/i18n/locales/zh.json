@@ -477,7 +477,14 @@
       "joinSuccess": "成功加入家庭!",
       "invalidCode": "无效或过期的邀请码",
       "alreadyMember": "您已是成员",
-      "failedToJoin": "加入失败"
+      "failedToJoin": "加入失败",
+      "unlimitedUsesHelp": "留空表示不限使用次数",
+      "noExpirationHelp": "留空表示无过期时间",
+      "pendingInvitation": "待确认邀请",
+      "roleTransferDescription": "转移领导权（您将成为管理员）",
+      "managerRoleDescription": "可以管理预算和成员",
+      "contributorRoleDescription": "可以添加交易",
+      "observerRoleDescription": "仅查看"
     }
   },
   "analytics": {

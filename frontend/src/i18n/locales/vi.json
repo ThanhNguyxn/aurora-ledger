@@ -477,7 +477,14 @@
       "joinSuccess": "Tham gia gia đình thành công!",
       "invalidCode": "Mã mời không hợp lệ hoặc đã hết hạn",
       "alreadyMember": "Bạn đã là thành viên của gia đình này",
-      "failedToJoin": "Không thể tham gia gia đình"
+      "failedToJoin": "Không thể tham gia gia đình",
+      "unlimitedUsesHelp": "Để trống nếu không giới hạn số lần sử dụng",
+      "noExpirationHelp": "Để trống nếu không có thời hạn",
+      "pendingInvitation": "Đang chờ xác nhận",
+      "roleTransferDescription": "Chuyển quyền lãnh đạo (bạn sẽ trở thành Quản lý)",
+      "managerRoleDescription": "Có thể quản lý ngân sách và thành viên",
+      "contributorRoleDescription": "Có thể thêm giao dịch",
+      "observerRoleDescription": "Chỉ xem"
     }
   },
   "analytics": {

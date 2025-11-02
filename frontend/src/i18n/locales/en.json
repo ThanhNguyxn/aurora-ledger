@@ -481,7 +481,14 @@
       "joinSuccess": "Successfully joined family!",
       "invalidCode": "Invalid or expired invite code",
       "alreadyMember": "You are already a member of this family",
-      "failedToJoin": "Failed to join family"
+      "failedToJoin": "Failed to join family",
+      "unlimitedUsesHelp": "Leave empty for unlimited uses",
+      "noExpirationHelp": "Leave empty for no expiration",
+      "pendingInvitation": "Pending invitation",
+      "roleTransferDescription": "Transfer leadership (you become Manager)",
+      "managerRoleDescription": "Can manage budgets and members",
+      "contributorRoleDescription": "Can add transactions",
+      "observerRoleDescription": "View only"
     }
   },
   "analytics": {

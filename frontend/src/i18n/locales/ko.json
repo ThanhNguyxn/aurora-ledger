@@ -477,7 +477,14 @@
       "joinSuccess": "가족에 참여했습니다!",
       "invalidCode": "유효하지 않거나 만료된 코드",
       "alreadyMember": "이미 구성원입니다",
-      "failedToJoin": "참여 실패"
+      "failedToJoin": "참여 실패",
+      "unlimitedUsesHelp": "무제한 사용을 원하면 비워두세요",
+      "noExpirationHelp": "만료 없음을 원하면 비워두세요",
+      "pendingInvitation": "대기 중인 초대",
+      "roleTransferDescription": "리더십 이전 (당신은 관리자가 됩니다)",
+      "managerRoleDescription": "예산 및 회원 관리 가능",
+      "contributorRoleDescription": "거래 추가 가능",
+      "observerRoleDescription": "보기 전용"
     }
   },
   "analytics": {

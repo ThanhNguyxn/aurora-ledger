@@ -477,7 +477,14 @@
       "joinSuccess": "Vous avez rejoint la famille!",
       "invalidCode": "Code invalide ou expiré",
       "alreadyMember": "Vous êtes déjà membre",
-      "failedToJoin": "Échec de rejoindre"
+      "failedToJoin": "Échec de rejoindre",
+      "unlimitedUsesHelp": "Laisser vide pour utilisations illimitées",
+      "noExpirationHelp": "Laisser vide pour pas d'expiration",
+      "pendingInvitation": "Invitation en attente",
+      "roleTransferDescription": "Transférer le leadership (vous devenez Manager)",
+      "managerRoleDescription": "Peut gérer les budgets et les membres",
+      "contributorRoleDescription": "Peut ajouter des transactions",
+      "observerRoleDescription": "Voir seulement"
     }
   },
   "analytics": {

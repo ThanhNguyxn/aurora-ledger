@@ -477,7 +477,14 @@
       "joinSuccess": "Вы присоединились к семье!",
       "invalidCode": "Неверный или истекший код",
       "alreadyMember": "Вы уже участник",
-      "failedToJoin": "Не удалось присоединиться"
+      "failedToJoin": "Не удалось присоединиться",
+      "unlimitedUsesHelp": "Оставьте пустым для неограниченного использования",
+      "noExpirationHelp": "Оставьте пустым для бессрочного",
+      "pendingInvitation": "Ожидающее приглашение",
+      "roleTransferDescription": "Передать лидерство (вы станете менеджером)",
+      "managerRoleDescription": "Может управлять бюджетами и участниками",
+      "contributorRoleDescription": "Может добавлять транзакции",
+      "observerRoleDescription": "Только просмотр"
     }
   },
   "analytics": {

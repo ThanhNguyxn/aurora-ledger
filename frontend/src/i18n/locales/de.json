@@ -477,7 +477,14 @@
       "joinSuccess": "Familie erfolgreich beigetreten!",
       "invalidCode": "Ungültiger oder abgelaufener Code",
       "alreadyMember": "Du bist bereits Mitglied dieser Familie",
-      "failedToJoin": "Beitritt fehlgeschlagen"
+      "failedToJoin": "Beitritt fehlgeschlagen",
+      "unlimitedUsesHelp": "Leer lassen für unbegrenzte Nutzungen",
+      "noExpirationHelp": "Leer lassen für kein Ablaufdatum",
+      "pendingInvitation": "Ausstehende Einladung",
+      "roleTransferDescription": "Führung übertragen (Sie werden Manager)",
+      "managerRoleDescription": "Kann Budgets und Mitglieder verwalten",
+      "contributorRoleDescription": "Kann Transaktionen hinzufügen",
+      "observerRoleDescription": "Nur Ansicht"
     }
   },
   "analytics": {

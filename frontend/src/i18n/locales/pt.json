@@ -477,7 +477,14 @@
       "joinSuccess": "Você entrou na família!",
       "invalidCode": "Código inválido ou expirado",
       "alreadyMember": "Você já é membro",
-      "failedToJoin": "Falha ao entrar"
+      "failedToJoin": "Falha ao entrar",
+      "unlimitedUsesHelp": "Deixe vazio para usos ilimitados",
+      "noExpirationHelp": "Deixe vazio para sem expiração",
+      "pendingInvitation": "Convite pendente",
+      "roleTransferDescription": "Transferir liderança (você se torna Gerente)",
+      "managerRoleDescription": "Pode gerenciar orçamentos e membros",
+      "contributorRoleDescription": "Pode adicionar transações",
+      "observerRoleDescription": "Apenas visualizar"
     }
   },
   "analytics": {
