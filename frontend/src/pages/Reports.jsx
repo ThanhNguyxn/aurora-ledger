@@ -57,6 +57,13 @@ const Reports = () => {
       const transactionsData = transactionsRes.data;
       const transactions = transactionsData.transactions || transactionsData || [];
       
+      console.log('🔍 Reports DEBUG:', {
+        currency,
+        transactionsCount: transactions.length,
+        firstTransaction: transactions[0],
+        allTransactions: transactions
+      });
+      
       // Calculate overview from converted transactions
       let totalIncome = 0;
       let totalExpense = 0;
