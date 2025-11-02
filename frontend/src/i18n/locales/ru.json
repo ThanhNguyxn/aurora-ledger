@@ -317,6 +317,7 @@
     "createFirst": "Создайте свою первую цель",
     "name": "Название Цели",
     "targetAmount": "Целевая Сумма",
+    "currency": "Валюта",
     "deadline": "Срок",
     "category": "Категория",
     "categoryPlaceholder": "напр: Дом, Машина, Отпуск",

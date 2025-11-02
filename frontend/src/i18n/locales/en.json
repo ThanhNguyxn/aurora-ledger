@@ -247,6 +247,7 @@
     "createFirst": "Create your first goal",
     "name": "Goal Name",
     "targetAmount": "Target Amount",
+    "currency": "Currency",
     "deadline": "Deadline",
     "category": "Category",
     "categoryPlaceholder": "e.g., House, Car, Vacation",

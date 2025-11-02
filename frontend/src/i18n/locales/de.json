@@ -317,6 +317,7 @@
     "createFirst": "Erstellen Sie Ihr erstes Ziel",
     "name": "Zielname",
     "targetAmount": "Zielbetrag",
+    "currency": "Währung",
     "deadline": "Frist",
     "category": "Kategorie",
     "categoryPlaceholder": "z.B. Haus, Auto, Urlaub",

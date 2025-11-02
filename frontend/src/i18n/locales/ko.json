@@ -317,6 +317,7 @@
     "createFirst": "첫 번째 목표 만들기",
     "name": "목표 이름",
     "targetAmount": "목표 금액",
+    "currency": "통화",
     "deadline": "마감일",
     "category": "카테고리",
     "categoryPlaceholder": "예: 집, 차, 여행",

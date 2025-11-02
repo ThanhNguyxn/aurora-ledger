@@ -36,11 +36,6 @@ const Layout = () => {
     { to: '/profile', icon: User, label: t('nav.profile') },
   ];
 
-  // Add Admin tab if user is admin or mod
-  if (user?.role === 'admin' || user?.role === 'mod') {
-    navItems.push({ to: '/admin', icon: Shield, label: t('nav.admin') });
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
       {/* Mobile Header */}

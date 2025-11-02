@@ -317,6 +317,7 @@
     "createFirst": "创建您的第一个目标",
     "name": "目标名称",
     "targetAmount": "目标金额",
+    "currency": "货币",
     "deadline": "截止日期",
     "category": "类别",
     "categoryPlaceholder": "例如：房子、车、旅游",

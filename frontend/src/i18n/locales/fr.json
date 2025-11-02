@@ -317,6 +317,7 @@
     "createFirst": "Créez votre premier objectif",
     "name": "Nom de l'Objectif",
     "targetAmount": "Montant Cible",
+    "currency": "Devise",
     "deadline": "Date Limite",
     "category": "Catégorie",
     "categoryPlaceholder": "ex: Maison, Voiture, Vacances",

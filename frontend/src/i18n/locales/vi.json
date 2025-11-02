@@ -315,6 +315,7 @@
     "createFirst": "Tạo mục tiêu đầu tiên của bạn",
     "name": "Tên mục tiêu",
     "targetAmount": "Số tiền mục tiêu",
+    "currency": "Mệnh giá",
     "deadline": "Thời hạn",
     "category": "Danh mục",
     "categoryPlaceholder": "vd: Nhà, Xe, Du lịch",

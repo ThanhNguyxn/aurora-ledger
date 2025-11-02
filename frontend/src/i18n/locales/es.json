@@ -317,6 +317,7 @@
     "createFirst": "Crea tu primera meta",
     "name": "Nombre de la Meta",
     "targetAmount": "Cantidad Objetivo",
+    "currency": "Moneda",
     "deadline": "Fecha Límite",
     "category": "Categoría",
     "categoryPlaceholder": "ej: Casa, Auto, Vacaciones",

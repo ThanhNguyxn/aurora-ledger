@@ -317,6 +317,7 @@
     "createFirst": "Crie sua primeira meta",
     "name": "Nome da Meta",
     "targetAmount": "Valor Alvo",
+    "currency": "Moeda",
     "deadline": "Prazo",
     "category": "Categoria",
     "categoryPlaceholder": "ex: Casa, Carro, Viagem",

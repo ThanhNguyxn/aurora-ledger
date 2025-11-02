@@ -89,7 +89,9 @@ const GoalModal = ({ goal, onClose }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2 dark:text-gray-200">{t('common.currency')}</label>
+              <label className="block text-sm font-medium mb-2 dark:text-gray-200">
+                {t('goals.currency') || t('common.currency') || 'Currency'}
+              </label>
               <select
                 value={formData.currency}
                 onChange={(e) => setFormData({ ...formData, currency: e.target.value })}

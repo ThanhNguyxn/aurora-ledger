@@ -317,6 +317,7 @@
     "createFirst": "最初の目標を作成",
     "name": "目標名",
     "targetAmount": "目標金額",
+    "currency": "通貨",
     "deadline": "期限",
     "category": "カテゴリ",
     "categoryPlaceholder": "例：家、車、旅行",
