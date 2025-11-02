@@ -124,16 +124,14 @@ const Budgets = () => {
             <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
               {t('budgets.year')}
             </label>
-            <select
+            <input
+              type="number"
               value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+              onChange={(e) => setSelectedYear(parseInt(e.target.value) || new Date().getFullYear())}
+              min="2000"
+              max="2100"
               className="input text-sm"
-            >
-              {Array.from({ length: 20 }, (_, i) => {
-                const year = new Date().getFullYear() - 5 + i;
-                return <option key={year} value={year}>{year}</option>;
-              })}
-            </select>
+            />
           </div>
         </div>
       </div>

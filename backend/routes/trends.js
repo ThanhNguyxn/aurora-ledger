@@ -12,10 +12,9 @@ router.get('/anomalies', authMiddleware, async (req, res) => {
     const { period = '3', currency: displayCurrency } = req.query; // Default 3 months
     const monthsBack = parseInt(period);
 
-    const targetCurrency = displayCurrency || 'USD';
-    if (!POPULAR_CURRENCIES.includes(targetCurrency)) {
-      return res.status(400).json({ error: 'Invalid currency' });
-    }
+    // Get user's default currency if not provided
+    const userResult = await pool.query('SELECT currency FROM users WHERE id = $1', [userId]);
+    const targetCurrency = displayCurrency || userResult.rows[0]?.currency || 'USD';
 
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - monthsBack);
@@ -119,10 +118,9 @@ router.get('/yoy-comparison', authMiddleware, async (req, res) => {
     const userId = req.user.id;
     const { currency: displayCurrency } = req.query;
 
-    const targetCurrency = displayCurrency || 'USD';
-    if (!POPULAR_CURRENCIES.includes(targetCurrency)) {
-      return res.status(400).json({ error: 'Invalid currency' });
-    }
+    // Get user's default currency if not provided
+    const userResult = await pool.query('SELECT currency FROM users WHERE id = $1', [userId]);
+    const targetCurrency = displayCurrency || userResult.rows[0]?.currency || 'USD';
 
     const currentYear = new Date().getFullYear();
     const lastYear = currentYear - 1;
@@ -270,10 +268,9 @@ router.get('/velocity', authMiddleware, async (req, res) => {
     const { period = '30', currency: displayCurrency } = req.query; // Default 30 days
     const daysBack = parseInt(period);
 
-    const targetCurrency = displayCurrency || 'USD';
-    if (!POPULAR_CURRENCIES.includes(targetCurrency)) {
-      return res.status(400).json({ error: 'Invalid currency' });
-    }
+    // Get user's default currency if not provided
+    const userResult = await pool.query('SELECT currency FROM users WHERE id = $1', [userId]);
+    const targetCurrency = displayCurrency || userResult.rows[0]?.currency || 'USD';
 
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - daysBack);
@@ -374,10 +371,9 @@ router.get('/patterns', authMiddleware, async (req, res) => {
     const { period = '6', currency: displayCurrency } = req.query; // Default 6 months
     const monthsBack = parseInt(period);
 
-    const targetCurrency = displayCurrency || 'USD';
-    if (!POPULAR_CURRENCIES.includes(targetCurrency)) {
-      return res.status(400).json({ error: 'Invalid currency' });
-    }
+    // Get user's default currency if not provided
+    const userResult = await pool.query('SELECT currency FROM users WHERE id = $1', [userId]);
+    const targetCurrency = displayCurrency || userResult.rows[0]?.currency || 'USD';
 
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - monthsBack);
