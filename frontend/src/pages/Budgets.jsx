@@ -102,10 +102,10 @@ const Budgets = () => {
           </button>
         </div>
         
-        {/* Month/Year Selector - Combined Input */}
+        {/* Month/Year Selector - Calendar Picker */}
         <div>
           <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-            {t('budgets.monthYear') || 'Month & Year'}
+            📅 {t('budgets.monthYear') || 'Month & Year'}
           </label>
           <input
             type="month"
@@ -117,7 +117,7 @@ const Budgets = () => {
                 setSelectedMonth(parseInt(month));
               }
             }}
-            className="input text-sm w-full"
+            className="input text-sm w-full cursor-pointer"
           />
         </div>
       </div>

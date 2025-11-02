@@ -283,14 +283,14 @@ const Dashboard = () => {
         </div>
 
         {/* Spending Forecast */}
-        {forecast && forecast.forecasts && forecast.forecasts.length > 0 && (
+        {forecastData && forecastData.forecasts && forecastData.forecasts.length > 0 && (
           <div className="card">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold dark:text-gray-100">📈 Next Month Forecast</h2>
               <span className="text-xs text-gray-500 dark:text-gray-400">Based on last 3 months</span>
             </div>
             <div className="space-y-3">
-              {forecast.forecasts.map((item, index) => {
+              {forecastData.forecasts.map((item, index) => {
                 const change = ((item.forecast - item.lastMonth) / item.lastMonth * 100);
                 const isIncreasing = change > 5;
                 const isDecreasing = change < -5;

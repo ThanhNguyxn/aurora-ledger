@@ -38,7 +38,7 @@ export default function Family() {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      toast.error('Failed to load families');
+      toast.error(t('family.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -64,12 +64,12 @@ export default function Family() {
         name: formData.get('name'),
         description: formData.get('description')
       });
-      toast.success('Family created successfully!');
+      toast.success(t('family.familyCreated'));
       setShowCreateModal(false);
       fetchData();
     } catch (error) {
       console.error('Error creating family:', error);
-      toast.error(error.response?.data?.error || 'Failed to create family');
+      toast.error(error.response?.data?.error || t('family.failedToCreate'));
     }
   };
 
@@ -82,93 +82,130 @@ export default function Family() {
         email: formData.get('email'),
         role: formData.get('role')
       });
-      toast.success('Invitation sent successfully!');
+      toast.success(t('family.inviteSent'));
       setShowInviteModal(false);
       selectFamily(selectedFamily);
     } catch (error) {
       console.error('Error sending invitation:', error);
-      toast.error(error.response?.data?.error || 'Failed to send invitation');
+      toast.error(error.response?.data?.error || t('family.failedToInvite'));
     }
   };
 
   const handleInvitationResponse = async (familyId, action) => {
     try {
       await api.post(`/families/${familyId}/invitation/${action}`);
-      toast.success(`Invitation ${action}ed successfully!`);
+      toast.success(action === 'accept' ? t('family.inviteAccepted') : t('family.inviteDeclined'));
       fetchData();
     } catch (error) {
       console.error(`Error ${action}ing invitation:`, error);
-      toast.error(`Failed to ${action} invitation`);
+      toast.error(t('family.failedToLoad'));
     }
   };
 
-  const handleRemoveMember = async (memberId) => {
-    if (!confirm('Are you sure you want to remove this member?')) return;
+  const handleDeleteFamily = async () => {
+    if (!confirm(t('family.deleteConfirm'))) {
+      return;
+    }
     
     try {
-      await api.delete(`/families/${selectedFamily}/members/${memberId}`);
-      toast.success('Member removed successfully!');
-      selectFamily(selectedFamily);
+      await api.delete(`/families/${selectedFamily}`);
+      toast.success(t('family.familyDeleted'));
+      setSelectedFamily(null);
+      setFamilyDetails(null);
+      fetchData(); // Reload families list
+    } catch (error) {
+      console.error('Error deleting family:', error);
+      toast.error(error.response?.data?.error || t('family.failedToDelete'));
+    }
+  };
+
+  const handleRemoveMember = async (memberId, isSelf = false) => {
+    const confirmMessage = isSelf 
+      ? t('family.leaveConfirm')
+      : t('family.removeConfirm');
+      
+    if (!confirm(confirmMessage)) return;
+    
+    try {
+      const response = await api.delete(`/families/${selectedFamily}/members/${memberId}`);
+      
+      if (response.data.self) {
+        toast.success(t('family.leftFamily'));
+        fetchData(); // Reload families list
+      } else {
+        toast.success(t('family.memberRemoved'));
+        selectFamily(selectedFamily);
+      }
     } catch (error) {
       console.error('Error removing member:', error);
-      toast.error(error.response?.data?.error || 'Failed to remove member');
+      toast.error(error.response?.data?.error || t('family.failedToRemove'));
     }
   };
 
   const handleChangeRole = async (memberId, newRole) => {
+    // Confirm head transfer
+    if (newRole === 'head') {
+      if (!confirm(t('family.transferHeadConfirm'))) {
+        return;
+      }
+    }
+
     try {
-      await api.put(`/families/${selectedFamily}/members/${memberId}/role`, {
+      const response = await api.put(`/families/${selectedFamily}/members/${memberId}/role`, {
         role: newRole
       });
-      toast.success('Role updated successfully!');
+      
+      if (response.data.transferred) {
+        toast.success(t('family.headTransferred'));
+      } else {
+        toast.success(t('family.roleUpdated'));
+      }
+      
       selectFamily(selectedFamily);
     } catch (error) {
       console.error('Error updating role:', error);
-      toast.error(error.response?.data?.error || 'Failed to update role');
+      toast.error(error.response?.data?.error || t('family.failedToUpdateRole'));
     }
   };
 
   const getRoleIcon = (role) => {
     switch (role) {
-      case 'owner': return <Crown className="h-4 w-4 text-yellow-500" />;
-      case 'admin': return <Shield className="h-4 w-4 text-blue-500" />;
-      case 'member': return <UserCheck className="h-4 w-4 text-green-500" />;
-      case 'viewer': return <Eye className="h-4 w-4 text-gray-500" />;
+      case 'head': return <Crown className="h-4 w-4 text-yellow-500" />;
+      case 'manager': return <Shield className="h-4 w-4 text-blue-500" />;
+      case 'contributor': return <UserCheck className="h-4 w-4 text-green-500" />;
+      case 'observer': return <Eye className="h-4 w-4 text-gray-500" />;
       default: return null;
     }
   };
 
   const getRoleBadgeColor = (role) => {
     switch (role) {
-      case 'owner': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
-      case 'admin': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'member': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-      case 'viewer': return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+      case 'head': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
+      case 'manager': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
+      case 'contributor': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+      case 'observer': return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   if (loading) {
     return (
-      <Layout>
-        <div className="flex justify-center items-center min-h-[60vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        </div>
-      </Layout>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Family & Group Sharing
+              {t('family.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Manage shared budgets, goals, and expenses with your family or group
+              {t('family.subtitle')}
             </p>
           </div>
           <button
@@ -176,7 +213,7 @@ export default function Family() {
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="h-5 w-5" />
-            Create Family
+            {t('family.createFamily')}
           </button>
         </div>
 
@@ -186,7 +223,7 @@ export default function Family() {
             <div className="flex items-center gap-2 mb-3">
               <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               <h3 className="font-semibold text-blue-900 dark:text-blue-100">
-                Pending Invitations ({invitations.length})
+                {t('family.invitations')} ({invitations.length})
               </h3>
             </div>
             <div className="space-y-2">
@@ -200,19 +237,21 @@ export default function Family() {
                       {invite.family_name}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Invited by {invite.invited_by_name} as {invite.role}
+                      {t('family.createdBy')} {invite.invited_by_name} - {t(`family.roles.${invite.role}`)}
                     </p>
                   </div>
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleInvitationResponse(invite.family_id, 'accept')}
                       className="p-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      title={t('family.accept')}
                     >
                       <Check className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleInvitationResponse(invite.family_id, 'decline')}
                       className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                      title={t('family.decline')}
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -227,16 +266,16 @@ export default function Family() {
           <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
             <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              No Families Yet
+              {t('family.noFamilies')}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Create a family to start sharing budgets and goals
+              {t('family.noFamiliesDesc')}
             </p>
             <button
               onClick={() => setShowCreateModal(true)}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
-              Create Your First Family
+              {t('family.createFirstFamily')}
             </button>
           </div>
         ) : (
@@ -265,10 +304,10 @@ export default function Family() {
                       )}
                       <div className="flex items-center gap-4 mt-2 text-sm">
                         <span className={`px-2 py-1 rounded-full ${getRoleBadgeColor(family.role)}`}>
-                          {family.role}
+                          {t(`family.roles.${family.role}`)}
                         </span>
                         <span className="text-gray-500 dark:text-gray-400">
-                          {family.member_count} members
+                          {family.member_count} {t('family.members')}
                         </span>
                       </div>
                     </div>
@@ -293,25 +332,37 @@ export default function Family() {
                         </p>
                       )}
                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                        Created by {familyDetails.family.created_by_name}
+                        {t('family.createdBy')} {familyDetails.family.created_by_name}
                       </p>
                     </div>
-                    {['owner', 'admin'].includes(familyDetails.currentUserRole) && (
-                      <button
-                        onClick={() => setShowInviteModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                      >
-                        <UserPlus className="h-4 w-4" />
-                        Invite
-                      </button>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {['head', 'manager'].includes(familyDetails.currentUserRole) && (
+                        <button
+                          onClick={() => setShowInviteModal(true)}
+                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                        >
+                          <UserPlus className="h-4 w-4" />
+                          {t('family.inviteMember')}
+                        </button>
+                      )}
+                      {familyDetails.currentUserRole === 'head' && (
+                        <button
+                          onClick={handleDeleteFamily}
+                          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                          title={t('family.deleteFamily')}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          {t('family.deleteFamily')}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Members List */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    Members ({familyDetails.members.length})
+                    {t('family.members')} ({familyDetails.members.length})
                   </h3>
                   <div className="space-y-3">
                     {familyDetails.members.map((member) => (
@@ -340,35 +391,73 @@ export default function Family() {
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
-                          {member.role === 'owner' ? (
-                            <span className={`px-3 py-1 rounded-full flex items-center gap-1 ${getRoleBadgeColor(member.role)}`}>
-                              {getRoleIcon(member.role)}
-                              {member.role}
-                            </span>
-                          ) : ['owner', 'admin'].includes(familyDetails.currentUserRole) ? (
-                            <select
-                              value={member.role}
-                              onChange={(e) => handleChangeRole(member.id, e.target.value)}
-                              className="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                            >
-                              <option value="admin">Admin</option>
-                              <option value="member">Member</option>
-                              <option value="viewer">Viewer</option>
-                            </select>
-                          ) : (
-                            <span className={`px-3 py-1 rounded-full flex items-center gap-1 ${getRoleBadgeColor(member.role)}`}>
-                              {getRoleIcon(member.role)}
-                              {member.role}
-                            </span>
-                          )}
-                          {member.role !== 'owner' && ['owner', 'admin'].includes(familyDetails.currentUserRole) && (
-                            <button
-                              onClick={() => handleRemoveMember(member.id)}
-                              className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          )}
+                          {/* Role hierarchy: head(4) > manager(3) > contributor(2) > observer(1) */}
+                          {(() => {
+                            const roleHierarchy = { 'head': 4, 'manager': 3, 'contributor': 2, 'observer': 1 };
+                            const currentLevel = roleHierarchy[familyDetails.currentUserRole];
+                            const memberLevel = roleHierarchy[member.role];
+                            const canModify = currentLevel > memberLevel;
+
+                            // Show role badge (read-only)
+                            if (!canModify) {
+                              return (
+                                <span className={`px-3 py-1 rounded-full flex items-center gap-1 ${getRoleBadgeColor(member.role)}`}>
+                                  {getRoleIcon(member.role)}
+                                  {t(`family.roles.${member.role}`)}
+                                </span>
+                              );
+                            }
+
+                            // Show role selector (can modify)
+                            return (
+                              <select
+                                value={member.role}
+                                onChange={(e) => handleChangeRole(member.id, e.target.value)}
+                                className="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                              >
+                                {familyDetails.currentUserRole === 'head' && (
+                                  <option value="head">{t('family.roles.head')} - Transfer leadership (you become Manager)</option>
+                                )}
+                                <option value="manager">{t('family.roles.manager')} - Can manage budgets and members</option>
+                                <option value="contributor">{t('family.roles.contributor')} - Can add transactions</option>
+                                <option value="observer">{t('family.roles.observer')} - View only</option>
+                              </select>
+                            );
+                          })()}
+                          
+                          {/* Remove/Leave button */}
+                          {(() => {
+                            const roleHierarchy = { 'head': 4, 'manager': 3, 'contributor': 2, 'observer': 1 };
+                            const currentLevel = roleHierarchy[familyDetails.currentUserRole];
+                            const memberLevel = roleHierarchy[member.role];
+                            const isSelf = member.user_id === familyDetails.currentUserId;
+                            
+                            // Self: Show Leave button (except head)
+                            if (isSelf && member.role !== 'head') {
+              return (
+                                <button
+                                  onClick={() => handleRemoveMember(member.id, true)}
+                                  className="px-3 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700 text-sm"
+                                >
+                                  {t('family.leaveFamily')}
+                                </button>
+                              );
+                            }
+                            
+                            // Others: Show Remove button only if can modify
+                            if (!isSelf && currentLevel > memberLevel) {
+                              return (
+                                <button
+                                  onClick={() => handleRemoveMember(member.id, false)}
+                                  className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              );
+                            }
+                            
+                            return null;
+                          })()}
                         </div>
                       </div>
                     ))}
@@ -378,7 +467,6 @@ export default function Family() {
             )}
           </div>
         )}
-      </div>
 
       {/* Create Family Modal */}
       {showCreateModal && (
@@ -386,7 +474,7 @@ export default function Family() {
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                Create New Family
+                {t('family.createFamily')}
               </h3>
               <button
                 onClick={() => setShowCreateModal(false)}
@@ -398,7 +486,7 @@ export default function Family() {
             <form onSubmit={handleCreateFamily} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Family Name *
+                  {t('family.familyName')} *
                 </label>
                 <input
                   type="text"
@@ -410,7 +498,7 @@ export default function Family() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Description
+                  {t('family.familyDescription')}
                 </label>
                 <textarea
                   name="description"
@@ -425,13 +513,13 @@ export default function Family() {
                   onClick={() => setShowCreateModal(false)}
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
-                  Create
+                  {t('common.create')}
                 </button>
               </div>
             </form>
@@ -445,7 +533,7 @@ export default function Family() {
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                Invite Member
+                {t('family.inviteMember')}
               </h3>
               <button
                 onClick={() => setShowInviteModal(false)}
@@ -457,7 +545,7 @@ export default function Family() {
             <form onSubmit={handleInviteMember} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Email Address *
+                  {t('family.inviteEmail')} *
                 </label>
                 <input
                   type="email"
@@ -469,16 +557,16 @@ export default function Family() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Role *
+                  {t('family.inviteRole')} *
                 </label>
                 <select
                   name="role"
-                  defaultValue="member"
+                  defaultValue="contributor"
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  <option value="admin">Admin - Can manage budgets and members</option>
-                  <option value="member">Member - Can add transactions and contribute</option>
-                  <option value="viewer">Viewer - Can only view data</option>
+                  <option value="manager">{t('family.roles.manager')} - {t('family.roleDescriptions.manager')}</option>
+                  <option value="contributor">{t('family.roles.contributor')} - {t('family.roleDescriptions.contributor')}</option>
+                  <option value="observer">{t('family.roles.observer')} - {t('family.roleDescriptions.observer')}</option>
                 </select>
               </div>
               <div className="flex gap-3">
@@ -487,19 +575,19 @@ export default function Family() {
                   onClick={() => setShowInviteModal(false)}
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
-                  Send Invitation
+                  {t('family.sendInvite')}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-    </Layout>
+    </div>
   );
 }

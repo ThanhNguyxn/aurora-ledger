@@ -143,7 +143,7 @@ const BudgetModal = ({ month, year, budget = null, onClose }) => {
           {/* Month/Year Selector */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              {t('budgets.monthYear') || 'Month & Year'}
+              📅 {t('budgets.monthYear') || 'Month & Year'}
             </label>
             <input
               type="month"
@@ -158,13 +158,13 @@ const BudgetModal = ({ month, year, budget = null, onClose }) => {
                   });
                 }
               }}
-              className="input text-sm"
+              className="input text-sm cursor-pointer"
               min="2000-01"
               max="2100-12"
               required
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              📅 {t('budgets.selectMonthYear') || 'Select month and year for this budget'}
+              {t('budgets.selectMonthYear') || 'Select month and year for this budget'}
             </p>
           </div>
 

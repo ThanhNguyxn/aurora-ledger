@@ -49,32 +49,29 @@ export default function Analytics() {
   };
 
   const tabs = [
-    { id: 'anomalies', name: 'Anomalies', icon: AlertTriangle },
-    { id: 'yoy', name: 'Year Over Year', icon: Calendar },
-    { id: 'velocity', name: 'Spending Velocity', icon: Zap },
-    { id: 'patterns', name: 'Patterns', icon: Activity }
+    { id: 'anomalies', name: t('analytics.anomalies'), icon: AlertTriangle },
+    { id: 'yoy', name: t('analytics.yearOverYear'), icon: Calendar },
+    { id: 'velocity', name: t('analytics.velocity'), icon: Zap },
+    { id: 'patterns', name: t('analytics.patterns'), icon: Activity }
   ];
 
   if (loading) {
     return (
-      <Layout>
-        <div className="flex justify-center items-center min-h-[60vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        </div>
-      </Layout>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            {t('Advanced Analytics')}
+            {t('analytics.title')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
-            {t('Deep insights into your spending behavior')}
+            {t('analytics.subtitle')}
           </p>
         </div>
 
@@ -545,6 +542,5 @@ export default function Analytics() {
           </div>
         )}
       </div>
-    </Layout>
   );
 }

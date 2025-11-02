@@ -76,9 +76,9 @@ router.get('/:id', authMiddleware, async (req, res) => {
        WHERE fm.family_id = $1
        ORDER BY 
          CASE fm.role 
-           WHEN 'owner' THEN 1 
-           WHEN 'admin' THEN 2 
-           WHEN 'member' THEN 3 
+           WHEN 'head' THEN 1 
+           WHEN 'manager' THEN 2 
+           WHEN 'contributor' THEN 3 
            ELSE 4 
          END,
          fm.joined_at ASC`,
@@ -89,7 +89,8 @@ router.get('/:id', authMiddleware, async (req, res) => {
       family: rows[0],
       members,
       currentUserRole: memberCheck[0].role,
-      currentUserStatus: memberCheck[0].status
+      currentUserStatus: memberCheck[0].status,
+      currentUserId: userId
     });
   } catch (error) {
     console.error('Error fetching family details:', error);
@@ -124,7 +125,7 @@ router.post('/', authMiddleware, async (req, res) => {
     // Add creator as owner
     await client.query(
       `INSERT INTO family_members (family_id, user_id, role, status, joined_at)
-       VALUES ($1, $2, 'owner', 'active', CURRENT_TIMESTAMP)`,
+       VALUES ($1, $2, 'head', 'active', CURRENT_TIMESTAMP)`,
       [family.id, userId]
     );
 
@@ -156,7 +157,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
       [id, userId]
     );
 
-    if (memberCheck.length === 0 || !['owner', 'admin'].includes(memberCheck[0].role)) {
+    if (memberCheck.length === 0 || !['head', 'manager'].includes(memberCheck[0].role)) {
       return res.status(403).json({ error: 'Only owners and admins can update family details' });
     }
 
@@ -195,7 +196,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
       [id, userId]
     );
 
-    if (memberCheck.length === 0 || memberCheck[0].role !== 'owner') {
+    if (memberCheck.length === 0 || memberCheck[0].role !== 'head') {
       return res.status(403).json({ error: 'Only the owner can delete the family' });
     }
 
@@ -215,13 +216,13 @@ router.post('/:id/invite', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    const { email, role = 'member' } = req.body;
+    const { email, role = 'contributor' } = req.body;
 
     if (!email) {
       return res.status(400).json({ error: 'Email is required' });
     }
 
-    if (!['member', 'admin', 'viewer'].includes(role)) {
+    if (!['contributor', 'manager', 'observer'].includes(role)) {
       return res.status(400).json({ error: 'Invalid role' });
     }
 
@@ -231,7 +232,7 @@ router.post('/:id/invite', authMiddleware, async (req, res) => {
       [id, userId]
     );
 
-    if (memberCheck.length === 0 || !['owner', 'admin'].includes(memberCheck[0].role)) {
+    if (memberCheck.length === 0 || !['head', 'manager'].includes(memberCheck[0].role)) {
       return res.status(403).json({ error: 'Only owners and admins can invite members' });
     }
 
@@ -364,40 +365,99 @@ router.put('/:id/members/:memberId/role', authMiddleware, async (req, res) => {
     const userId = req.user.id;
     const { role } = req.body;
 
-    if (!['member', 'admin', 'viewer'].includes(role)) {
+    // Validate role
+    if (!['head', 'contributor', 'manager', 'observer'].includes(role)) {
       return res.status(400).json({ error: 'Invalid role' });
     }
 
-    // Check if current user is owner or admin
-    const { rows: currentUserCheck } = await pool.query(
-      'SELECT role FROM family_members WHERE family_id = $1 AND user_id = $2',
-      [id, userId]
-    );
+    const client = await pool.connect();
+    
+    try {
+      await client.query('BEGIN');
 
-    if (currentUserCheck.length === 0 || !['owner', 'admin'].includes(currentUserCheck[0].role)) {
-      return res.status(403).json({ error: 'Only owners and admins can change roles' });
+      // Get current user info
+      const { rows: currentUserCheck } = await client.query(
+        'SELECT role, id as member_id FROM family_members WHERE family_id = $1 AND user_id = $2',
+        [id, userId]
+      );
+
+      if (currentUserCheck.length === 0) {
+        await client.query('ROLLBACK');
+        return res.status(403).json({ error: 'You are not a member of this family' });
+      }
+
+      const currentUserRole = currentUserCheck[0].role;
+      const currentMemberId = currentUserCheck[0].member_id;
+
+      // Get target member info
+      const { rows: targetMemberCheck } = await client.query(
+        'SELECT role, user_id FROM family_members WHERE id = $1 AND family_id = $2',
+        [memberId, id]
+      );
+
+      if (targetMemberCheck.length === 0) {
+        await client.query('ROLLBACK');
+        return res.status(404).json({ error: 'Member not found' });
+      }
+
+      const targetRole = targetMemberCheck[0].role;
+
+      // Define role hierarchy: head(4) > manager(3) > contributor(2) > observer(1)
+      const roleHierarchy = { 'head': 4, 'manager': 3, 'contributor': 2, 'observer': 1 };
+      
+      // Permission check: Can only modify people with lower role
+      if (roleHierarchy[currentUserRole] <= roleHierarchy[targetRole]) {
+        await client.query('ROLLBACK');
+        return res.status(403).json({ error: 'You can only modify members with lower roles than yours' });
+      }
+
+      // Cannot assign role equal or higher than your own (except head can transfer)
+      if (roleHierarchy[role] >= roleHierarchy[currentUserRole] && role !== 'head') {
+        await client.query('ROLLBACK');
+        return res.status(403).json({ error: 'You cannot assign a role equal to or higher than yours' });
+      }
+
+      // Special case: Transferring head role
+      if (role === 'head') {
+        if (currentUserRole !== 'head') {
+          await client.query('ROLLBACK');
+          return res.status(403).json({ error: 'Only the current head can transfer this role' });
+        }
+
+        // Demote current head to manager
+        await client.query(
+          'UPDATE family_members SET role = $1 WHERE id = $2',
+          ['manager', currentMemberId]
+        );
+
+        // Promote target to head
+        await client.query(
+          'UPDATE family_members SET role = $1 WHERE id = $2',
+          ['head', memberId]
+        );
+
+        await client.query('COMMIT');
+        return res.json({ 
+          message: 'Head role transferred successfully. You are now a manager.',
+          transferred: true
+        });
+      }
+
+      // Normal role change
+      await client.query(
+        'UPDATE family_members SET role = $1 WHERE id = $2',
+        [role, memberId]
+      );
+
+      await client.query('COMMIT');
+      res.json({ message: 'Member role updated successfully' });
+      
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
     }
-
-    // Check target member
-    const { rows: targetMemberCheck } = await pool.query(
-      'SELECT role FROM family_members WHERE id = $1 AND family_id = $2',
-      [memberId, id]
-    );
-
-    if (targetMemberCheck.length === 0) {
-      return res.status(404).json({ error: 'Member not found' });
-    }
-
-    if (targetMemberCheck[0].role === 'owner') {
-      return res.status(403).json({ error: 'Cannot change owner role' });
-    }
-
-    await pool.query(
-      'UPDATE family_members SET role = $1 WHERE id = $2',
-      [role, memberId]
-    );
-
-    res.json({ message: 'Member role updated successfully' });
   } catch (error) {
     console.error('Error updating member role:', error);
     res.status(500).json({ error: 'Failed to update member role' });
@@ -434,25 +494,22 @@ router.delete('/:id/members/:memberId', authMiddleware, async (req, res) => {
     }
 
     const targetRole = targetMemberCheck[0].role;
-    const targetUserId = targetMemberCheck[0].user_id;
 
-    // Members can only remove themselves
+    // Role hierarchy
+    const roleHierarchy = { 'head': 4, 'manager': 3, 'contributor': 2, 'observer': 1 };
+
+    // Self-removal (Leave family)
     if (currentMemberId === parseInt(memberId)) {
-      if (targetRole === 'owner') {
-        return res.status(403).json({ error: 'Owner cannot leave the family. Transfer ownership or delete the family.' });
+      if (targetRole === 'head') {
+        return res.status(403).json({ error: 'Head cannot leave the family. Transfer head role first or delete the family.' });
       }
       await pool.query('DELETE FROM family_members WHERE id = $1', [memberId]);
-      return res.json({ message: 'You have left the family' });
+      return res.json({ message: 'You have left the family', self: true });
     }
 
-    // Only owner/admin can remove others
-    if (!['owner', 'admin'].includes(currentUserRole)) {
-      return res.status(403).json({ error: 'Only owners and admins can remove members' });
-    }
-
-    // Cannot remove owner
-    if (targetRole === 'owner') {
-      return res.status(403).json({ error: 'Cannot remove the owner' });
+    // Permission check: Can only remove people with lower role
+    if (roleHierarchy[currentUserRole] <= roleHierarchy[targetRole]) {
+      return res.status(403).json({ error: 'You can only remove members with lower roles than yours' });
     }
 
     await pool.query('DELETE FROM family_members WHERE id = $1', [memberId]);
