@@ -33,11 +33,11 @@ export const processRecurringTransactions = async () => {
     
     await client.query('BEGIN');
 
-    // Find all active recurring transactions that are due
+    // Find all active recurring transactions that are due TODAY
     const recurringResult = await client.query(
       `SELECT * FROM recurring_transactions 
        WHERE is_active = true 
-       AND next_occurrence <= $1
+       AND next_occurrence = $1
        AND (end_date IS NULL OR end_date >= $1)
        ORDER BY next_occurrence ASC`,
       [today]
