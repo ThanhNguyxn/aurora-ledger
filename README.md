@@ -96,6 +96,24 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 - 🎯 **Smart Buffer** - Auto-adds 10% safety margin to suggestions
 - 💱 **Multi-Currency** - All suggestions in your preferred currency
 
+### 🤖 AI & Automation
+- 🏷️ **Smart Categorization** - Auto-suggest categories based on transaction descriptions
+- 📚 **Learning System** - Learns from your past transaction patterns
+- 🔍 **Keyword Matching** - 12+ category templates with 200+ keywords
+- 📊 **Spending Insights** - Intelligent analysis of your spending patterns:
+  - Category trends and transaction averages
+  - Day-of-week spending patterns  
+  - Monthly income/expense/savings trends
+  - Unusual spending detection (transactions > 2x average)
+  - Automated insights generation
+- 💡 **Budget Recommendations** - AI-powered budget adjustments:
+  - **Increase** suggestions for over-budget categories
+  - **Decrease** suggestions for under-utilized budgets
+  - **Create** suggestions for unbudgeted categories (based on 3-month average)
+  - **Perfect** acknowledgment for well-managed budgets (90-100% usage)
+- 📈 **Confidence Scoring** - High/Medium/Low confidence levels for all suggestions
+- 🎯 **Priority Ranking** - Recommendations sorted by urgency
+
 ### 📉 Financial Reports
 - 📊 **Income vs Expense** - Track your financial health over time
 - 🥧 **Category Breakdown** - See where your money goes (pie charts)
