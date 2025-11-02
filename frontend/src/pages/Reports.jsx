@@ -54,7 +54,7 @@ const Reports = () => {
             _t: Date.now() // Cache buster to prevent stale data
           }
         }),
-        api.get('/reports/trends?months=6')
+        api.get(`/reports/trends?months=6&currency=${currency}`)
       ]);
       
       const transactionsData = transactionsRes.data;
@@ -232,12 +232,8 @@ const Reports = () => {
   const incomeByCategory = overview?.byCategory?.income || [];
   const expenseByCategory = overview?.byCategory?.expense || [];
 
-  // Trends data - note: trends API might still return USD, keep conversion for now
-  const trendsConverted = trends.map(t => ({
-    ...t,
-    income: convertAmount(t.income, 'USD'),
-    expense: convertAmount(t.expense, 'USD')
-  }));
+  // Trends data is also converted by backend now - no conversion needed
+  const trendsConverted = trends;
 
   return (
     <div className="space-y-4 sm:space-y-6">

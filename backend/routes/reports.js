@@ -87,32 +87,51 @@ router.get('/overview', async (req, res) => {
 // Get monthly trends
 router.get('/trends', async (req, res) => {
   try {
-    const { months = 6 } = req.query;
+    const { months = 6, currency: displayCurrency } = req.query;
+    
+    // Get user's default currency if not specified
+    const userResult = await pool.query(
+      'SELECT currency FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    const targetCurrency = displayCurrency || userResult.rows[0]?.currency || 'USD';
 
     const result = await pool.query(
       `SELECT 
         TO_CHAR(transaction_date, 'YYYY-MM') as month,
         type,
+        currency,
         COALESCE(SUM(amount), 0) as total
        FROM transactions
        WHERE user_id = $1 
        AND transaction_date >= CURRENT_DATE - INTERVAL '${parseInt(months)} months'
-       GROUP BY TO_CHAR(transaction_date, 'YYYY-MM'), type
+       GROUP BY TO_CHAR(transaction_date, 'YYYY-MM'), type, currency
        ORDER BY month ASC`,
       [req.user.id]
     );
 
+    // Group by month and convert currencies
     const trends = {};
-    result.rows.forEach(row => {
+    
+    for (const row of result.rows) {
       if (!trends[row.month]) {
         trends[row.month] = { month: row.month, income: 0, expense: 0 };
       }
-      trends[row.month][row.type] = parseFloat(row.total);
-    });
+      
+      // Convert amount to target currency
+      const convertedAmount = await convertCurrency(
+        parseFloat(row.total),
+        row.currency,
+        targetCurrency
+      );
+      
+      trends[row.month][row.type] += convertedAmount;
+    }
 
     const trendsArray = Object.values(trends).map(item => ({
       ...item,
-      balance: item.income - item.expense
+      balance: item.income - item.expense,
+      currency: targetCurrency
     }));
 
     res.json(trendsArray);

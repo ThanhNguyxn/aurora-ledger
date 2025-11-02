@@ -19,7 +19,7 @@ const Budgets = () => {
   const fetchBudgets = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/budgets?month=${selectedMonth}&year=${selectedYear}`);
+      const response = await api.get(`/budgets?month=${selectedMonth}&year=${selectedYear}&currency=${currentCurrency}`);
       setBudgets(response.data);
     } catch (error) {
       toast.error(t('budgets.failedToLoad'));
@@ -27,7 +27,7 @@ const Budgets = () => {
     } finally {
       setLoading(false);
     }
-  }, [selectedMonth, selectedYear, t]);
+  }, [selectedMonth, selectedYear, currentCurrency, t]);
 
   // Re-fetch when month/year changes OR when currency changes
   useEffect(() => {

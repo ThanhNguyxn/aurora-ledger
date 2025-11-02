@@ -10,7 +10,7 @@ router.use(authMiddleware);
 // Get budgets for a specific month/year
 router.get('/', async (req, res) => {
   try {
-    const { month, year } = req.query;
+    const { month, year, currency: displayCurrency } = req.query;
     
     if (!month || !year) {
       return res.status(400).json({ error: 'Month and year are required' });
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
       'SELECT currency FROM users WHERE id = $1',
       [req.user.id]
     );
-    const userCurrency = userResult.rows[0]?.currency || 'USD';
+    const targetCurrency = displayCurrency || userResult.rows[0]?.currency || 'USD';
 
     const result = await pool.query(
       `SELECT 
@@ -35,79 +35,68 @@ router.get('/', async (req, res) => {
          b.updated_at,
          c.name as category_name, 
          c.color as category_color, 
-         c.icon as category_icon,
-         COALESCE(
-           (SELECT 
-              COALESCE(
-                SUM(
-                  CASE 
-                    WHEN t.currency = $4 THEN t.amount
-                    ELSE 0
-                  END
-                ), 0
-              )
-            FROM transactions t
-            WHERE t.user_id = $1 
-            AND t.category_id = b.category_id 
-            AND t.type = 'expense'
-            AND EXTRACT(MONTH FROM t.transaction_date) = $2
-            AND EXTRACT(YEAR FROM t.transaction_date) = $3
-           ), 0
-         ) as spent_same_currency,
-         COALESCE(
-           (SELECT 
-              json_agg(
-                json_build_object(
-                  'amount', t.amount,
-                  'currency', t.currency
-                )
-              )
-            FROM transactions t
-            WHERE t.user_id = $1 
-            AND t.category_id = b.category_id 
-            AND t.type = 'expense'
-            AND t.currency != $4
-            AND EXTRACT(MONTH FROM t.transaction_date) = $2
-            AND EXTRACT(YEAR FROM t.transaction_date) = $3
-           ), '[]'::json
-         ) as spent_other_currencies
+         c.icon as category_icon
        FROM budgets b
        LEFT JOIN categories c ON b.category_id = c.id
        WHERE b.user_id = $1 AND b.month = $2 AND b.year = $3
        ORDER BY c.name`,
-      [req.user.id, month, year, userCurrency]
+      [req.user.id, month, year]
     );
 
-    // Budget amount is already in user's currency (converted when saved)
-    // Only need to convert spent amounts from other currencies
+    // Get all transactions for this period (we'll convert everything to target currency)
+    const transactionsResult = await pool.query(
+      `SELECT 
+         category_id,
+         amount,
+         currency
+       FROM transactions
+       WHERE user_id = $1 
+       AND type = 'expense'
+       AND EXTRACT(MONTH FROM transaction_date) = $2
+       AND EXTRACT(YEAR FROM transaction_date) = $3`,
+      [req.user.id, month, year]
+    );
+
+    // Group transactions by category and convert to target currency
+    const spentByCategory = {};
+    for (const t of transactionsResult.rows) {
+      const catId = t.category_id || null;
+      if (!spentByCategory[catId]) {
+        spentByCategory[catId] = 0;
+      }
+      
+      const convertedAmount = await convertCurrency(
+        parseFloat(t.amount),
+        t.currency,
+        targetCurrency
+      );
+      spentByCategory[catId] += convertedAmount;
+    }
+
+    // Convert budget amounts and add spent data
     const budgetsWithConversion = await Promise.all(
       result.rows.map(async (budget) => {
-        // Budget amount is already in user currency, no conversion needed
-        const budgetAmount = budget.amount;
-
-        // Calculate total spent (already in user currency + need to convert others)
-        let totalSpent = parseFloat(budget.spent_same_currency || 0);
+        // Convert budget amount to target currency
+        const convertedBudgetAmount = await convertCurrency(
+          parseFloat(budget.amount),
+          budget.currency,
+          targetCurrency
+        );
         
-        // Convert other currencies
-        const otherSpent = budget.spent_other_currencies || [];
-        for (const item of otherSpent) {
-          if (item && item.currency && item.amount) {
-            const rate = await getExchangeRate(item.currency, userCurrency);
-            totalSpent += convertCurrency(item.amount, rate);
-          }
-        }
+        // Get spent for this category (already in target currency)
+        const totalSpent = spentByCategory[budget.category_id] || 0;
 
         return {
           id: budget.id,
           category_id: budget.category_id,
-          amount: budgetAmount, // Already in user's currency
-          currency: userCurrency,
+          amount: convertedBudgetAmount,
+          currency: targetCurrency,
           month: budget.month,
           year: budget.year,
           category_name: budget.category_name,
           category_color: budget.category_color,
           category_icon: budget.category_icon,
-          spent: totalSpent, // Converted to user's currency
+          spent: totalSpent,
           created_at: budget.created_at,
           updated_at: budget.updated_at
         };
