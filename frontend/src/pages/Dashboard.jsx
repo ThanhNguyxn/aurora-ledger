@@ -20,6 +20,7 @@ const Dashboard = () => {
   const { formatCurrency, formatAmount, convertAmount, currency } = useCurrency();
   const [stats, setStats] = useState(null);
   const [recentTransactions, setRecentTransactions] = useState([]);
+  const [forecast, setForecast] = useState(null);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('month'); // 'month', 'last30', 'all'
 
@@ -29,7 +30,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
+    fetchForecast();
   }, [viewMode, currency]); // Add currency dependency
+
+  const fetchForecast = async () => {
+    try {
+      const response = await api.get('/forecast/categories');
+      setForecast(response.data);
+    } catch (error) {
+      console.error('Forecast fetch error:', error);
+      setForecast(null);
+    }
+  };
 
   const getDateLocale = () => {
     const locales = {
@@ -315,6 +327,66 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+
+        {/* Spending Forecast */}
+        {forecast && forecast.forecasts && forecast.forecasts.length > 0 && (
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold dark:text-gray-100">📈 Next Month Forecast</h2>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Based on last 3 months</span>
+            </div>
+            <div className="space-y-3">
+              {forecast.forecasts.map((item, index) => {
+                const change = ((item.forecast - item.lastMonth) / item.lastMonth * 100);
+                const isIncreasing = change > 5;
+                const isDecreasing = change < -5;
+                
+                return (
+                  <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: item.category_color }}
+                        ></div>
+                        <span className="font-medium dark:text-gray-100">{item.category_name}</span>
+                      </div>
+                      {isIncreasing && <TrendingUp size={16} className="text-red-500" />}
+                      {isDecreasing && <TrendingDown size={16} className="text-green-500" />}
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <div>
+                        <div className="text-gray-600 dark:text-gray-400">Predicted</div>
+                        <div className="font-semibold text-blue-600 dark:text-blue-400">
+                          {formatCurrency(item.forecast)}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-gray-600 dark:text-gray-400">Last Month</div>
+                        <div className="font-semibold dark:text-gray-100">
+                          {formatCurrency(item.lastMonth)}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-gray-600 dark:text-gray-400">Change</div>
+                        <div className={`font-semibold ${
+                          change > 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'
+                        }`}>
+                          {change > 0 ? '+' : ''}{change.toFixed(1)}%
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-300">
+                💡 <strong>Tip:</strong> Forecasts are based on your spending patterns. Large changes may indicate seasonal variations or lifestyle changes.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Recent Transactions */}
         <div className="card">
