@@ -19,6 +19,7 @@ import dashboardRoutes from './routes/dashboard.js';
 import insightsRoutes from './routes/insights.js';
 import setupRoutes from './routes/setup.js';
 import forecastRoutes from './routes/forecast.js';
+import trendsRoutes from './routes/trends.js';
 import { processRecurringTransactions } from './utils/recurring-processor.js';
 
 dotenv.config();
@@ -72,6 +73,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/insights', insightsRoutes);
 app.use('/api/forecast', forecastRoutes);
+app.use('/api/trends', trendsRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
