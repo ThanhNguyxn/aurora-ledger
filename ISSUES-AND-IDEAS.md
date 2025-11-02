@@ -26,6 +26,17 @@
     - Fixed API authentication (axios → api helper)
   - Status: COMPLETE and committed ✅
 
+- [x] **Family Invite Code Generation 404 Error** - Fixed ✅
+  - Issue: Frontend POST to `/families/join` but backend expected `/join/:code` with code in URL params
+  - Root Cause: Route mismatch - frontend sends code in request body, backend expected URL parameter
+  - Location: `backend/routes/families.js` line 649
+  - Solution: 
+    - Changed route from `POST /join/:code` to `POST /join`
+    - Updated to read `code` from `req.body` instead of `req.params`
+    - Added validation: `if (!code) return 400`
+  - Impact: Generate Invite Code modal now works correctly
+  - Status: FIXED and committed ✅
+
 - [ ] **Analytics & Family pages showing blank screen** - FAILED ATTEMPTS ❌
   - Root Cause: Double Layout wrapper (Layout in App.jsx + Layout in page components)
   - Attempted Solutions:

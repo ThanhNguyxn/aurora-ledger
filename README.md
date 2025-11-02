@@ -139,12 +139,17 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 ### 👨‍👩‍👧‍👦 Family & Group Sharing (NEW!)
 - 🏠 **Family Management** - Create and manage family groups
 - 👥 **Member Roles** - Owner, Admin, Member, Viewer with permissions
-- 📧 **Invite System** - Email invitations with accept/decline
+- 📧 **Email Invitations** - Send invites by email with accept/decline
+- 🎟️ **Invite Codes** - Generate shareable codes to join family groups
+  - Customizable expiry dates and usage limits
+  - Copy code or full join link with one click
+  - Track code usage and deactivate anytime
+  - No email required - perfect for quick sharing
 - 💰 **Shared Budgets** - Collaborative budget planning and tracking
 - 🎯 **Shared Goals** - Family savings goals with contributions
 - 💸 **Expense Splitting** - Split bills by percentage or fixed amount
 - 📊 **Contribution Tracking** - Monitor who paid what
-- 🔐 **Role-Based Access** - 4-tier permission system
+- 🔐 **Role-Based Access** - 4-tier permission system (Head/Manager/Contributor/Observer)
 - 💱 **Multi-Currency** - Family budgets in any currency
 - 🗑️ **Family Control** - Leave, transfer ownership, or delete family
 

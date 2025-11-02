@@ -646,12 +646,16 @@ router.delete('/:id/invite-codes/:codeId', authMiddleware, async (req, res) => {
 });
 
 // Join family using invite code (public endpoint)
-router.post('/join/:code', authMiddleware, async (req, res) => {
+router.post('/join', authMiddleware, async (req, res) => {
   const client = await pool.connect();
   
   try {
-    const { code } = req.params;
+    const { code } = req.body;
     const userId = req.user.id;
+
+    if (!code) {
+      return res.status(400).json({ error: 'Invite code is required' });
+    }
 
     await client.query('BEGIN');
 
