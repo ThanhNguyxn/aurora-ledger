@@ -34,7 +34,7 @@ const Reports = () => {
 
   useEffect(() => {
     fetchReports();
-  }, [dateRange]);
+  }, [dateRange, currency]);
 
   const fetchReports = async () => {
     try {
