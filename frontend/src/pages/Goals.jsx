@@ -123,7 +123,7 @@ const Goals = () => {
             <div className="text-xl sm:text-2xl font-bold dark:text-gray-100">{stats.completedCount}</div>
           </div>
           <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-            <div className="text-xs sm:text-sm text-purple-600 dark:text-purple-400 mb-1">{t('goals.overall Progress')}</div>
+            <div className="text-xs sm:text-sm text-purple-600 dark:text-purple-400 mb-1">{t('goals.overallProgress')}</div>
             <div className="text-xl sm:text-2xl font-bold dark:text-gray-100">{overallProgress.toFixed(1)}%</div>
           </div>
         </div>

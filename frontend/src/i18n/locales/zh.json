@@ -131,6 +131,7 @@
   "budgets": {
     "title": "预算",
     "setBudget": "设置预算",
+    "editBudget": "编辑预算",
     "month": "月份",
     "year": "年份",
     "overallBudget": "总预算",
@@ -143,6 +144,7 @@
     "deleteConfirm": "确定要删除此预算吗？",
     "budgetDeleted": "预算已删除",
     "budgetSet": "预算设置成功",
+    "budgetUpdated": "预算更新成功",
     "failedToLoad": "加载预算失败",
     "failedToDelete": "删除失败",
     "failedToSet": "设置预算失败",

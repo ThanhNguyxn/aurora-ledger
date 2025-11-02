@@ -129,6 +129,7 @@
   "budgets": {
     "title": "Presupuestos",
     "setBudget": "Establecer presupuesto",
+    "editBudget": "Editar Presupuesto",
     "month": "Mes",
     "year": "Año",
     "overallBudget": "Presupuesto general",
@@ -141,6 +142,7 @@
     "deleteConfirm": "¿Estás seguro de eliminar este presupuesto?",
     "budgetDeleted": "Presupuesto eliminado",
     "budgetSet": "Presupuesto establecido exitosamente",
+    "budgetUpdated": "Presupuesto actualizado exitosamente",
     "failedToLoad": "Error al cargar presupuestos",
     "failedToDelete": "Error al eliminar presupuesto",
     "failedToSet": "Error al establecer presupuesto",

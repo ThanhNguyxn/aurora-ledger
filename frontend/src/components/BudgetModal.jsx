@@ -5,14 +5,14 @@ import { X, Plus } from 'lucide-react';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
 
-const BudgetModal = ({ month, year, onClose }) => {
+const BudgetModal = ({ month, year, budget = null, onClose }) => {
   const { t } = useTranslation();
   const { currency: userCurrency } = useCurrency();
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
-    category_id: '',
-    amount: '',
-    currency: userCurrency || 'USD',
+    category_id: budget?.category_id || '',
+    amount: budget?.amount || '',
+    currency: budget?.currency || userCurrency || 'USD',
     month: month,
     year: year
   });
@@ -69,11 +69,18 @@ const BudgetModal = ({ month, year, onClose }) => {
 
       console.log('💰 Creating budget with data:', data);
 
-      await api.post('/budgets', data);
-      toast.success(t('budgets.budgetSet'));
+      if (budget) {
+        // Update existing budget
+        await api.put(`/budgets/${budget.id}`, data);
+        toast.success(t('budgets.budgetUpdated'));
+      } else {
+        // Create new budget
+        await api.post('/budgets', data);
+        toast.success(t('budgets.budgetSet'));
+      }
       onClose();
     } catch (error) {
-      console.error('❌ Budget creation error:', error);
+      console.error('❌ Budget operation error:', error);
       console.error('❌ Response:', error.response?.data);
       toast.error(error.response?.data?.error || t('budgets.failedToSet'));
     } finally {
@@ -124,7 +131,9 @@ const BudgetModal = ({ month, year, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">{t('budgets.setBudget')}</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
+            {budget ? t('budgets.editBudget') : t('budgets.setBudget')}
+          </h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors" title="Close">
             <X size={20} className="text-gray-600 dark:text-gray-400" />
           </button>

@@ -131,6 +131,7 @@
   "budgets": {
     "title": "予算",
     "setBudget": "予算を設定",
+    "editBudget": "予算を編集",
     "month": "月",
     "year": "年",
     "overallBudget": "全体予算",
@@ -143,6 +144,7 @@
     "deleteConfirm": "この予算を削除してもよろしいですか？",
     "budgetDeleted": "予算が削除されました",
     "budgetSet": "予算が正常に設定されました",
+    "budgetUpdated": "予算が正常に更新されました",
     "failedToLoad": "予算の読み込みに失敗",
     "failedToDelete": "削除に失敗",
     "failedToSet": "予算の設定に失敗",

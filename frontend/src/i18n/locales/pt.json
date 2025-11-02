@@ -131,6 +131,7 @@
   "budgets": {
     "title": "Orçamentos",
     "setBudget": "Definir orçamento",
+    "editBudget": "Editar Orçamento",
     "month": "Mês",
     "year": "Ano",
     "overallBudget": "Orçamento geral",
@@ -143,6 +144,7 @@
     "deleteConfirm": "Tem certeza de que deseja excluir este orçamento?",
     "budgetDeleted": "Orçamento excluído",
     "budgetSet": "Orçamento definido com sucesso",
+    "budgetUpdated": "Orçamento atualizado com sucesso",
     "failedToLoad": "Falha ao carregar orçamentos",
     "failedToDelete": "Falha ao excluir",
     "failedToSet": "Falha ao definir orçamento",

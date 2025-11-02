@@ -127,6 +127,7 @@
   "budgets": {
     "title": "Budgets",
     "setBudget": "Set Budget",
+    "editBudget": "Edit Budget",
     "month": "Month",
     "year": "Year",
     "overallBudget": "Overall Budget",
@@ -139,6 +140,7 @@
     "deleteConfirm": "Are you sure you want to delete this budget?",
     "budgetDeleted": "Budget deleted",
     "budgetSet": "Budget set successfully",
+    "budgetUpdated": "Budget updated successfully",
     "failedToLoad": "Failed to load budgets",
     "failedToDelete": "Failed to delete budget",
     "failedToSet": "Failed to set budget",

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
-import { Plus, Trash2, TrendingDown, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, TrendingDown, AlertTriangle, Edit2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BudgetModal from '../components/BudgetModal';
 
@@ -12,6 +12,7 @@ const Budgets = () => {
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingBudget, setEditingBudget] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
@@ -47,11 +48,18 @@ const Budgets = () => {
   };
 
   const handleAdd = () => {
+    setEditingBudget(null);
+    setShowModal(true);
+  };
+
+  const handleEdit = (budget) => {
+    setEditingBudget(budget);
     setShowModal(true);
   };
 
   const handleModalClose = () => {
     setShowModal(false);
+    setEditingBudget(null);
     fetchBudgets();
   };
 
@@ -201,6 +209,13 @@ const Budgets = () => {
                     <div className="flex items-center gap-2 self-end sm:self-start">
                       {getStatusIcon(percentage)}
                       <button
+                        onClick={() => handleEdit(budget)}
+                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
+                        title="Edit budget"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button
                         onClick={() => handleDelete(budget.id)}
                         className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                         title="Delete budget"
@@ -249,6 +264,7 @@ const Budgets = () => {
         <BudgetModal
           month={selectedMonth}
           year={selectedYear}
+          budget={editingBudget}
           onClose={handleModalClose}
         />
       )}

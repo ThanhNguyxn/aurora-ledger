@@ -131,6 +131,7 @@
   "budgets": {
     "title": "예산",
     "setBudget": "예산 설정",
+    "editBudget": "예산 편집",
     "month": "월",
     "year": "연도",
     "overallBudget": "전체 예산",
@@ -143,6 +144,7 @@
     "deleteConfirm": "이 예산을 삭제하시겠습니까?",
     "budgetDeleted": "예산이 삭제되었습니다",
     "budgetSet": "예산이 성공적으로 설정되었습니다",
+    "budgetUpdated": "예산이 성공적으로 업데이트되었습니다",
     "failedToLoad": "예산 로드 실패",
     "failedToDelete": "삭제 실패",
     "failedToSet": "예산 설정 실패",

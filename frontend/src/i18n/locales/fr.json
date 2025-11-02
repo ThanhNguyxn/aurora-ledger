@@ -131,6 +131,7 @@
   "budgets": {
     "title": "Budgets",
     "setBudget": "Définir le budget",
+    "editBudget": "Modifier le Budget",
     "month": "Mois",
     "year": "Année",
     "overallBudget": "Budget global",
@@ -143,6 +144,7 @@
     "deleteConfirm": "Êtes-vous sûr de supprimer ce budget ?",
     "budgetDeleted": "Budget supprimé",
     "budgetSet": "Budget défini avec succès",
+    "budgetUpdated": "Budget mis à jour avec succès",
     "failedToLoad": "Échec du chargement des budgets",
     "failedToDelete": "Échec de la suppression",
     "failedToSet": "Échec de la définition du budget",

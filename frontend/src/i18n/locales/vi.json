@@ -129,6 +129,7 @@
   "budgets": {
     "title": "Ngân sách",
     "setBudget": "Đặt ngân sách",
+    "editBudget": "Chỉnh sửa Ngân sách",
     "month": "Tháng",
     "year": "Năm",
     "overallBudget": "Tổng ngân sách",
@@ -141,6 +142,7 @@
     "deleteConfirm": "Bạn có chắc muốn xóa ngân sách này?",
     "budgetDeleted": "Đã xóa ngân sách",
     "budgetSet": "Đã đặt ngân sách thành công",
+    "budgetUpdated": "Cập nhật ngân sách thành công",
     "failedToLoad": "Không thể tải ngân sách",
     "failedToDelete": "Không thể xóa ngân sách",
     "failedToSet": "Không thể đặt ngân sách",
