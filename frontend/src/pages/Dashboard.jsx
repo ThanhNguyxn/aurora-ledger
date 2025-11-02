@@ -29,7 +29,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, [viewMode]);
+  }, [viewMode, currency]); // Add currency dependency
 
   const getDateLocale = () => {
     const locales = {
@@ -83,14 +83,15 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const dateRange = getDateRange();
-      const [overviewRes, transactionsRes] = await Promise.all([
-        api.get(`/reports/overview?start_date=${dateRange.start}&end_date=${dateRange.end}`),
-        api.get('/transactions?limit=5')
-      ]);
-
-      setStats(overviewRes.data);
-      setRecentTransactions(transactionsRes.data);
+      
+      // Use new dashboard stats API with currency conversion
+      const response = await api.get(`/dashboard/stats?currency=${currency}`);
+      setStats(response.data);
+      
+      // Recent transactions are included in the dashboard stats
+      if (response.data.recentActivity) {
+        setRecentTransactions(response.data.recentActivity.transactions || []);
+      }
     } catch (error) {
       toast.error(t('dashboard.failedToLoad') || 'Failed to load dashboard data');
       console.error(error);
@@ -107,22 +108,14 @@ const Dashboard = () => {
     );
   }
 
-  // Note: Backend returns amounts in USD
-  // We need to convert them to user's display currency
-  const balanceUSD = stats?.totals?.balance || 0;
-  const incomeUSD = stats?.totals?.income || 0;
-  const expenseUSD = stats?.totals?.expense || 0;
+  // Extract data from new API structure
+  const month = stats?.month || {};
+  const balance = (month.income || 0) - (month.expense || 0);
+  const income = month.income || 0;
+  const expense = month.expense || 0;
 
-  // Convert to user's currency
-  const balance = convertAmount(balanceUSD, 'USD');
-  const income = convertAmount(incomeUSD, 'USD');
-  const expense = convertAmount(expenseUSD, 'USD');
-
-  // Convert category breakdown data
-  const expenseByCategoryConverted = stats?.byCategory?.expense?.map(cat => ({
-    ...cat,
-    total: convertAmount(cat.total, 'USD')
-  })) || [];
+  // Map top categories from new API
+  const expenseByCategoryConverted = stats?.topCategories || [];
 
   const dateRange = getDateRange();
 
