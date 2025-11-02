@@ -84,36 +84,69 @@ const Dashboard = () => {
     try {
       setLoading(true);
       
-      // Use reports API (proven to work) instead of dashboard stats
       const dateRange = getDateRange();
-      const [overviewRes, transactionsRes] = await Promise.all([
-        api.get(`/reports/overview?start_date=${dateRange.start}&end_date=${dateRange.end}`),
-        api.get('/transactions', { 
-          params: { 
-            start_date: dateRange.start,
-            end_date: dateRange.end,
-            limit: 100, // Get more to ensure we have data
-            sort: 'date_desc'
-          } 
-        })
-      ]);
       
-      const overviewData = overviewRes.data;
+      // Fetch all transactions (they already have currency conversion in Transactions page)
+      const transactionsRes = await api.get('/transactions', { 
+        params: { 
+          start_date: dateRange.start,
+          end_date: dateRange.end,
+          limit: 1000 // Get all for accurate calculation
+        } 
+      });
+      
       const transactions = transactionsRes.data.transactions || [];
       
-      console.log('Dashboard data:', { overviewData, transactions }); // Debug
+      console.log('Dashboard transactions:', transactions); // Debug
+      
+      // Manual calculation with currency-aware amounts
+      // The transactions API already converts amounts to display currency
+      let totalIncome = 0;
+      let totalExpense = 0;
+      const categorySpending = {};
+      
+      transactions.forEach(t => {
+        const amount = parseFloat(t.amount || 0);
+        
+        if (t.type === 'income') {
+          totalIncome += amount;
+        } else if (t.type === 'expense') {
+          totalExpense += amount;
+          
+          // Aggregate by category
+          const catName = t.category_name || 'Uncategorized';
+          if (!categorySpending[catName]) {
+            categorySpending[catName] = {
+              name: catName,
+              color: t.category_color || '#6B7280',
+              icon: t.category_icon || '📦',
+              total: 0,
+              transaction_count: 0
+            };
+          }
+          categorySpending[catName].total += amount;
+          categorySpending[catName].transaction_count += 1;
+        }
+      });
+      
+      // Convert category spending to array and sort
+      const topCategories = Object.values(categorySpending)
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 5);
+      
+      const savings = totalIncome - totalExpense;
       
       // Transform to expected format
       setStats({
         month: {
-          income: overviewData.totals?.income || 0,
-          expense: overviewData.totals?.expense || 0,
-          savings: overviewData.totals?.balance || 0,
-          savingsRate: overviewData.totals?.income > 0 
-            ? (((overviewData.totals?.balance || 0) / overviewData.totals.income) * 100).toFixed(1)
+          income: totalIncome,
+          expense: totalExpense,
+          savings: savings,
+          savingsRate: totalIncome > 0 
+            ? ((savings / totalIncome) * 100).toFixed(1)
             : 0
         },
-        topCategories: (overviewData.byCategory?.expense || []).slice(0, 5),
+        topCategories: topCategories,
         recentActivity: {
           transactions: transactions.slice(0, 5) // Show first 5
         }

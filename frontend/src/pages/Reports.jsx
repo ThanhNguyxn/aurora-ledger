@@ -39,12 +39,76 @@ const Reports = () => {
   const fetchReports = async () => {
     try {
       setLoading(true);
-      const [overviewRes, trendsRes] = await Promise.all([
-        api.get(`/reports/overview?start_date=${dateRange.start_date}&end_date=${dateRange.end_date}`),
+      
+      // Fetch transactions instead of using reports API
+      // Transactions API already handles currency conversion
+      const [transactionsRes, trendsRes] = await Promise.all([
+        api.get('/transactions', {
+          params: {
+            start_date: dateRange.start_date,
+            end_date: dateRange.end_date,
+            limit: 1000
+          }
+        }),
         api.get('/reports/trends?months=6')
       ]);
+      
+      const transactions = transactionsRes.data.transactions || [];
+      
+      // Calculate overview from transactions (currency-aware)
+      let totalIncome = 0;
+      let totalExpense = 0;
+      const categoryBreakdown = { income: {}, expense: {} };
+      
+      transactions.forEach(t => {
+        const amount = parseFloat(t.amount || 0);
+        const catName = t.category_name || 'Uncategorized';
+        
+        if (t.type === 'income') {
+          totalIncome += amount;
+          if (!categoryBreakdown.income[catName]) {
+            categoryBreakdown.income[catName] = {
+              category_id: t.category_id,
+              category_name: catName,
+              category_color: t.category_color || '#6B7280',
+              category_icon: t.category_icon || '📦',
+              total: 0,
+              transaction_count: 0
+            };
+          }
+          categoryBreakdown.income[catName].total += amount;
+          categoryBreakdown.income[catName].transaction_count += 1;
+        } else if (t.type === 'expense') {
+          totalExpense += amount;
+          if (!categoryBreakdown.expense[catName]) {
+            categoryBreakdown.expense[catName] = {
+              category_id: t.category_id,
+              category_name: catName,
+              category_color: t.category_color || '#6B7280',
+              category_icon: t.category_icon || '📦',
+              total: 0,
+              transaction_count: 0
+            };
+          }
+          categoryBreakdown.expense[catName].total += amount;
+          categoryBreakdown.expense[catName].transaction_count += 1;
+        }
+      });
+      
+      // Transform to expected format
+      const overviewData = {
+        totals: {
+          income: totalIncome,
+          expense: totalExpense,
+          balance: totalIncome - totalExpense
+        },
+        byCategory: {
+          income: Object.values(categoryBreakdown.income).sort((a, b) => b.total - a.total),
+          expense: Object.values(categoryBreakdown.expense).sort((a, b) => b.total - a.total)
+        }
+      };
 
-      setOverview(overviewRes.data);
+      setOverview(overviewData);
       setTrends(trendsRes.data);
     } catch (error) {
       toast.error(t('reports.failedToLoad'));
