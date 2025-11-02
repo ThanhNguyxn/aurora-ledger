@@ -1,11 +1,11 @@
 import express from 'express';
 import pool from '../config/database.js';
-import { requireAuth } from '../middleware/auth.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Get all families for current user
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -34,7 +34,7 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 // Get specific family details
-router.get('/:id', requireAuth, async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
@@ -98,7 +98,7 @@ router.get('/:id', requireAuth, async (req, res) => {
 });
 
 // Create new family
-router.post('/', requireAuth, async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   const client = await pool.connect();
   
   try {
@@ -144,7 +144,7 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 // Update family
-router.put('/:id', requireAuth, async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
@@ -184,7 +184,7 @@ router.put('/:id', requireAuth, async (req, res) => {
 });
 
 // Delete family (owner only)
-router.delete('/:id', requireAuth, async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
@@ -209,7 +209,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
 });
 
 // Invite member to family
-router.post('/:id/invite', requireAuth, async (req, res) => {
+router.post('/:id/invite', authMiddleware, async (req, res) => {
   const client = await pool.connect();
   
   try {
@@ -292,7 +292,7 @@ router.post('/:id/invite', requireAuth, async (req, res) => {
 });
 
 // Accept/Decline invitation
-router.post('/:id/invitation/:action', requireAuth, async (req, res) => {
+router.post('/:id/invitation/:action', authMiddleware, async (req, res) => {
   try {
     const { id, action } = req.params;
     const userId = req.user.id;
@@ -333,7 +333,7 @@ router.post('/:id/invitation/:action', requireAuth, async (req, res) => {
 });
 
 // Get pending invitations for current user
-router.get('/invitations/pending', requireAuth, async (req, res) => {
+router.get('/invitations/pending', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -358,7 +358,7 @@ router.get('/invitations/pending', requireAuth, async (req, res) => {
 });
 
 // Update member role (owner/admin only)
-router.put('/:id/members/:memberId/role', requireAuth, async (req, res) => {
+router.put('/:id/members/:memberId/role', authMiddleware, async (req, res) => {
   try {
     const { id, memberId } = req.params;
     const userId = req.user.id;
@@ -405,7 +405,7 @@ router.put('/:id/members/:memberId/role', requireAuth, async (req, res) => {
 });
 
 // Remove member from family
-router.delete('/:id/members/:memberId', requireAuth, async (req, res) => {
+router.delete('/:id/members/:memberId', authMiddleware, async (req, res) => {
   try {
     const { id, memberId } = req.params;
     const userId = req.user.id;

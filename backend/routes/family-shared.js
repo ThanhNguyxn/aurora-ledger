@@ -1,6 +1,6 @@
 import express from 'express';
 import pool from '../config/database.js';
-import { requireAuth } from '../middleware/auth.js';
+import { authMiddleware } from '../middleware/auth.js';
 import { convertCurrency, POPULAR_CURRENCIES } from '../utils/currency.js';
 
 const router = express.Router();
@@ -23,7 +23,7 @@ async function checkFamilyPermission(familyId, userId, requiredRoles = ['owner',
 }
 
 // Get family budgets
-router.get('/:familyId/budgets', requireAuth, async (req, res) => {
+router.get('/:familyId/budgets', authMiddleware, async (req, res) => {
   try {
     const { familyId } = req.params;
     const userId = req.user.id;
@@ -85,7 +85,7 @@ router.get('/:familyId/budgets', requireAuth, async (req, res) => {
 });
 
 // Create family budget
-router.post('/:familyId/budgets', requireAuth, async (req, res) => {
+router.post('/:familyId/budgets', authMiddleware, async (req, res) => {
   try {
     const { familyId } = req.params;
     const userId = req.user.id;
@@ -123,7 +123,7 @@ router.post('/:familyId/budgets', requireAuth, async (req, res) => {
 });
 
 // Update family budget
-router.put('/:familyId/budgets/:budgetId', requireAuth, async (req, res) => {
+router.put('/:familyId/budgets/:budgetId', authMiddleware, async (req, res) => {
   try {
     const { familyId, budgetId } = req.params;
     const userId = req.user.id;
@@ -163,7 +163,7 @@ router.put('/:familyId/budgets/:budgetId', requireAuth, async (req, res) => {
 });
 
 // Delete family budget
-router.delete('/:familyId/budgets/:budgetId', requireAuth, async (req, res) => {
+router.delete('/:familyId/budgets/:budgetId', authMiddleware, async (req, res) => {
   try {
     const { familyId, budgetId } = req.params;
     const userId = req.user.id;
@@ -190,7 +190,7 @@ router.delete('/:familyId/budgets/:budgetId', requireAuth, async (req, res) => {
 });
 
 // Get family goals
-router.get('/:familyId/goals', requireAuth, async (req, res) => {
+router.get('/:familyId/goals', authMiddleware, async (req, res) => {
   try {
     const { familyId } = req.params;
     const userId = req.user.id;
@@ -263,7 +263,7 @@ router.get('/:familyId/goals', requireAuth, async (req, res) => {
 });
 
 // Create family goal
-router.post('/:familyId/goals', requireAuth, async (req, res) => {
+router.post('/:familyId/goals', authMiddleware, async (req, res) => {
   try {
     const { familyId } = req.params;
     const userId = req.user.id;
@@ -301,7 +301,7 @@ router.post('/:familyId/goals', requireAuth, async (req, res) => {
 });
 
 // Contribute to family goal
-router.post('/:familyId/goals/:goalId/contribute', requireAuth, async (req, res) => {
+router.post('/:familyId/goals/:goalId/contribute', authMiddleware, async (req, res) => {
   const client = await pool.connect();
   
   try {
@@ -380,7 +380,7 @@ router.post('/:familyId/goals/:goalId/contribute', requireAuth, async (req, res)
 });
 
 // Update family goal
-router.put('/:familyId/goals/:goalId', requireAuth, async (req, res) => {
+router.put('/:familyId/goals/:goalId', authMiddleware, async (req, res) => {
   try {
     const { familyId, goalId } = req.params;
     const userId = req.user.id;
@@ -419,7 +419,7 @@ router.put('/:familyId/goals/:goalId', requireAuth, async (req, res) => {
 });
 
 // Delete family goal
-router.delete('/:familyId/goals/:goalId', requireAuth, async (req, res) => {
+router.delete('/:familyId/goals/:goalId', authMiddleware, async (req, res) => {
   try {
     const { familyId, goalId } = req.params;
     const userId = req.user.id;
