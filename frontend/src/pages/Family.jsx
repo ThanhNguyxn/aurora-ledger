@@ -55,7 +55,7 @@ export default function Family() {
         api.get(`/families/${familyId}/invite-codes`)
       ]);
       setFamilyDetails(detailsRes.data);
-      setInviteCodes(codesRes.data.codes || []);
+      setInviteCodes(codesRes.data.inviteCodes || []);
       setSelectedFamily(familyId);
     } catch (error) {
       console.error('Error fetching family details:', error);
@@ -180,6 +180,14 @@ export default function Family() {
     e.preventDefault();
     const formData = new FormData(e.target);
     
+    // Validate selectedFamily exists
+    if (!selectedFamily) {
+      toast.error('Please select a family first');
+      return;
+    }
+    
+    console.log('Generating invite code for family:', selectedFamily);
+    
     try {
       await api.post(`/families/${selectedFamily}/invite-codes`, {
         max_uses: formData.get('max_uses') ? parseInt(formData.get('max_uses')) : null,
@@ -278,15 +286,13 @@ export default function Family() {
             </p>
           </div>
           <div className="flex gap-3">
-            {families.length === 0 && (
-              <button
-                onClick={() => setShowJoinFamilyModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <UserPlus className="h-5 w-5" />
-                {t('family.inviteCode.joinFamily')}
-              </button>
-            )}
+            <button
+              onClick={() => setShowJoinFamilyModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              <UserPlus className="h-5 w-5" />
+              {t('family.inviteCode.joinFamily')}
+            </button>
             <button
               onClick={() => setShowCreateModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -565,15 +571,9 @@ export default function Family() {
                         <p className="text-gray-600 dark:text-gray-400 mb-4">
                           {t('family.inviteCode.noActiveCodes')}
                         </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">
+                        <p className="text-sm text-gray-500 dark:text-gray-500">
                           {t('family.inviteCode.createFirst')}
                         </p>
-                        <button
-                          onClick={() => setShowGenerateCodeModal(true)}
-                          className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-                        >
-                          {t('family.inviteCode.generate')}
-                        </button>
                       </div>
                     ) : (
                       <div className="space-y-3">

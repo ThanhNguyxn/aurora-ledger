@@ -522,11 +522,11 @@ router.delete('/:id/members/:memberId', authMiddleware, async (req, res) => {
 });
 
 // Generate invite code for family
-router.post('/:id/invite-code', authMiddleware, async (req, res) => {
+router.post('/:id/invite-codes', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    const { expiresInDays = 7, maxUses = null } = req.body;
+    const { expires_in_days, max_uses } = req.body;
 
     // Check permission (head or manager can create invite codes)
     const { rows: memberRows } = await pool.query(
@@ -547,9 +547,12 @@ router.post('/:id/invite-code', authMiddleware, async (req, res) => {
     const crypto = await import('crypto');
     const inviteCode = crypto.randomBytes(4).toString('hex').toUpperCase();
 
-    // Calculate expiry date
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+    // Calculate expiry date (only if expires_in_days is provided)
+    let expiresAt = null;
+    if (expires_in_days) {
+      expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + parseInt(expires_in_days));
+    }
 
     // Insert invite code
     const { rows } = await pool.query(
@@ -557,7 +560,7 @@ router.post('/:id/invite-code', authMiddleware, async (req, res) => {
        (family_id, code, created_by, expires_at, max_uses, uses_count)
        VALUES ($1, $2, $3, $4, $5, 0)
        RETURNING *`,
-      [id, inviteCode, userId, expiresAt, maxUses]
+      [id, inviteCode, userId, expiresAt, max_uses]
     );
 
     res.status(201).json({
