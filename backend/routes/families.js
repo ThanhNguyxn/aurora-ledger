@@ -521,4 +521,205 @@ router.delete('/:id/members/:memberId', authMiddleware, async (req, res) => {
   }
 });
 
+// Generate invite code for family
+router.post('/:id/invite-code', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const { expiresInDays = 7, maxUses = null } = req.body;
+
+    // Check permission (head or manager can create invite codes)
+    const { rows: memberRows } = await pool.query(
+      'SELECT role FROM family_members WHERE family_id = $1 AND user_id = $2 AND status = $3',
+      [id, userId, 'active']
+    );
+
+    if (memberRows.length === 0) {
+      return res.status(403).json({ error: 'You are not a member of this family' });
+    }
+
+    const role = memberRows[0].role;
+    if (role !== 'head' && role !== 'manager') {
+      return res.status(403).json({ error: 'Only heads and managers can create invite codes' });
+    }
+
+    // Generate unique invite code (8 characters)
+    const crypto = await import('crypto');
+    const inviteCode = crypto.randomBytes(4).toString('hex').toUpperCase();
+
+    // Calculate expiry date
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+
+    // Insert invite code
+    const { rows } = await pool.query(
+      `INSERT INTO family_invite_codes 
+       (family_id, code, created_by, expires_at, max_uses, uses_count)
+       VALUES ($1, $2, $3, $4, $5, 0)
+       RETURNING *`,
+      [id, inviteCode, userId, expiresAt, maxUses]
+    );
+
+    res.status(201).json({
+      message: 'Invite code created successfully',
+      inviteCode: rows[0]
+    });
+  } catch (error) {
+    console.error('Error creating invite code:', error);
+    res.status(500).json({ error: 'Failed to create invite code' });
+  }
+});
+
+// Get all invite codes for a family
+router.get('/:id/invite-codes', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    // Check if user is member
+    const { rows: memberRows } = await pool.query(
+      'SELECT role FROM family_members WHERE family_id = $1 AND user_id = $2 AND status = $3',
+      [id, userId, 'active']
+    );
+
+    if (memberRows.length === 0) {
+      return res.status(403).json({ error: 'You are not a member of this family' });
+    }
+
+    const role = memberRows[0].role;
+    if (role !== 'head' && role !== 'manager') {
+      return res.status(403).json({ error: 'Only heads and managers can view invite codes' });
+    }
+
+    // Get all active invite codes
+    const { rows } = await pool.query(
+      `SELECT ic.*, u.full_name as created_by_name, u.email as created_by_email
+       FROM family_invite_codes ic
+       LEFT JOIN users u ON ic.created_by = u.id
+       WHERE ic.family_id = $1 AND ic.is_active = true
+       ORDER BY ic.created_at DESC`,
+      [id]
+    );
+
+    res.json({ inviteCodes: rows });
+  } catch (error) {
+    console.error('Error fetching invite codes:', error);
+    res.status(500).json({ error: 'Failed to fetch invite codes' });
+  }
+});
+
+// Deactivate invite code
+router.delete('/:id/invite-codes/:codeId', authMiddleware, async (req, res) => {
+  try {
+    const { id, codeId } = req.params;
+    const userId = req.user.id;
+
+    // Check permission
+    const { rows: memberRows } = await pool.query(
+      'SELECT role FROM family_members WHERE family_id = $1 AND user_id = $2 AND status = $3',
+      [id, userId, 'active']
+    );
+
+    if (memberRows.length === 0) {
+      return res.status(403).json({ error: 'You are not a member of this family' });
+    }
+
+    const role = memberRows[0].role;
+    if (role !== 'head' && role !== 'manager') {
+      return res.status(403).json({ error: 'Only heads and managers can deactivate invite codes' });
+    }
+
+    // Deactivate code
+    await pool.query(
+      'UPDATE family_invite_codes SET is_active = false WHERE id = $1 AND family_id = $2',
+      [codeId, id]
+    );
+
+    res.json({ message: 'Invite code deactivated successfully' });
+  } catch (error) {
+    console.error('Error deactivating invite code:', error);
+    res.status(500).json({ error: 'Failed to deactivate invite code' });
+  }
+});
+
+// Join family using invite code (public endpoint)
+router.post('/join/:code', authMiddleware, async (req, res) => {
+  const client = await pool.connect();
+  
+  try {
+    const { code } = req.params;
+    const userId = req.user.id;
+
+    await client.query('BEGIN');
+
+    // Find invite code
+    const { rows: codeRows } = await client.query(
+      `SELECT ic.*, f.name as family_name
+       FROM family_invite_codes ic
+       JOIN families f ON ic.family_id = f.id
+       WHERE ic.code = $1 AND ic.is_active = true`,
+      [code.toUpperCase()]
+    );
+
+    if (codeRows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Invalid or expired invite code' });
+    }
+
+    const inviteCode = codeRows[0];
+
+    // Check if code is expired
+    if (new Date(inviteCode.expires_at) < new Date()) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'This invite code has expired' });
+    }
+
+    // Check max uses
+    if (inviteCode.max_uses && inviteCode.uses_count >= inviteCode.max_uses) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'This invite code has reached its maximum uses' });
+    }
+
+    // Check if user is already a member
+    const { rows: existingMember } = await client.query(
+      'SELECT id FROM family_members WHERE family_id = $1 AND user_id = $2',
+      [inviteCode.family_id, userId]
+    );
+
+    if (existingMember.length > 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'You are already a member of this family' });
+    }
+
+    // Add user to family as contributor
+    await client.query(
+      `INSERT INTO family_members (family_id, user_id, role, status, joined_at)
+       VALUES ($1, $2, 'contributor', 'active', CURRENT_TIMESTAMP)`,
+      [inviteCode.family_id, userId]
+    );
+
+    // Increment uses count
+    await client.query(
+      'UPDATE family_invite_codes SET uses_count = uses_count + 1 WHERE id = $1',
+      [inviteCode.id]
+    );
+
+    await client.query('COMMIT');
+
+    res.json({
+      message: 'Successfully joined family',
+      family: {
+        id: inviteCode.family_id,
+        name: inviteCode.family_name
+      }
+    });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error joining family:', error);
+    res.status(500).json({ error: 'Failed to join family' });
+  } finally {
+    client.release();
+  }
+});
+
 export default router;
