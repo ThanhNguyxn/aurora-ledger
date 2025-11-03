@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { body, validationResult } from 'express-validator';
 import pool from '../config/database.js';
 import { authenticateToken, isAdmin, isMod } from '../middleware/auth.js';
+import { processRecurringTransactions } from '../utils/recurring-processor.js';
 
 const router = express.Router();
 
@@ -341,21 +342,6 @@ router.get('/stats', authenticateToken, isAdmin, async (req, res) => {
   } catch (error) {
     console.error('Get admin stats error:', error);
     res.status(500).json({ error: 'Failed to get stats' });
-  }
-});
-
-// Manual trigger for recurring transactions (admin only)
-router.post('/trigger-recurring', authenticateToken, isAdmin, async (req, res) => {
-  try {
-    console.log('🔄 Manually triggering recurring transactions processor...');
-    const result = await processRecurringTransactions();
-    res.json({ 
-      message: 'Recurring transactions processed successfully',
-      result 
-    });
-  } catch (error) {
-    console.error('❌ Manual recurring processing failed:', error);
-    res.status(500).json({ error: error.message });
   }
 });
 

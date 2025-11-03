@@ -256,7 +256,15 @@
     "day": "day",
     "week": "week",
     "month": "month",
-    "year": "year"
+    "year": "year",
+    "testRecurringNow": "Test Recurring Now",
+    "testRecurringDesc": "Process due recurring transactions immediately (normally runs at 00:05 AM)",
+    "runNow": "Run Now",
+    "noRecurring": "No recurring transactions yet",
+    "addFirstRecurring": "Add First Recurring",
+    "next": "Next",
+    "ends": "Ends",
+    "processed": "Recurring transactions processed successfully!"
   },
   "goals": {
     "title": "Saving Goals",
