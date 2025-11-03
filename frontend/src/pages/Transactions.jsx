@@ -381,15 +381,15 @@ const Transactions = () => {
               <div className="flex items-center gap-3">
                 <Repeat className="text-blue-600 dark:text-blue-400" size={20} />
                 <div>
-                  <h3 className="font-semibold text-blue-900 dark:text-blue-100">Test Recurring Now</h3>
-                  <p className="text-sm text-blue-700 dark:text-blue-300">Process due recurring transactions immediately (normally runs at 00:05 AM)</p>
+                  <h3 className="font-semibold text-blue-900 dark:text-blue-100">{t('recurring.testRecurringNow')}</h3>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">{t('recurring.testRecurringDesc')}</p>
                 </div>
               </div>
               <button
                 onClick={async () => {
                   try {
                     const response = await api.post('/admin/trigger-recurring');
-                    toast.success(response.data.message || 'Recurring transactions processed!');
+                    toast.success(response.data.message || t('recurring.processed'));
                     fetchTransactions(); // Refresh to show new transactions
                   } catch (error) {
                     toast.error(error.response?.data?.error || 'Failed to process recurring');
@@ -397,7 +397,7 @@ const Transactions = () => {
                 }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                ▶️ Run Now
+                ▶️ {t('recurring.runNow')}
               </button>
             </div>
           </div>
@@ -410,13 +410,13 @@ const Transactions = () => {
           ) : recurringList.length === 0 ? (
             <div className="card text-center py-12">
               <Repeat className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" />
-              <p className="text-gray-500 dark:text-gray-400">No recurring transactions yet</p>
+              <p className="text-gray-500 dark:text-gray-400">{t('recurring.noRecurring')}</p>
               <button
                 onClick={() => setShowRecurringModal(true)}
                 className="mt-4 btn btn-primary"
               >
                 <Plus size={18} className="inline mr-2" />
-                Add First Recurring
+                {t('recurring.addFirstRecurring')}
               </button>
             </div>
           ) : (
@@ -456,9 +456,9 @@ const Transactions = () => {
                       <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
                         <div className="flex items-center gap-1">
                           <Calendar size={14} />
-                          <span>Next: <span className="font-medium">{new Date(rec.next_occurrence).toLocaleDateString()}</span></span>
+                          <span>{t('recurring.next')}: <span className="font-medium">{new Date(rec.next_occurrence).toLocaleDateString()}</span></span>
                         </div>
-                        {rec.end_date && <span>• Ends: {new Date(rec.end_date).toLocaleDateString()}</span>}
+                        {rec.end_date && <span>• {t('recurring.ends')}: {new Date(rec.end_date).toLocaleDateString()}</span>}
                       </div>
                     </div>
                     <div className="flex gap-2">
