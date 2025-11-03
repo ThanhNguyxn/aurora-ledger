@@ -59,13 +59,26 @@ export default function Family() {
 
   const selectFamily = async (familyId) => {
     try {
-      const [detailsRes, codesRes] = await Promise.all([
-        api.get(`/families/${familyId}`),
-        api.get(`/families/${familyId}/invite-codes`)
-      ]);
+      // First, get family details to know user's role
+      const detailsRes = await api.get(`/families/${familyId}`);
       setFamilyDetails(detailsRes.data);
-      setInviteCodes(codesRes.data.inviteCodes || []);
       setSelectedFamily(familyId);
+      
+      // Only fetch invite codes if user is head or manager
+      const userRole = detailsRes.data.currentUserRole;
+      if (userRole === 'head' || userRole === 'manager') {
+        try {
+          const codesRes = await api.get(`/families/${familyId}/invite-codes`);
+          setInviteCodes(codesRes.data.inviteCodes || []);
+        } catch (error) {
+          console.error('Error fetching invite codes:', error);
+          // Don't show error for invite codes, just set empty array
+          setInviteCodes([]);
+        }
+      } else {
+        // Contributors and observers don't see invite codes
+        setInviteCodes([]);
+      }
     } catch (error) {
       console.error('Error fetching family details:', error);
       const errorMsg = error.response?.data?.error || 'Failed to load family details';
