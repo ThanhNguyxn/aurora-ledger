@@ -431,18 +431,18 @@ const Transactions = () => {
                             ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
                             : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'
                         }`}>
-                          {rec.type}
+                          {t(`transactions.${rec.type}`)}
                         </span>
                         <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
-                          {rec.frequency}
+                          {t(`recurring.${rec.frequency}`)}
                         </span>
                         {rec.is_active ? (
                           <span className="px-2 py-1 rounded text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
-                            ✓ Active
+                            ✓ {t('recurring.active')}
                           </span>
                         ) : (
                           <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-400">
-                            ○ Inactive
+                            ○ {t('recurring.inactive')}
                           </span>
                         )}
                       </div>
@@ -466,10 +466,10 @@ const Transactions = () => {
                         onClick={async () => {
                           try {
                             await api.patch(`/recurring/${rec.id}/toggle`);
-                            toast.success('Toggled!');
+                            toast.success(t('common.success'));
                             fetchRecurring();
                           } catch (error) {
-                            toast.error('Failed to toggle');
+                            toast.error(t('common.error'));
                           }
                         }}
                         className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
@@ -479,13 +479,13 @@ const Transactions = () => {
                       </button>
                       <button
                         onClick={async () => {
-                          if (window.confirm('Delete this recurring transaction?')) {
+                          if (window.confirm(t('recurring.recurringDeleted'))) {
                             try {
                               await api.delete(`/recurring/${rec.id}`);
-                              toast.success('Deleted!');
+                              toast.success(t('recurring.recurringDeleted'));
                               fetchRecurring();
                             } catch (error) {
-                              toast.error('Failed to delete');
+                              toast.error(t('common.error'));
                             }
                           }
                         }}
