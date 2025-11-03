@@ -57,11 +57,13 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 
 ### 🔁 Recurring Transactions
 - ⏰ **Automated Scheduling** - Set up daily, weekly, monthly, or yearly recurring transactions
-- 🎯 **Smart Execution** - Auto-creates transactions on scheduled dates
+- 🎯 **Smart Execution** - Auto-creates transactions on scheduled dates (daily at 00:05 AM)
+- ▶️ **Manual Trigger** - Test/run recurring immediately with "Run Now" button
 - 📅 **Flexible Timing** - Customize start date and optional end date
 - ✏️ **Easy Management** - Edit or delete recurring schedules anytime
 - 🔔 **Active Tracking** - Monitor upcoming and past recurring transactions
 - 💰 **Budget Integration** - Recurring expenses automatically tracked in budgets
+- 📊 **Integrated UI** - Access from Transactions page via tab toggle
 
 ### 🎯 Saving Goals
 - 💰 **Target Setting** - Create goals with target amounts and deadlines
@@ -138,20 +140,22 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 
 ### 👨‍👩‍👧‍👦 Family & Group Sharing (NEW!)
 - 🏠 **Family Management** - Create and manage family groups
-- 👥 **Member Roles** - Owner, Admin, Member, Viewer with permissions
+- 👥 **Member Roles** - 4-tier permission system (Head/Manager/Contributor/Observer)
 - 📧 **Email Invitations** - Send invites by email with accept/decline
-- 🎟️ **Invite Codes** - Generate shareable codes to join family groups
+- 🎟️ **Smart Invite Codes** - Generate shareable codes to join family groups
+  - 👔 **Role Selection** - Choose role (Manager/Contributor/Observer) when creating code
   - ♾️ **Unlimited options** - 0 or empty = no expiry, unlimited uses
   - 📅 Customizable expiry dates (days) or permanent links
   - 👥 Set usage limits or allow unlimited joins
   - 🔗 Copy code or full join link with one click
   - 📊 Track code usage and deactivate anytime
   - ✉️ No email required - perfect for quick sharing
+  - 🔄 Auto-join from URL - Click link to join instantly
 - 💰 **Shared Budgets** - Collaborative budget planning and tracking
 - 🎯 **Shared Goals** - Family savings goals with contributions
 - 💸 **Expense Splitting** - Split bills by percentage or fixed amount
 - 📊 **Contribution Tracking** - Monitor who paid what
-- 🔐 **Role-Based Access** - 4-tier permission system (Head/Manager/Contributor/Observer)
+- 🔐 **Role-Based Permissions** - Granular access control per role
 - 💱 **Multi-Currency** - Family budgets in any currency
 - 🗑️ **Family Control** - Leave, transfer ownership, or delete family
 

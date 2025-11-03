@@ -72,6 +72,43 @@
     - Clear documentation in placeholders
   - Status: COMPLETE ✅
 
+- [x] **Invite Code Role Selection** - Implemented ✅
+  - Feature: Choose which role users get when joining via invite code
+  - Implementation:
+    - Added role dropdown to Generate Invite Code modal (first field)
+    - Role options: Manager, Contributor, Observer
+    - Database migration: Added role column to family_invite_codes table
+    - Backend: Store and use role when user joins via code
+    - Frontend: Display role badge in invite codes list
+  - Database Changes:
+    - Added role VARCHAR(20) DEFAULT 'contributor'
+    - Constraint: CHECK (role IN ('manager', 'contributor', 'observer'))
+    - Fixed expires_at to allow NULL (unlimited expiry)
+  - Benefits:
+    - Consistent with email invite flow
+    - Flexible member onboarding
+    - Clear role assignment upfront
+  - Status: COMPLETE ✅
+
+- [x] **Recurring Transactions UI Integration** - Implemented ✅
+  - Feature: Integrate Recurring into Transactions page instead of separate tab
+  - Implementation:
+    - Tab toggle in Transactions page: Transactions | Recurring
+    - viewMode state to switch between views
+    - Conditional rendering for filters and lists
+    - Manual trigger button "Run Now" for testing
+  - Manual Trigger Feature:
+    - POST /api/admin/trigger-recurring endpoint
+    - Process due recurring transactions instantly
+    - No need to wait for 00:05 AM cron job
+    - Perfect for Render free tier (may sleep and miss cron)
+  - Benefits:
+    - All transactions in one place
+    - Better UX - related features together
+    - Fix issue: Can manually trigger recurring
+    - Recurring tab can be hidden from sidebar
+  - Status: COMPLETE ✅
+
 - [ ] **Analytics & Family pages showing blank screen** - FAILED ATTEMPTS ❌
   - Root Cause: Double Layout wrapper (Layout in App.jsx + Layout in page components)
   - Attempted Solutions:
@@ -404,18 +441,24 @@
 - i18n (10 languages: en, vi, zh, de, es, fr, ja, ko, pt, ru)
 - Dashboard with Financial Health Score (40% savings + 30% budget + 30% goals)
 - Transaction CRUD with pagination
-- Recurring transactions (auto-creation via cron job)
+- Recurring transactions (auto-creation via cron job + manual trigger)
+- Integrated Transactions/Recurring UI (tab toggle in one page)
 - Budgets with smart AI suggestions (50/30/20, 60/20/20, 70/20/10, Zero-based)
 - Saving goals with contribution tracking
-- Family sharing (roles, invitations, shared budgets/goals, unlimited invite codes)
+- Family sharing (roles, invitations, shared budgets/goals)
+  * Smart invite codes with role selection
+  * Unlimited invite codes (0 = ♾️)
+  * Auto-join from URL links
+  * Role-based permissions (Head/Manager/Contributor/Observer)
 - Advanced analytics (anomalies, YoY, velocity, patterns)
 - Reports with CSV/PDF export
 - OAuth login (Google)
 - Password reset via email
-- Admin dashboard
+- Admin dashboard with user details
 - React Query caching (5min TTL)
 - JWT auto token management (30-day expiry, auto-cleanup)
 - Comprehensive auth debugging tools
+- Profile page with created_at display
 
 ⚠️ **Partially Implemented:**
 - Mobile responsive (needs optimization)
