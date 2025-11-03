@@ -6,8 +6,9 @@ import toast from 'react-hot-toast';
 import {
   Users, Plus, Mail, Shield, Trash2, Settings,
   UserPlus, X, Check, Crown, UserCheck, Eye, AlertTriangle,
-  Copy, Link as LinkIcon, Ticket
+  Copy, Link as LinkIcon, Ticket, Bug
 } from 'lucide-react';
+import { debugAuthToken, clearAuthAndReload } from '../utils/debugAuth';
 
 export default function Family() {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export default function Family() {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showGenerateCodeModal, setShowGenerateCodeModal] = useState(false);
   const [showJoinFamilyModal, setShowJoinFamilyModal] = useState(false);
+  const [authError, setAuthError] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -29,6 +31,7 @@ export default function Family() {
 
   const fetchData = async () => {
     setLoading(true);
+    setAuthError(false);
     try {
       const [familiesRes, invitationsRes] = await Promise.all([
         api.get('/families'),
@@ -42,7 +45,13 @@ export default function Family() {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      toast.error(t('family.failedToLoad'));
+      
+      if (error.response?.status === 403 || error.response?.status === 401) {
+        setAuthError(true);
+        toast.error('Authentication error. Please log in again.');
+      } else {
+        toast.error(t('family.failedToLoad'));
+      }
     } finally {
       setLoading(false);
     }
@@ -299,6 +308,42 @@ export default function Family() {
 
   return (
     <div className="space-y-6">
+        {/* Auth Error Banner */}
+        {authError && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                <div>
+                  <h3 className="font-semibold text-red-900 dark:text-red-100">
+                    Authentication Error
+                  </h3>
+                  <p className="text-sm text-red-700 dark:text-red-300">
+                    Your session may have expired. Please log in again.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    debugAuthToken();
+                    toast('Check console for details', { icon: '🔍' });
+                  }}
+                  className="px-3 py-1.5 text-sm border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 rounded hover:bg-red-100 dark:hover:bg-red-900/30"
+                >
+                  Debug
+                </button>
+                <button
+                  onClick={clearAuthAndReload}
+                  className="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Re-login
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -310,6 +355,17 @@ export default function Family() {
             </p>
           </div>
           <div className="flex gap-3">
+            {/* Debug button - remove in production */}
+            <button
+              onClick={() => {
+                debugAuthToken();
+                toast('Check console (F12) for auth debug info', { icon: '🔍' });
+              }}
+              className="flex items-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              title="Debug Authentication"
+            >
+              <Bug className="h-4 w-4" />
+            </button>
             <button
               onClick={() => setShowJoinFamilyModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"

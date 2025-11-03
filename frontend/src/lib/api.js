@@ -11,6 +11,14 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+    console.log('API Request:', {
+      url: config.url,
+      method: config.method,
+      hasToken: !!token,
+      tokenPreview: token.substring(0, 20) + '...'
+    });
+  } else {
+    console.warn('No token found for request:', config.url);
   }
   return config;
 });
