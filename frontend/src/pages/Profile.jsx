@@ -34,15 +34,32 @@ const Profile = () => {
   // Loading states
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
+    // Fetch full profile data from backend
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/profile`);
+        setProfileData(response.data);
+        
+        // Update user in context with created_at
+        const updatedUser = { ...user, created_at: response.data.created_at };
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
     if (user) {
       setProfileForm({
         full_name: user.full_name || '',
         email: user.email || ''
       });
+      fetchProfile();
     }
-  }, [user]);
+  }, [user?.id]); // Only re-run if user ID changes
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
@@ -341,7 +358,7 @@ const Profile = () => {
               {t('profile.accountCreated') || 'Account Created:'}
             </span>
             <span className="ml-2 text-gray-900 dark:text-gray-100 font-medium">
-              {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
+              {profileData?.created_at ? new Date(profileData.created_at).toLocaleDateString() : 'Loading...'}
             </span>
           </div>
           <div>
