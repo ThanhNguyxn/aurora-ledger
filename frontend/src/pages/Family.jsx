@@ -206,12 +206,24 @@ export default function Family() {
     
     console.log('Generating invite code for family:', selectedFamily);
     
+    // Convert to int, treat 0 or empty as null (unlimited)
+    const maxUses = formData.get('max_uses');
+    const expiresInDays = formData.get('expires_in_days');
+    
+    const maxUsesValue = maxUses && parseInt(maxUses) > 0 ? parseInt(maxUses) : null;
+    const expiresValue = expiresInDays && parseInt(expiresInDays) > 0 ? parseInt(expiresInDays) : null;
+    
     try {
       await api.post(`/families/${selectedFamily}/invite-codes`, {
-        max_uses: formData.get('max_uses') ? parseInt(formData.get('max_uses')) : null,
-        expires_in_days: formData.get('expires_in_days') ? parseInt(formData.get('expires_in_days')) : null
+        max_uses: maxUsesValue,
+        expires_in_days: expiresValue
       });
-      toast.success(t('family.inviteCode.codeGenerated'));
+      
+      const message = maxUsesValue || expiresValue 
+        ? t('family.inviteCode.codeGenerated')
+        : 'Unlimited invite code created! ♾️';
+      toast.success(message);
+      
       setShowGenerateCodeModal(false);
       selectFamily(selectedFamily);
     } catch (error) {
@@ -879,12 +891,12 @@ export default function Family() {
                 <input
                   type="number"
                   name="max_uses"
-                  min="1"
+                  min="0"
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder={t('family.inviteCode.unlimited')}
+                  placeholder="0 = Unlimited"
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {t('family.inviteCode.unlimitedUsesHelp')}
+                  💡 Leave empty or enter 0 for unlimited uses
                 </p>
               </div>
               <div>
@@ -894,12 +906,12 @@ export default function Family() {
                 <input
                   type="number"
                   name="expires_in_days"
-                  min="1"
+                  min="0"
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder={t('family.inviteCode.noExpirationHelp')}
+                  placeholder="0 = Never expires"
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {t('family.inviteCode.noExpirationHelp')}
+                  💡 Leave empty or enter 0 for permanent link
                 </p>
               </div>
               <div className="flex gap-3">

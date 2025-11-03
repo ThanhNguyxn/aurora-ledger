@@ -37,6 +37,41 @@
   - Impact: Generate Invite Code modal now works correctly
   - Status: FIXED and committed ✅
 
+- [x] **Family Invite Link Issues** - Fixed ✅
+  - Issues Fixed:
+    1. 403 Forbidden errors when accessing family details
+    2. Blank screen on `/join-family?code=XXX` page
+    3. Invite link not working (modal input worked)
+    4. No automatic token cleanup when expired
+  - Solutions Implemented:
+    - Created `JoinFamily.jsx` page to handle invite links from URL
+    - Fixed dark mode classes causing blank screen (inline styles)
+    - Added comprehensive authentication debugging tools
+    - Implemented automatic token expiration management (30-day expiry)
+    - Auto-cleanup expired tokens before API requests
+    - Enhanced error messages and user feedback
+  - New Features:
+    - Debug button on Family page to check auth status
+    - Authentication error banner with re-login option
+    - Token validation on app load
+    - Detailed console logging for troubleshooting
+  - Status: COMPLETE and deployed ✅
+
+- [x] **Unlimited Invite Codes** - Implemented ✅
+  - Feature: Allow creating invite codes with unlimited uses and no expiration
+  - Implementation:
+    - Enter 0 or leave empty for Max Uses → Unlimited users can join
+    - Enter 0 or leave empty for Expiry Days → Link never expires
+    - Updated UI with clear placeholders: "0 = Unlimited", "0 = Never expires"
+    - Added helpful hints with 💡 emoji
+    - Backend already supported null values (unlimited)
+    - Frontend now properly converts 0 or empty to null
+  - UX Improvements:
+    - Changed min from 1 to 0 on both inputs
+    - Special toast message: "Unlimited invite code created! ♾️"
+    - Clear documentation in placeholders
+  - Status: COMPLETE ✅
+
 - [ ] **Analytics & Family pages showing blank screen** - FAILED ATTEMPTS ❌
   - Root Cause: Double Layout wrapper (Layout in App.jsx + Layout in page components)
   - Attempted Solutions:
@@ -309,7 +344,7 @@
 **Backend:**
 - Node.js v22 + Express
 - PostgreSQL (20+ tables, Neon serverless)
-- JWT authentication (7-day expiry)
+- JWT authentication (30-day expiry, auto-cleanup)
 - Bcrypt password hashing
 - Passport.js (OAuth support)
 - Node-cron (recurring transaction processor)
@@ -372,13 +407,15 @@
 - Recurring transactions (auto-creation via cron job)
 - Budgets with smart AI suggestions (50/30/20, 60/20/20, 70/20/10, Zero-based)
 - Saving goals with contribution tracking
-- Family sharing (roles, invitations, shared budgets/goals)
+- Family sharing (roles, invitations, shared budgets/goals, unlimited invite codes)
 - Advanced analytics (anomalies, YoY, velocity, patterns)
 - Reports with CSV/PDF export
 - OAuth login (Google)
 - Password reset via email
 - Admin dashboard
 - React Query caching (5min TTL)
+- JWT auto token management (30-day expiry, auto-cleanup)
+- Comprehensive auth debugging tools
 
 ⚠️ **Partially Implemented:**
 - Mobile responsive (needs optimization)

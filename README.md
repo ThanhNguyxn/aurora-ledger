@@ -141,10 +141,12 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 - 👥 **Member Roles** - Owner, Admin, Member, Viewer with permissions
 - 📧 **Email Invitations** - Send invites by email with accept/decline
 - 🎟️ **Invite Codes** - Generate shareable codes to join family groups
-  - Customizable expiry dates and usage limits
-  - Copy code or full join link with one click
-  - Track code usage and deactivate anytime
-  - No email required - perfect for quick sharing
+  - ♾️ **Unlimited options** - 0 or empty = no expiry, unlimited uses
+  - 📅 Customizable expiry dates (days) or permanent links
+  - 👥 Set usage limits or allow unlimited joins
+  - 🔗 Copy code or full join link with one click
+  - 📊 Track code usage and deactivate anytime
+  - ✉️ No email required - perfect for quick sharing
 - 💰 **Shared Budgets** - Collaborative budget planning and tracking
 - 🎯 **Shared Goals** - Family savings goals with contributions
 - 💸 **Expense Splitting** - Split bills by percentage or fixed amount
@@ -172,7 +174,8 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 
 ### 🔐 Security & Authentication
 - 🔒 **Bcrypt Encryption** - Military-grade password hashing
-- 🎫 **JWT Tokens** - Secure stateless authentication (7-day expiry)
+- 🎫 **JWT Tokens** - Secure stateless authentication (30-day expiry)
+- 🗑️ **Auto Token Cleanup** - Expired tokens automatically removed
 - 🛡️ **SQL Protection** - Parameterized queries prevent injection
 - 🔐 **HTTPS Only** - All data encrypted in transit
 - 👤 **Data Privacy** - Complete isolation between user accounts
@@ -199,7 +202,8 @@ Track expenses • Manage budgets • Analyze finances • Multi-currency suppor
 ## 🔐 Security
 
 - 🔒 **Password Encryption** - Bcrypt hashing with 10 salt rounds
-- 🎫 **JWT Authentication** - Secure token-based authentication (7-day expiry)
+- 🎫 **JWT Authentication** - Secure token-based authentication (30-day expiry)
+- 🗑️ **Auto Token Management** - Expired tokens automatically cleaned up
 - 🛡️ **SQL Injection Protection** - Parameterized database queries
 - 🔐 **HTTPS Only** - SSL/TLS encryption for all connections
 - 👤 **Data Isolation** - Complete user data privacy
