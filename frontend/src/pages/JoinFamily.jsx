@@ -69,13 +69,13 @@ export default function JoinFamily() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f9fafb' }}>
         <div className="text-center">
           <Loader2 className="h-16 w-16 text-blue-600 animate-spin mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-2xl font-bold mb-2" style={{ color: '#111827' }}>
             Joining Family...
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p style={{ color: '#6b7280' }}>
             Please wait while we process your invite
           </p>
         </div>
@@ -85,24 +85,24 @@ export default function JoinFamily() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f9fafb' }}>
         <div className="max-w-md w-full mx-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+          <div className="rounded-lg shadow-lg p-8" style={{ backgroundColor: '#ffffff' }}>
             <div className="text-center">
-              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <AlertCircle className="h-8 w-8 text-red-600 dark:text-red-400" />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#fee2e2' }}>
+                <AlertCircle className="h-8 w-8 text-red-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="text-2xl font-bold mb-2" style={{ color: '#111827' }}>
                 Unable to Join Family
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
+              <p className="mb-4" style={{ color: '#6b7280' }}>
                 {error}
               </p>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded p-3 mb-6 text-sm text-left">
-                <p className="text-gray-700 dark:text-gray-300">
+              <div className="rounded p-3 mb-6 text-sm text-left" style={{ backgroundColor: '#f3f4f6' }}>
+                <p style={{ color: '#374151' }}>
                   <strong>Invite Code:</strong> {searchParams.get('code') || 'Not found'}
                 </p>
-                <p className="text-gray-500 dark:text-gray-400 mt-2 text-xs">
+                <p className="mt-2 text-xs" style={{ color: '#9ca3af' }}>
                   Check browser console (F12) for detailed error logs
                 </p>
               </div>
@@ -140,22 +140,22 @@ export default function JoinFamily() {
 
   // Success state
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f9fafb' }}>
       <div className="max-w-md w-full mx-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div className="rounded-lg shadow-lg p-8" style={{ backgroundColor: '#ffffff' }}>
           <div className="text-center">
-            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#d1fae5' }}>
+              <Check className="h-8 w-8 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold mb-2" style={{ color: '#111827' }}>
               Successfully Joined!
             </h2>
             {familyInfo && (
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              <p className="mb-6" style={{ color: '#6b7280' }}>
                 Welcome to <span className="font-semibold">{familyInfo.name}</span>
               </p>
             )}
-            <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+            <p className="text-sm mb-6" style={{ color: '#9ca3af' }}>
               Redirecting to family page...
             </p>
             <button
