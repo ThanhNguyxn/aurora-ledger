@@ -559,6 +559,15 @@ router.post('/:id/invite-codes', authMiddleware, async (req, res) => {
       expiresAt.setDate(expiresAt.getDate() + parseInt(expires_in_days));
     }
 
+    console.log('Creating invite code with params:', {
+      family_id: id,
+      code: inviteCode,
+      created_by: userId,
+      expires_at: expiresAt,
+      max_uses: max_uses,
+      role: role
+    });
+
     // Insert invite code with role
     const { rows } = await pool.query(
       `INSERT INTO family_invite_codes 
@@ -568,13 +577,24 @@ router.post('/:id/invite-codes', authMiddleware, async (req, res) => {
       [id, inviteCode, userId, expiresAt, max_uses, role]
     );
 
+    console.log('Invite code created successfully:', rows[0]);
+
     res.status(201).json({
       message: 'Invite code created successfully',
       inviteCode: rows[0]
     });
   } catch (error) {
     console.error('Error creating invite code:', error);
-    res.status(500).json({ error: 'Failed to create invite code' });
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      detail: error.detail,
+      constraint: error.constraint
+    });
+    res.status(500).json({ 
+      error: 'Failed to create invite code',
+      details: error.message // Show error details for debugging
+    });
   }
 });
 
