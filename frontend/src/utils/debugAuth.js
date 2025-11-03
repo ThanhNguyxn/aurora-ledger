@@ -1,4 +1,10 @@
 // Debug utility to check authentication status
+import { 
+  isTokenExpired, 
+  getTokenExpiration, 
+  getTimeUntilExpiration,
+  getTokenExpirationMessage 
+} from './tokenManager';
 
 export const debugAuthToken = () => {
   const token = localStorage.getItem('token');
@@ -11,6 +17,11 @@ export const debugAuthToken = () => {
   if (token) {
     console.log('Token Length:', token.length);
     console.log('Token Preview:', token.substring(0, 30) + '...');
+    
+    // Use tokenManager utilities
+    console.log('Is Expired:', isTokenExpired(token));
+    console.log('Expiration Date:', getTokenExpiration(token)?.toLocaleString());
+    console.log('Time Until Expiration:', getTokenExpirationMessage());
     
     // Try to decode JWT (without verification)
     try {
@@ -25,8 +36,9 @@ export const debugAuthToken = () => {
       const decoded = JSON.parse(jsonPayload);
       console.log('Token Payload:', decoded);
       console.log('Token Issued:', new Date(decoded.iat * 1000).toLocaleString());
-      console.log('Token Expires:', new Date(decoded.exp * 1000).toLocaleString());
-      console.log('Is Expired:', Date.now() > decoded.exp * 1000);
+      console.log('User ID:', decoded.id || decoded.userId);
+      console.log('Email:', decoded.email);
+      console.log('Role:', decoded.role);
     } catch (e) {
       console.error('Failed to decode token:', e);
     }
