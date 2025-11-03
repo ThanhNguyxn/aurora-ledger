@@ -1,18 +1,21 @@
 # Token Expiration Update
 
-## ⚠️ IMPORTANT: Update Environment Variable on Vercel
+## ⚠️ IMPORTANT: Update Environment Variable on Render
 
 The JWT token expiration time has been increased from **7 days** to **30 days** to improve user experience.
 
 ### Action Required:
 
-1. Go to your Vercel project: https://vercel.com/dashboard
-2. Navigate to **Settings** → **Environment Variables**
-3. Update (or add if not exists):
+1. Go to your Render dashboard: https://dashboard.render.com/
+2. Select your **backend service** (aurora-ledger-backend)
+3. Click **Environment** tab
+4. Update (or add if not exists):
    ```
-   JWT_EXPIRES_IN=30d
+   Key: JWT_EXPIRES_IN
+   Value: 30d
    ```
-4. **Redeploy** your backend for the changes to take effect
+5. Click **Save Changes**
+6. Render will **automatically redeploy** the backend (~2-5 minutes)
 
 ### What Changed:
 
