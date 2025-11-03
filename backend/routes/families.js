@@ -526,7 +526,12 @@ router.post('/:id/invite-codes', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    const { expires_in_days, max_uses } = req.body;
+    const { expires_in_days, max_uses, role = 'contributor' } = req.body;
+
+    // Validate role
+    if (!['manager', 'contributor', 'observer'].includes(role)) {
+      return res.status(400).json({ error: 'Invalid role. Must be manager, contributor, or observer' });
+    }
 
     // Check permission (head or manager can create invite codes)
     const { rows: memberRows } = await pool.query(
@@ -538,8 +543,8 @@ router.post('/:id/invite-codes', authMiddleware, async (req, res) => {
       return res.status(403).json({ error: 'You are not a member of this family' });
     }
 
-    const role = memberRows[0].role;
-    if (role !== 'head' && role !== 'manager') {
+    const creatorRole = memberRows[0].role;
+    if (creatorRole !== 'head' && creatorRole !== 'manager') {
       return res.status(403).json({ error: 'Only heads and managers can create invite codes' });
     }
 
@@ -554,13 +559,13 @@ router.post('/:id/invite-codes', authMiddleware, async (req, res) => {
       expiresAt.setDate(expiresAt.getDate() + parseInt(expires_in_days));
     }
 
-    // Insert invite code
+    // Insert invite code with role
     const { rows } = await pool.query(
       `INSERT INTO family_invite_codes 
-       (family_id, code, created_by, expires_at, max_uses, uses_count)
-       VALUES ($1, $2, $3, $4, $5, 0)
+       (family_id, code, created_by, expires_at, max_uses, uses_count, role)
+       VALUES ($1, $2, $3, $4, $5, 0, $6)
        RETURNING *`,
-      [id, inviteCode, userId, expiresAt, max_uses]
+      [id, inviteCode, userId, expiresAt, max_uses, role]
     );
 
     res.status(201).json({
@@ -681,12 +686,15 @@ router.post('/join', authMiddleware, async (req, res) => {
     }
 
     const inviteCode = codeRows[0];
+    const assignedRole = inviteCode.role || 'contributor'; // Default to contributor if role is null
+    
     console.log('Invite code details:', {
       family_id: inviteCode.family_id,
       family_name: inviteCode.family_name,
       expires_at: inviteCode.expires_at,
       max_uses: inviteCode.max_uses,
-      uses_count: inviteCode.uses_count
+      uses_count: inviteCode.uses_count,
+      assigned_role: assignedRole
     });
 
     // Check if code is expired
@@ -715,11 +723,11 @@ router.post('/join', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'You are already a member of this family' });
     }
 
-    // Add user to family as contributor
+    // Add user to family with role from invite code
     await client.query(
       `INSERT INTO family_members (family_id, user_id, role, status, joined_at)
-       VALUES ($1, $2, 'contributor', 'active', CURRENT_TIMESTAMP)`,
-      [inviteCode.family_id, userId]
+       VALUES ($1, $2, $3, 'active', CURRENT_TIMESTAMP)`,
+      [inviteCode.family_id, userId, assignedRole]
     );
 
     // Increment uses count

@@ -222,6 +222,7 @@ export default function Family() {
     // Convert to int, treat 0 or empty as null (unlimited)
     const maxUses = formData.get('max_uses');
     const expiresInDays = formData.get('expires_in_days');
+    const role = formData.get('role') || 'contributor';
     
     const maxUsesValue = maxUses && parseInt(maxUses) > 0 ? parseInt(maxUses) : null;
     const expiresValue = expiresInDays && parseInt(expiresInDays) > 0 ? parseInt(expiresInDays) : null;
@@ -229,12 +230,13 @@ export default function Family() {
     try {
       await api.post(`/families/${selectedFamily}/invite-codes`, {
         max_uses: maxUsesValue,
-        expires_in_days: expiresValue
+        expires_in_days: expiresValue,
+        role: role
       });
       
       const message = maxUsesValue || expiresValue 
         ? t('family.inviteCode.codeGenerated')
-        : 'Unlimited invite code created! ♾️';
+        : `Unlimited invite code created! ♾️ (Role: ${t(`family.roles.${role}`)})`;
       toast.success(message);
       
       setShowGenerateCodeModal(false);
@@ -701,6 +703,12 @@ export default function Family() {
                                     Inactive
                                   </span>
                                 )}
+                                {code.role && (
+                                  <span className={`px-2 py-1 rounded text-xs font-semibold ${getRoleBadgeColor(code.role)}`}>
+                                    {getRoleIcon(code.role)}
+                                    {t(`family.roles.${code.role}`)}
+                                  </span>
+                                )}
                               </div>
                               <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                                 <p>
@@ -897,6 +905,23 @@ export default function Family() {
               </button>
             </div>
             <form onSubmit={handleGenerateInviteCode} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('family.inviteRole')} *
+                </label>
+                <select
+                  name="role"
+                  defaultValue="contributor"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  <option value="manager">{t('family.roles.manager')} - {t('family.inviteCode.managerRoleDescription') || 'Can manage budgets & members'}</option>
+                  <option value="contributor">{t('family.roles.contributor')} - {t('family.inviteCode.contributorRoleDescription') || 'Can add transactions'}</option>
+                  <option value="observer">{t('family.roles.observer')} - {t('family.inviteCode.observerRoleDescription') || 'View only'}</option>
+                </select>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  👥 All users joining via this link will get this role
+                </p>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t('family.inviteCode.maxUses')}
