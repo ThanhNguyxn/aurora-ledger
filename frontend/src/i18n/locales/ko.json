@@ -256,7 +256,15 @@
     "day": "일",
     "week": "주",
     "month": "월",
-    "year": "년"
+    "year": "년",
+    "testRecurringNow": "지금 반복 거래 테스트",
+    "testRecurringDesc": "만기 반복 거래를 즉시 처리 (일반적으로 00:05에 실행)",
+    "runNow": "지금 실행",
+    "noRecurring": "아직 반복 거래가 없습니다",
+    "addFirstRecurring": "첫 번째 반복 거래 추가",
+    "next": "다음",
+    "ends": "종료",
+    "processed": "반복 거래가 성공적으로 처리되었습니다!"
   },
   "profile": {
     "title": "프로필 설정",

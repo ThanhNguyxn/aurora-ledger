@@ -256,7 +256,15 @@
     "day": "天",
     "week": "周",
     "month": "月",
-    "year": "年"
+    "year": "年",
+    "testRecurringNow": "立即测试定期交易",
+    "testRecurringDesc": "立即处理到期的定期交易（通常在凌晨00:05运行）",
+    "runNow": "立即运行",
+    "noRecurring": "暂无定期交易",
+    "addFirstRecurring": "添加第一个定期交易",
+    "next": "下次",
+    "ends": "结束",
+    "processed": "定期交易处理成功！"
   },
   "profile": {
     "title": "个人资料设置",

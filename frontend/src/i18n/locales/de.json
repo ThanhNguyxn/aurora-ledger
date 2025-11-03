@@ -256,7 +256,15 @@
     "day": "Tag",
     "week": "Woche",
     "month": "Monat",
-    "year": "Jahr"
+    "year": "Jahr",
+    "testRecurringNow": "Wiederkehrend jetzt testen",
+    "testRecurringDesc": "Fällige wiederkehrende Transaktionen sofort verarbeiten (läuft normalerweise um 00:05 Uhr)",
+    "runNow": "Jetzt ausführen",
+    "noRecurring": "Noch keine wiederkehrenden Transaktionen",
+    "addFirstRecurring": "Erste wiederkehrende Transaktion hinzufügen",
+    "next": "Nächste",
+    "ends": "Endet",
+    "processed": "Wiederkehrende Transaktionen erfolgreich verarbeitet!"
   },
   "profile": {
     "title": "Profileinstellungen",

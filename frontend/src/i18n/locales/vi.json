@@ -256,7 +256,15 @@
     "day": "ngày",
     "week": "tuần",
     "month": "tháng",
-    "year": "năm"
+    "year": "năm",
+    "testRecurringNow": "Kiểm tra định kỳ ngay",
+    "testRecurringDesc": "Xử lý các giao dịch định kỳ đến hạn ngay lập tức (thường chạy lúc 00:05 sáng)",
+    "runNow": "Chạy ngay",
+    "noRecurring": "Chưa có giao dịch định kỳ",
+    "addFirstRecurring": "Thêm giao dịch định kỳ đầu tiên",
+    "next": "Kế tiếp",
+    "ends": "Kết thúc",
+    "processed": "Đã xử lý giao dịch định kỳ thành công!"
   },
   "profile": {
     "title": "Cài Đặt Tài Khoản",

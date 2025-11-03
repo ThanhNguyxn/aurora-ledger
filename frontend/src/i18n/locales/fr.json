@@ -256,7 +256,15 @@
     "day": "jour",
     "week": "semaine",
     "month": "mois",
-    "year": "année"
+    "year": "année",
+    "testRecurringNow": "Tester récurrent maintenant",
+    "testRecurringDesc": "Traiter immédiatement les transactions récurrentes dues (s'exécute normalement à 00h05)",
+    "runNow": "Exécuter maintenant",
+    "noRecurring": "Aucune transaction récurrente pour le moment",
+    "addFirstRecurring": "Ajouter la première transaction récurrente",
+    "next": "Suivant",
+    "ends": "Se termine",
+    "processed": "Transactions récurrentes traitées avec succès !"
   },
   "profile": {
     "title": "Paramètres du profil",
