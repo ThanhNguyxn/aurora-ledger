@@ -97,20 +97,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Manual trigger endpoint for testing (admin only)
-app.post('/api/admin/trigger-recurring', async (req, res) => {
-  try {
-    console.log('🔄 Manually triggering recurring transactions processor...');
-    const result = await processRecurringTransactions();
-    res.json({ 
-      message: 'Recurring transactions processed',
-      result 
-    });
-  } catch (error) {
-    console.error('❌ Manual recurring processing failed:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // Setup recurring transactions cron job
 // Run every day at 00:05 (5 minutes after midnight)

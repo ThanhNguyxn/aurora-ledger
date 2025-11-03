@@ -344,4 +344,34 @@ router.get('/stats', authenticateToken, isAdmin, async (req, res) => {
   }
 });
 
+// Manual trigger for recurring transactions (admin only)
+router.post('/trigger-recurring', authenticateToken, isAdmin, async (req, res) => {
+  try {
+    console.log('🔄 Manually triggering recurring transactions processor...');
+    const result = await processRecurringTransactions();
+    res.json({ 
+      message: 'Recurring transactions processed successfully',
+      result 
+    });
+  } catch (error) {
+    console.error('❌ Manual recurring processing failed:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Manual trigger for recurring transactions (admin only)
+router.post('/trigger-recurring', authenticateToken, isAdmin, async (req, res) => {
+  try {
+    console.log('🔄 Manually triggering recurring transactions processor...');
+    const result = await processRecurringTransactions();
+    res.json({ 
+      message: 'Recurring transactions processed successfully',
+      result 
+    });
+  } catch (error) {
+    console.error('❌ Manual recurring processing failed:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;
