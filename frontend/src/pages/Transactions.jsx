@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
-import { Plus, Pencil, Trash2, Filter, Download } from 'lucide-react';
+import { Plus, Pencil, Trash2, Filter, Download, Repeat, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { enUS, vi, es, fr, de, zhCN, ja, ko, pt, ru } from 'date-fns/locale';
 import toast from 'react-hot-toast';
@@ -16,11 +16,15 @@ const Transactions = () => {
     const locales = { en: enUS, vi: vi, es: es, fr: fr, de: de, zh: zhCN, ja: ja, ko: ko, pt: pt, ru: ru };
     return locales[i18n.language] || enUS;
   };
+  const [viewMode, setViewMode] = useState('transactions'); // 'transactions' or 'recurring'
   const [transactions, setTransactions] = useState([]);
+  const [recurringList, setRecurringList] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showRecurringModal, setShowRecurringModal] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [editingRecurring, setEditingRecurring] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [filters, setFilters] = useState({
@@ -34,7 +38,10 @@ const Transactions = () => {
     setCurrentPage(1); // Reset to page 1 when filters change
     fetchTransactions();
     fetchCategories();
-  }, [filters, currency]); // Add currency dependency
+    if (viewMode === 'recurring') {
+      fetchRecurring();
+    }
+  }, [filters, currency, viewMode]); // Add viewMode dependency
 
   const fetchTransactions = async () => {
     try {
@@ -64,6 +71,22 @@ const Transactions = () => {
       setCategories(response.data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const fetchRecurring = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/recurring');
+      setRecurringList(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.error('Error fetching recurring:', error);
+      setRecurringList([]);
+      if (error.response?.status !== 404 && error.response?.status !== 502) {
+        toast.error('Failed to load recurring transactions');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,27 +147,59 @@ const Transactions = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
+      {/* Header with Tab Toggle */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h1 className="text-2xl sm:text-3xl font-bold">{t('transactions.title')}</h1>
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t('transactions.title')}</h1>
+          {/* Tab Toggle */}
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={() => setViewMode('transactions')}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                viewMode === 'transactions'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
+            >
+              📊 {t('transactions.title')}
+            </button>
+            <button
+              onClick={() => setViewMode('recurring')}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                viewMode === 'recurring'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
+            >
+              🔁 {t('recurring.title')}
+            </button>
+          </div>
+        </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
-          <button onClick={handleExport} className="btn btn-secondary flex items-center justify-center gap-2">
-            <Download size={20} />
-            <span className="hidden sm:inline">{t('transactions.exportCSV')}</span>
-            <span className="sm:hidden">Export</span>
-          </button>
-          <button onClick={handleAdd} className="btn btn-primary flex items-center justify-center gap-2">
+          {viewMode === 'transactions' && (
+            <button onClick={handleExport} className="btn btn-secondary flex items-center justify-center gap-2">
+              <Download size={20} />
+              <span className="hidden sm:inline">{t('transactions.exportCSV')}</span>
+              <span className="sm:hidden">Export</span>
+            </button>
+          )}
+          <button 
+            onClick={() => viewMode === 'transactions' ? handleAdd() : setShowRecurringModal(true)} 
+            className="btn btn-primary flex items-center justify-center gap-2"
+          >
             <Plus size={20} />
-            <span>{t('transactions.addTransaction')}</span>
+            <span>{viewMode === 'transactions' ? t('transactions.addTransaction') : t('recurring.addRecurring')}</span>
           </button>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="card">
-        <div className="flex items-center gap-2 mb-4">
-          <Filter size={20} className="text-gray-600 dark:text-gray-400" />
-          <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">{t('transactions.filters')}</h2>
-        </div>
+      {/* Filters - Only show for transactions view */}
+      {viewMode === 'transactions' && (
+        <div className="card">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter size={20} className="text-gray-600 dark:text-gray-400" />
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">{t('transactions.filters')}</h2>
+          </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <select
             value={filters.type}
@@ -185,23 +240,25 @@ const Transactions = () => {
             placeholder={t('transactions.endDate')}
           />
         </div>
-        {(filters.type || filters.category_id || filters.start_date || filters.end_date) && (
-          <button
-            onClick={() => setFilters({ type: '', category_id: '', start_date: '', end_date: '' })}
-            className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            {t('transactions.clearFilters')}
-          </button>
-        )}
-      </div>
+          {(filters.type || filters.category_id || filters.start_date || filters.end_date) && (
+            <button
+              onClick={() => setFilters({ type: '', category_id: '', start_date: '', end_date: '' })}
+              className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              {t('transactions.clearFilters')}
+            </button>
+          )}
+        </div>
+      )}
 
-      {/* Transactions List */}
-      <div className="card">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          </div>
-        ) : transactions.length > 0 ? (
+      {/* Transactions List - Only show for transactions view */}
+      {viewMode === 'transactions' && (
+        <div className="card">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          ) : transactions.length > 0 ? (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -307,12 +364,24 @@ const Transactions = () => {
               </div>
             )}
           </>
-        ) : (
-          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-            {t('transactions.noTransactions')}
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              {t('transactions.noTransactions')}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Recurring List - Only show for recurring view */}
+      {viewMode === 'recurring' && (
+        <div className="card">
+          <p className="text-center py-8 text-gray-500 dark:text-gray-400">
+            🔁 Recurring transactions feature coming soon!
+            <br/>
+            <span className="text-sm mt-2 block">Use the Recurring tab in sidebar for now.</span>
+          </p>
+        </div>
+      )}
 
       {showModal && (
         <TransactionModal
