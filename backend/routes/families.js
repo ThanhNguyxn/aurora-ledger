@@ -653,6 +653,10 @@ router.post('/join', authMiddleware, async (req, res) => {
     const { code } = req.body;
     const userId = req.user.id;
 
+    console.log('=== JOIN FAMILY REQUEST ===');
+    console.log('User ID:', userId);
+    console.log('Invite Code:', code);
+
     if (!code) {
       return res.status(400).json({ error: 'Invite code is required' });
     }
@@ -668,22 +672,34 @@ router.post('/join', authMiddleware, async (req, res) => {
       [code.toUpperCase()]
     );
 
+    console.log('Code lookup result:', codeRows.length > 0 ? 'Found' : 'Not found');
+
     if (codeRows.length === 0) {
       await client.query('ROLLBACK');
+      console.log('Error: Code not found or inactive');
       return res.status(404).json({ error: 'Invalid or expired invite code' });
     }
 
     const inviteCode = codeRows[0];
+    console.log('Invite code details:', {
+      family_id: inviteCode.family_id,
+      family_name: inviteCode.family_name,
+      expires_at: inviteCode.expires_at,
+      max_uses: inviteCode.max_uses,
+      uses_count: inviteCode.uses_count
+    });
 
     // Check if code is expired
-    if (new Date(inviteCode.expires_at) < new Date()) {
+    if (inviteCode.expires_at && new Date(inviteCode.expires_at) < new Date()) {
       await client.query('ROLLBACK');
+      console.log('Error: Code expired at', inviteCode.expires_at);
       return res.status(400).json({ error: 'This invite code has expired' });
     }
 
     // Check max uses
     if (inviteCode.max_uses && inviteCode.uses_count >= inviteCode.max_uses) {
       await client.query('ROLLBACK');
+      console.log('Error: Code reached max uses');
       return res.status(400).json({ error: 'This invite code has reached its maximum uses' });
     }
 
@@ -695,6 +711,7 @@ router.post('/join', authMiddleware, async (req, res) => {
 
     if (existingMember.length > 0) {
       await client.query('ROLLBACK');
+      console.log('Error: User already a member');
       return res.status(400).json({ error: 'You are already a member of this family' });
     }
 
@@ -713,6 +730,7 @@ router.post('/join', authMiddleware, async (req, res) => {
 
     await client.query('COMMIT');
 
+    console.log('Success: User joined family');
     res.json({
       message: 'Successfully joined family',
       family: {

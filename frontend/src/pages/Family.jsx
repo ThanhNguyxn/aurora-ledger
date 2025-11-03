@@ -59,7 +59,16 @@ export default function Family() {
       setSelectedFamily(familyId);
     } catch (error) {
       console.error('Error fetching family details:', error);
-      toast.error('Failed to load family details');
+      const errorMsg = error.response?.data?.error || 'Failed to load family details';
+      
+      // Handle specific error cases
+      if (error.response?.status === 403) {
+        toast.error(t('family.accessDenied') || 'Access denied. You may not have permission to view this family.');
+      } else if (error.response?.status === 401) {
+        toast.error('Session expired. Please log in again.');
+      } else {
+        toast.error(errorMsg);
+      }
     }
   };
 
@@ -233,15 +242,30 @@ export default function Family() {
     const formData = new FormData(e.target);
     const code = formData.get('code').trim();
     
+    if (!code) {
+      toast.error('Please enter an invite code');
+      return;
+    }
+    
     try {
-      await api.post('/families/join', { code });
-      toast.success(t('family.inviteCode.joinSuccess'));
+      const response = await api.post('/families/join', { code });
+      toast.success(response.data.message || t('family.inviteCode.joinSuccess'));
       setShowJoinFamilyModal(false);
       fetchData();
     } catch (error) {
       console.error('Error joining family:', error);
       const errorMsg = error.response?.data?.error || t('family.inviteCode.failedToJoin');
-      toast.error(errorMsg);
+      
+      // More specific error messages
+      if (error.response?.status === 404) {
+        toast.error('Invalid or expired invite code. Please check the code and try again.');
+      } else if (error.response?.status === 400) {
+        toast.error(errorMsg); // Show specific error from backend (already member, max uses, etc.)
+      } else if (error.response?.status === 403 || error.response?.status === 401) {
+        toast.error('Authentication error. Please log in again.');
+      } else {
+        toast.error(errorMsg);
+      }
     }
   };
 

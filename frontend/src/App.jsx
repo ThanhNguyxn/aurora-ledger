@@ -18,6 +18,7 @@ import Budgets from './pages/Budgets';
 import Reports from './pages/Reports';
 import Analytics from './pages/Analytics';
 import Family from './pages/Family';
+import JoinFamily from './pages/JoinFamily';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import Layout from './components/Layout';
@@ -63,6 +64,7 @@ function App() {
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/join-family" element={<PrivateRoute><JoinFamily /></PrivateRoute>} />
             
             <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
               <Route index element={<Navigate to="/dashboard" />} />

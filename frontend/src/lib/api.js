@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 errors
+// Handle 401 and 403 errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -23,6 +23,14 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
+    }
+    // Log 403 errors for debugging
+    if (error.response?.status === 403) {
+      console.error('403 Forbidden Error:', {
+        url: error.config?.url,
+        method: error.config?.method,
+        message: error.response?.data?.error
+      });
     }
     return Promise.reject(error);
   }
