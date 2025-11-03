@@ -374,12 +374,131 @@ const Transactions = () => {
 
       {/* Recurring List - Only show for recurring view */}
       {viewMode === 'recurring' && (
-        <div className="card">
-          <p className="text-center py-8 text-gray-500 dark:text-gray-400">
-            🔁 Recurring transactions feature coming soon!
-            <br/>
-            <span className="text-sm mt-2 block">Use the Recurring tab in sidebar for now.</span>
-          </p>
+        <div className="space-y-4">
+          {/* Test Button - Manual Trigger */}
+          <div className="card bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Repeat className="text-blue-600 dark:text-blue-400" size={20} />
+                <div>
+                  <h3 className="font-semibold text-blue-900 dark:text-blue-100">Test Recurring Now</h3>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">Process due recurring transactions immediately (normally runs at 00:05 AM)</p>
+                </div>
+              </div>
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await api.post('/admin/trigger-recurring');
+                    toast.success(response.data.message || 'Recurring transactions processed!');
+                    fetchTransactions(); // Refresh to show new transactions
+                  } catch (error) {
+                    toast.error(error.response?.data?.error || 'Failed to process recurring');
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                ▶️ Run Now
+              </button>
+            </div>
+          </div>
+
+          {/* Recurring List */}
+          {loading ? (
+            <div className="card text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+          ) : recurringList.length === 0 ? (
+            <div className="card text-center py-12">
+              <Repeat className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" />
+              <p className="text-gray-500 dark:text-gray-400">No recurring transactions yet</p>
+              <button
+                onClick={() => setShowRecurringModal(true)}
+                className="mt-4 btn btn-primary"
+              >
+                <Plus size={18} className="inline mr-2" />
+                Add First Recurring
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {recurringList.map((rec) => (
+                <div key={rec.id} className="card">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          rec.type === 'income'
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
+                            : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'
+                        }`}>
+                          {rec.type}
+                        </span>
+                        <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
+                          {rec.frequency}
+                        </span>
+                        {rec.is_active ? (
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                            ✓ Active
+                          </span>
+                        ) : (
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-400">
+                            ○ Inactive
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-xl font-bold mb-1">{formatAmount(rec.amount, rec.currency)}</h3>
+                      {rec.category_name && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">📁 {rec.category_name}</p>
+                      )}
+                      {rec.description && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{rec.description}</p>
+                      )}
+                      <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center gap-1">
+                          <Calendar size={14} />
+                          <span>Next: <span className="font-medium">{new Date(rec.next_occurrence).toLocaleDateString()}</span></span>
+                        </div>
+                        {rec.end_date && <span>• Ends: {new Date(rec.end_date).toLocaleDateString()}</span>}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.patch(`/recurring/${rec.id}/toggle`);
+                            toast.success('Toggled!');
+                            fetchRecurring();
+                          } catch (error) {
+                            toast.error('Failed to toggle');
+                          }
+                        }}
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                        title={rec.is_active ? 'Deactivate' : 'Activate'}
+                      >
+                        {rec.is_active ? '🟢' : '⚪'}
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (window.confirm('Delete this recurring transaction?')) {
+                            try {
+                              await api.delete(`/recurring/${rec.id}`);
+                              toast.success('Deleted!');
+                              fetchRecurring();
+                            } catch (error) {
+                              toast.error('Failed to delete');
+                            }
+                          }
+                        }}
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                      >
+                        <Trash2 size={18} className="text-red-600" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
