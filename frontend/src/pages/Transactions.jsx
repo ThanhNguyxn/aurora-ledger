@@ -8,6 +8,7 @@ import { enUS, vi, es, fr, de, zhCN, ja, ko, pt, ru } from 'date-fns/locale';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
 import { TableSkeleton, ListSkeleton } from '../components/LoadingSkeleton';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 const Transactions = () => {
   const { t, i18n } = useTranslation();
@@ -43,6 +44,13 @@ const Transactions = () => {
       fetchRecurring();
     }
   }, [filters, currency, viewMode]); // Add viewMode dependency
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    onNew: () => viewMode === 'transactions' && handleAdd(),
+    onRecurring: () => window.location.href = '/recurring',
+    onClose: () => setShowModal(false),
+  });
 
   const fetchTransactions = async () => {
     try {
