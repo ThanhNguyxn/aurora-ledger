@@ -184,7 +184,14 @@ const Transactions = () => {
             </button>
           )}
           <button 
-            onClick={() => viewMode === 'transactions' ? handleAdd() : setShowRecurringModal(true)} 
+            onClick={() => {
+              if (viewMode === 'transactions') {
+                handleAdd();
+              } else {
+                // For now, show message. Full recurring modal coming soon!
+                toast('Please use Recurring page from sidebar to add new recurring', { icon: 'ℹ️' });
+              }
+            }} 
             className="btn btn-primary flex items-center justify-center gap-2"
           >
             <Plus size={20} />
@@ -383,14 +390,10 @@ const Transactions = () => {
           ) : recurringList.length === 0 ? (
             <div className="card text-center py-12">
               <Repeat className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" />
-              <p className="text-gray-500 dark:text-gray-400">{t('recurring.noRecurring')}</p>
-              <button
-                onClick={() => setShowRecurringModal(true)}
-                className="mt-4 btn btn-primary"
-              >
-                <Plus size={18} className="inline mr-2" />
-                {t('recurring.addFirstRecurring')}
-              </button>
+              <p className="text-gray-500 dark:text-gray-400 mb-3">{t('recurring.noRecurring')}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">
+                💡 Use Recurring page from sidebar to add new, or tick "Make Recurring" when adding transactions
+              </p>
             </div>
           ) : (
             <div className="space-y-3">
