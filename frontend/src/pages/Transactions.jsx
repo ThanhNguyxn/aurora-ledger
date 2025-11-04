@@ -14,7 +14,7 @@ import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 const Transactions = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const { formatAmount, currency } = useCurrency();
+  const { formatAmount, formatCurrency, currency } = useCurrency();
   
   const getDateLocale = () => {
     const locales = { en: enUS, vi: vi, es: es, fr: fr, de: de, zh: zhCN, ja: ja, ko: ko, pt: pt, ru: ru };
@@ -199,7 +199,6 @@ const Transactions = () => {
               if (viewMode === 'transactions') {
                 handleAdd();
               } else {
-                console.log('Navigating to recurring page...');
                 navigate('/recurring');
               }
             }} 
@@ -326,7 +325,7 @@ const Transactions = () => {
                         }`}
                       >
                         {/* Backend already converted to display_currency, just format */}
-                        {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, currency)}
+                        {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
@@ -413,10 +412,7 @@ const Transactions = () => {
                 💡 Tick "Make Recurring" checkbox when adding transactions
               </p>
               <button
-                onClick={() => {
-                  console.log('Add recurring clicked');
-                  navigate('/recurring');
-                }}
+                onClick={() => navigate('/recurring')}
                 className="btn btn-primary"
               >
                 <Plus size={18} className="inline mr-2" />
@@ -467,10 +463,7 @@ const Transactions = () => {
                     </div>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => {
-                          console.log('Edit recurring:', rec.id);
-                          navigate(`/recurring?edit=${rec.id}`);
-                        }}
+                        onClick={() => navigate(`/recurring?edit=${rec.id}`)}
                         className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
                         title={t('common.edit')}
                       >

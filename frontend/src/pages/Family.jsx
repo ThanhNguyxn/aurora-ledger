@@ -6,9 +6,9 @@ import toast from 'react-hot-toast';
 import {
   Users, Plus, Mail, Shield, Trash2, Settings,
   UserPlus, X, Check, Crown, UserCheck, Eye, AlertTriangle,
-  Copy, Link as LinkIcon, Ticket, Bug
+  Copy, Link as LinkIcon, Ticket
 } from 'lucide-react';
-import { debugAuthToken, clearAuthAndReload } from '../utils/debugAuth';
+import { clearAuthAndReload } from '../utils/debugAuth';
 
 export default function Family() {
   const { t } = useTranslation();
@@ -351,15 +351,6 @@ export default function Family() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    debugAuthToken();
-                    toast('Check console for details', { icon: '🔍' });
-                  }}
-                  className="px-3 py-1.5 text-sm border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 rounded hover:bg-red-100 dark:hover:bg-red-900/30"
-                >
-                  Debug
-                </button>
                 <button
                   onClick={clearAuthAndReload}
                   className="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700"
