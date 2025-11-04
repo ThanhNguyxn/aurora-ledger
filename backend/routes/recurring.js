@@ -65,8 +65,8 @@ router.post('/',
     body('currency').optional().isLength({ min: 3, max: 3 }),
     body('frequency').isIn(['daily', 'weekly', 'monthly', 'yearly']),
     body('start_date').isISO8601().toDate(),
-    body('end_date').optional().isISO8601().toDate(),
-    body('category_id').optional().isInt(),
+    body('end_date').optional({ nullable: true, checkFalsy: true }).isISO8601().toDate(),
+    body('category_id').optional({ nullable: true, checkFalsy: true }).isInt(),
     body('description').optional().trim()
   ],
   async (req, res) => {
@@ -139,9 +139,9 @@ router.put('/:id',
     body('currency').optional().isLength({ min: 3, max: 3 }),
     body('frequency').optional().isIn(['daily', 'weekly', 'monthly', 'yearly']),
     body('start_date').optional().isISO8601().toDate(),
-    body('end_date').optional().isISO8601().toDate(),
+    body('end_date').optional({ nullable: true, checkFalsy: true }).isISO8601().toDate(),
     body('is_active').optional().isBoolean(),
-    body('category_id').optional().isInt(),
+    body('category_id').optional({ nullable: true, checkFalsy: true }).isInt(),
     body('description').optional().trim()
   ],
   async (req, res) => {
