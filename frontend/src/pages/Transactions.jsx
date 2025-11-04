@@ -461,6 +461,13 @@ const Transactions = () => {
                     </div>
                     <div className="flex gap-2">
                       <button
+                        onClick={() => window.location.href = `/recurring?edit=${rec.id}`}
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                        title={t('common.edit')}
+                      >
+                        <Pencil size={18} className="text-blue-600 dark:text-blue-400" />
+                      </button>
+                      <button
                         onClick={async () => {
                           try {
                             await api.patch(`/recurring/${rec.id}/toggle`);
@@ -488,8 +495,9 @@ const Transactions = () => {
                           }
                         }}
                         className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                        title={t('common.delete')}
                       >
-                        <Trash2 size={18} className="text-red-600" />
+                        <Trash2 size={18} className="text-red-600 dark:text-red-400" />
                       </button>
                     </div>
                   </div>

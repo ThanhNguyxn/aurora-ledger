@@ -132,14 +132,22 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
             
             await api.post('/recurring', recurringPayload);
             toast.success(t('recurring.recurringCreated'));
+            
+            // Reload page to refresh both transactions and recurring list
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
           } catch (recurError) {
             console.error('Failed to create recurring:', recurError);
             toast.error('Transaction created but failed to setup recurring');
           }
+        } else {
+          // Just close if not recurring
+          onClose();
         }
+      } else {
+        onClose();
       }
-
-      onClose();
     } catch (error) {
       console.error('❌ Transaction error:', error);
       console.error('❌ Response data:', error.response?.data);
