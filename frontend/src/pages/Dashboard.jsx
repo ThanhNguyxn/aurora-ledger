@@ -368,7 +368,8 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <p className={`font-bold ${transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                    {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, transaction.currency)}
+                    {/* Backend already converted, just format */}
+                    {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, currency)}
                   </p>
                 </div>
               ))

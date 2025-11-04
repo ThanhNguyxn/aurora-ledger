@@ -13,7 +13,7 @@ import {
 
 export default function Analytics() {
   const { t } = useTranslation();
-  const { currency, formatAmount } = useCurrency();
+  const { currency, formatAmount, formatCurrency } = useCurrency();
   
   const [anomalies, setAnomalies] = useState(null);
   const [yoyData, setYoyData] = useState(null);
@@ -166,7 +166,8 @@ export default function Analytics() {
                             </p>
                             <div className="mt-2 text-sm text-gray-700 dark:text-gray-300">
                               <span className="font-medium">
-                                {formatAmount(anomaly.amount)}
+                                {/* Backend already converted */}
+                                {formatCurrency(anomaly.amount)}
                               </span>
                               <span className="mx-2">•</span>
                               <span className="text-gray-500 dark:text-gray-400">
@@ -174,7 +175,7 @@ export default function Analytics() {
                               </span>
                               <span className="mx-2">•</span>
                               <span className="text-gray-500 dark:text-gray-400">
-                                Avg: {formatAmount(anomaly.averageForCategory)}
+                                Avg: {formatCurrency(anomaly.averageForCategory)}
                               </span>
                             </div>
                           </div>
@@ -220,13 +221,14 @@ export default function Analytics() {
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Income:</span>
                     <span className="font-semibold text-green-600 dark:text-green-400">
-                      {formatAmount(yoyData.totals.currentYear.income)}
+                      {/* Backend already converted */}
+                      {formatCurrency(yoyData.totals.currentYear.income)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Expense:</span>
                     <span className="font-semibold text-red-600 dark:text-red-400">
-                      {formatAmount(yoyData.totals.currentYear.expense)}
+                      {formatCurrency(yoyData.totals.currentYear.expense)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t dark:border-gray-700">
@@ -236,7 +238,7 @@ export default function Analytics() {
                         ? 'text-green-600 dark:text-green-400'
                         : 'text-red-600 dark:text-red-400'
                     }`}>
-                      {formatAmount(yoyData.totals.currentYear.net)}
+                      {formatCurrency(yoyData.totals.currentYear.net)}
                     </span>
                   </div>
                 </div>
@@ -250,13 +252,13 @@ export default function Analytics() {
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Income:</span>
                     <span className="font-semibold text-green-600 dark:text-green-400">
-                      {formatAmount(yoyData.totals.lastYear.income)}
+                      {formatCurrency(yoyData.totals.lastYear.income)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Expense:</span>
                     <span className="font-semibold text-red-600 dark:text-red-400">
-                      {formatAmount(yoyData.totals.lastYear.expense)}
+                      {formatCurrency(yoyData.totals.lastYear.expense)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t dark:border-gray-700">
@@ -266,7 +268,7 @@ export default function Analytics() {
                         ? 'text-green-600 dark:text-green-400'
                         : 'text-red-600 dark:text-red-400'
                     }`}>
-                      {formatAmount(yoyData.totals.lastYear.net)}
+                      {formatCurrency(yoyData.totals.lastYear.net)}
                     </span>
                   </div>
                 </div>
@@ -292,10 +294,10 @@ export default function Analytics() {
                             <p className="font-semibold mb-2">{data.month}</p>
                             <div className="space-y-1 text-sm">
                               <p className="text-green-600">
-                                {yoyData.totals.currentYear.year}: {formatAmount(data.currentYear.expense)}
+                                {yoyData.totals.currentYear.year}: {formatCurrency(data.currentYear.expense)}
                               </p>
                               <p className="text-blue-600">
-                                {yoyData.totals.lastYear.year}: {formatAmount(data.lastYear.expense)}
+                                {yoyData.totals.lastYear.year}: {formatCurrency(data.lastYear.expense)}
                               </p>
                               {data.change.expense && (
                                 <p className={data.change.expense > 0 ? 'text-red-600' : 'text-green-600'}>
@@ -346,13 +348,13 @@ export default function Analytics() {
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <p className="text-sm text-gray-600 dark:text-gray-400">Daily Average</p>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {formatAmount(velocity.averageDaily)}
+                  {formatCurrency(velocity.averageDaily)}
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <p className="text-sm text-gray-600 dark:text-gray-400">Monthly Projection</p>
                 <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                  {formatAmount(velocity.projectedMonthly)}
+                  {formatCurrency(velocity.projectedMonthly)}
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
@@ -404,7 +406,7 @@ export default function Analytics() {
                               {new Date(payload[0].payload.date).toLocaleDateString()}
                             </p>
                             <p className="text-sm text-blue-600">
-                              {formatAmount(payload[0].value)}
+                              {formatCurrency(payload[0].value)}
                             </p>
                           </div>
                         );
@@ -449,7 +451,7 @@ export default function Analytics() {
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Weekday Average</p>
                   <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {formatAmount(patterns.weekdayVsWeekend.weekday.average)}
+                    {formatCurrency(patterns.weekdayVsWeekend.weekday.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {patterns.weekdayVsWeekend.weekday.count} transactions
@@ -458,7 +460,7 @@ export default function Analytics() {
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Weekend Average</p>
                   <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                    {formatAmount(patterns.weekdayVsWeekend.weekend.average)}
+                    {formatCurrency(patterns.weekdayVsWeekend.weekend.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {patterns.weekdayVsWeekend.weekend.count} transactions
@@ -490,7 +492,7 @@ export default function Analytics() {
                     Early Month (1-10)
                   </p>
                   <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {formatAmount(patterns.monthlyPeriods.earlyMonth.average)}
+                    {formatCurrency(patterns.monthlyPeriods.earlyMonth.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {patterns.monthlyPeriods.earlyMonth.count} transactions
@@ -501,7 +503,7 @@ export default function Analytics() {
                     Mid Month (11-20)
                   </p>
                   <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-                    {formatAmount(patterns.monthlyPeriods.midMonth.average)}
+                    {formatCurrency(patterns.monthlyPeriods.midMonth.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {patterns.monthlyPeriods.midMonth.count} transactions
@@ -512,7 +514,7 @@ export default function Analytics() {
                     Late Month (21-31)
                   </p>
                   <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                    {formatAmount(patterns.monthlyPeriods.lateMonth.average)}
+                    {formatCurrency(patterns.monthlyPeriods.lateMonth.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {patterns.monthlyPeriods.lateMonth.count} transactions

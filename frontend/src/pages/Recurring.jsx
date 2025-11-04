@@ -279,6 +279,7 @@ const Recurring = () => {
                   </div>
                   
                   <h3 className="text-xl font-bold mb-1">
+                    {/* Recurring amounts are stored in original currency, need conversion */}
                     {formatAmount(rec.amount, rec.currency)}
                   </h3>
                   

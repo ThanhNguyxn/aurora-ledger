@@ -325,7 +325,8 @@ const Transactions = () => {
                           transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                         }`}
                       >
-                        {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, transaction.currency)}
+                        {/* Backend already converted to display_currency, just format */}
+                        {transaction.type === 'income' ? '+' : '-'}{formatAmount(transaction.amount, currency)}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
