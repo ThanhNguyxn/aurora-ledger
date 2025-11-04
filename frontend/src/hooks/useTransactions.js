@@ -30,7 +30,7 @@ export function useDashboardData(dateRange) {
         params: {
           start_date: dateRange.start,
           end_date: dateRange.end,
-          limit: 100,
+          limit: 10000, // Increased from 100 to ensure all transactions are fetched
           display_currency: currency,
         }
       });
