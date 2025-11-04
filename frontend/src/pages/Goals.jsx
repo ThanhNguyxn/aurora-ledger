@@ -187,9 +187,19 @@ const Goals = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Target size={48} className="mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-500 dark:text-gray-400 mb-4">{t('goals.noGoals')}</p>
+            <Target className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t('goals.noGoals')}</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-md mx-auto">
+              💡 Set savings goals to stay motivated! Track progress towards your dreams: emergency fund, vacation, new car, or house down payment.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-6">
+              <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-xs">🏠 House</span>
+              <span className="px-3 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-full text-xs">✈️ Vacation</span>
+              <span className="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-xs">🚗 Car</span>
+              <span className="px-3 py-1 bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 rounded-full text-xs">💼 Emergency</span>
+            </div>
             <button onClick={handleAdd} className="btn btn-primary">
+              <Plus size={18} className="inline mr-2" />
               {t('goals.createFirst')}
             </button>
           </div>
