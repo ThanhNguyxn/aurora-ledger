@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCurrency } from '../context/CurrencyContext';
 
 const CURRENCIES = [
@@ -34,6 +35,7 @@ const CURRENCIES = [
 ];
 
 export default function CurrencySelector({ className = '' }) {
+  const queryClient = useQueryClient();
   const { currency, setCurrency } = useCurrency();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,6 +44,11 @@ export default function CurrencySelector({ className = '' }) {
   const handleSelect = async (currencyCode) => {
     try {
       await setCurrency(currencyCode);
+      
+      // Invalidate all queries to refetch with new currency
+      queryClient.invalidateQueries();
+      console.log('🔄 Currency changed, invalidating all caches...');
+      
       setIsOpen(false);
     } catch (error) {
       console.error('Error changing currency:', error);
