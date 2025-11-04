@@ -92,6 +92,28 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
       } else {
         await api.post('/transactions', data);
         toast.success(t('transactions.transactionCreated'));
+        
+        // If recurring is checked, create recurring transaction
+        if (isRecurring) {
+          try {
+            const recurringPayload = {
+              type: formData.type,
+              amount: amount,
+              currency: formData.currency,
+              category_id: formData.category_id ? parseInt(formData.category_id) : null,
+              description: formData.description || '',
+              frequency: recurringData.frequency,
+              start_date: recurringData.startDate,
+              end_date: recurringData.endDate || null
+            };
+            
+            await api.post('/recurring', recurringPayload);
+            toast.success(t('recurring.recurringCreated'));
+          } catch (recurError) {
+            console.error('Failed to create recurring:', recurError);
+            toast.error('Transaction created but failed to setup recurring');
+          }
+        }
       }
 
       onClose();
