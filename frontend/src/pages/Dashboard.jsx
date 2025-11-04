@@ -14,6 +14,7 @@ import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { enUS, vi, es, fr, de, zhCN, ja, ko, pt, ru } from 'date-fns/locale';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import toast from 'react-hot-toast';
+import { DashboardSkeleton } from '../components/LoadingSkeleton';
 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
@@ -140,11 +141,7 @@ const Dashboard = () => {
   );
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   // Extract data from computed stats

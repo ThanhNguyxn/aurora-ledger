@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { enUS, vi, es, fr, de, zhCN, ja, ko, pt, ru } from 'date-fns/locale';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
+import { TableSkeleton, ListSkeleton } from '../components/LoadingSkeleton';
 
 const Transactions = () => {
   const { t, i18n } = useTranslation();
@@ -262,9 +263,7 @@ const Transactions = () => {
       {viewMode === 'transactions' && (
         <div className="card">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
+            <TableSkeleton rows={10} />
           ) : transactions.length > 0 ? (
           <>
             <div className="overflow-x-auto">
@@ -384,9 +383,7 @@ const Transactions = () => {
         <div className="space-y-4">
           {/* Recurring List */}
           {loading ? (
-            <div className="card text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            </div>
+            <ListSkeleton items={5} />
           ) : recurringList.length === 0 ? (
             <div className="card text-center py-12">
               <Repeat className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" />

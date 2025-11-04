@@ -7,6 +7,7 @@ import { Target, Plus, TrendingUp, Calendar, AlertCircle } from 'lucide-react';
 import GoalModal from '../components/GoalModal';
 import GoalCard from '../components/GoalCard';
 import ContributionModal from '../components/ContributionModal';
+import { GoalCardSkeleton } from '../components/LoadingSkeleton';
 
 const Goals = () => {
   const { t } = useTranslation();
@@ -166,8 +167,8 @@ const Goals = () => {
       {/* Goals Grid */}
       <div className="card">
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => <GoalCardSkeleton key={i} />)}
           </div>
         ) : filteredGoals.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
