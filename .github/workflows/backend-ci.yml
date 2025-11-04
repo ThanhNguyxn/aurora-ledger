@@ -117,7 +117,7 @@ jobs:
       
       - name: Check for secrets
         run: |
-          if grep -r "password\|secret\|key" backend/.env 2>/dev/null; then
+          if [ -f backend/.env ]; then
             echo "❌ .env file should not be committed!"
             exit 1
           fi

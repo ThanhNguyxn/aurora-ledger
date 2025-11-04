@@ -62,12 +62,34 @@ const createTables = async () => {
       )
     `);
 
+    // Recurring transactions table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS recurring_transactions (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
+        type VARCHAR(20) NOT NULL CHECK (type IN ('income', 'expense')),
+        amount DECIMAL(15, 2) NOT NULL,
+        currency VARCHAR(3) DEFAULT 'USD',
+        description TEXT,
+        frequency VARCHAR(20) NOT NULL CHECK (frequency IN ('daily', 'weekly', 'monthly', 'yearly')),
+        start_date DATE NOT NULL,
+        end_date DATE,
+        next_occurrence DATE NOT NULL,
+        is_active BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Create indexes
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_transactions_user_id ON transactions(user_id);
       CREATE INDEX IF NOT EXISTS idx_transactions_date ON transactions(transaction_date);
       CREATE INDEX IF NOT EXISTS idx_categories_user_id ON categories(user_id);
       CREATE INDEX IF NOT EXISTS idx_budgets_user_id ON budgets(user_id);
+      CREATE INDEX IF NOT EXISTS idx_recurring_user_id ON recurring_transactions(user_id);
+      CREATE INDEX IF NOT EXISTS idx_recurring_next_occurrence ON recurring_transactions(next_occurrence) WHERE is_active = true;
     `);
 
     await client.query('COMMIT');
