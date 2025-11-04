@@ -188,8 +188,8 @@ const Transactions = () => {
               if (viewMode === 'transactions') {
                 handleAdd();
               } else {
-                // For now, show message. Full recurring modal coming soon!
-                toast('Please use Recurring page from sidebar to add new recurring', { icon: 'ℹ️' });
+                // Navigate to Recurring page for full form
+                window.location.href = '/recurring';
               }
             }} 
             className="btn btn-primary flex items-center justify-center gap-2"
@@ -392,8 +392,15 @@ const Transactions = () => {
               <Repeat className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" />
               <p className="text-gray-500 dark:text-gray-400 mb-3">{t('recurring.noRecurring')}</p>
               <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">
-                💡 Use Recurring page from sidebar to add new, or tick "Make Recurring" when adding transactions
+                💡 Tick "Make Recurring" checkbox when adding transactions
               </p>
+              <button
+                onClick={() => window.location.href = '/recurring'}
+                className="btn btn-primary"
+              >
+                <Plus size={18} className="inline mr-2" />
+                {t('recurring.addRecurring')}
+              </button>
             </div>
           ) : (
             <div className="space-y-3">

@@ -30,8 +30,6 @@ const Layout = () => {
   const navItems = [
     { to: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     { to: '/transactions', icon: ArrowLeftRight, label: t('nav.transactions') },
-    // Recurring fully integrated into Transactions page (tab + modal)
-    // { to: '/recurring', icon: Repeat, label: t('nav.recurring') },
     { to: '/goals', icon: Target, label: t('nav.goals') },
     { to: '/categories', icon: FolderKanban, label: t('nav.categories') },
     { to: '/budgets', icon: Wallet, label: t('nav.budgets') },
