@@ -27,6 +27,7 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
     startDate: format(new Date(), 'yyyy-MM-dd'),
     endDate: ''
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     if (transaction) {
@@ -62,18 +63,40 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
     { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$' },
   ];
 
+  // Real-time validation
+  const validateForm = () => {
+    const errors = {};
+    
+    const amount = parseFloat(formData.amount);
+    if (!formData.amount) {
+      errors.amount = t('transactions.amountRequired') || 'Amount is required';
+    } else if (isNaN(amount) || amount <= 0) {
+      errors.amount = t('transactions.amountInvalid') || 'Must be greater than 0';
+    } else if (amount > 999999999999.99) {
+      errors.amount = t('transactions.amountTooLarge') || 'Amount too large';
+    }
+    
+    if (!formData.transaction_date) {
+      errors.date = t('transactions.dateRequired') || 'Date is required';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error('Please fix validation errors');
+      return;
+    }
+    
     setLoading(true);
 
     try {
       // Validate and format data
       const amount = parseFloat(formData.amount);
-      if (isNaN(amount) || amount <= 0) {
-        toast.error('Please enter a valid amount');
-        setLoading(false);
-        return;
-      }
 
       const data = {
         type: formData.type,
