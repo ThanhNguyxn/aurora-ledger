@@ -1,27 +1,32 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { Suspense, lazy } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { CurrencyProvider } from './context/CurrencyContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { useAuth } from './context/AuthContext';
+import Layout from './components/Layout';
+
+// Eager load critical pages (auth, dashboard, transactions)
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
-import Recurring from './pages/Recurring';
-import Goals from './pages/Goals';
-import Categories from './pages/Categories';
-import Budgets from './pages/Budgets';
-import Reports from './pages/Reports';
-import Analytics from './pages/Analytics';
-import Family from './pages/Family';
-import JoinFamily from './pages/JoinFamily';
-import Profile from './pages/Profile';
-import Admin from './pages/Admin';
-import Layout from './components/Layout';
+
+// Lazy load less frequently used pages
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const Recurring = lazy(() => import('./pages/Recurring'));
+const Goals = lazy(() => import('./pages/Goals'));
+const Categories = lazy(() => import('./pages/Categories'));
+const Budgets = lazy(() => import('./pages/Budgets'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const Family = lazy(() => import('./pages/Family'));
+const JoinFamily = lazy(() => import('./pages/JoinFamily'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Admin = lazy(() => import('./pages/Admin'));
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
@@ -51,6 +56,15 @@ function PublicRoute({ children }) {
   return user ? <Navigate to="/dashboard" /> : children;
 }
 
+// Loading component for lazy loaded pages
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  );
+}
+
 function App() {
   return (
     <ThemeProvider>
@@ -58,7 +72,8 @@ function App() {
         <CurrencyProvider>
           <Router>
             <Toaster position="top-right" />
-            <Routes>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
             <Route path="/auth/callback" element={<AuthCallback />} />
