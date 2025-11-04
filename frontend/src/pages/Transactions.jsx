@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
@@ -11,6 +12,7 @@ import { TableSkeleton, ListSkeleton } from '../components/LoadingSkeleton';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 const Transactions = () => {
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { formatAmount, currency } = useCurrency();
   
@@ -197,8 +199,8 @@ const Transactions = () => {
               if (viewMode === 'transactions') {
                 handleAdd();
               } else {
-                // Navigate to Recurring page for full form
-                window.location.href = '/recurring';
+                console.log('Navigating to recurring page...');
+                navigate('/recurring');
               }
             }} 
             className="btn btn-primary flex items-center justify-center gap-2"
@@ -410,7 +412,10 @@ const Transactions = () => {
                 💡 Tick "Make Recurring" checkbox when adding transactions
               </p>
               <button
-                onClick={() => window.location.href = '/recurring'}
+                onClick={() => {
+                  console.log('Add recurring clicked');
+                  navigate('/recurring');
+                }}
                 className="btn btn-primary"
               >
                 <Plus size={18} className="inline mr-2" />
@@ -461,7 +466,10 @@ const Transactions = () => {
                     </div>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => window.location.href = `/recurring?edit=${rec.id}`}
+                        onClick={() => {
+                          console.log('Edit recurring:', rec.id);
+                          navigate(`/recurring?edit=${rec.id}`);
+                        }}
                         className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
                         title={t('common.edit')}
                       >
