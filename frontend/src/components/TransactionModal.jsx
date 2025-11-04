@@ -145,8 +145,6 @@ const TransactionModal = ({ transaction, categories: initialCategories, onClose 
           // Just close if not recurring
           onClose();
         }
-      } else {
-        onClose();
       }
     } catch (error) {
       console.error('❌ Transaction error:', error);

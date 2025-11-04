@@ -145,6 +145,7 @@ function App() {
               <Route path="admin" element={<Admin />} />
             </Route>
           </Routes>
+        </Suspense>
         </Router>
       </CurrencyProvider>
     </AuthProvider>

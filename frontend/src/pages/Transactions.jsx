@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
-import { Plus, Pencil, Trash2, Filter, Download, Repeat, Calendar } from 'lucide-react';
+import { Plus, Pencil, Trash2, Filter, Download, Repeat, Calendar, Wallet } from 'lucide-react';
 import { format } from 'date-fns';
 import { enUS, vi, es, fr, de, zhCN, ja, ko, pt, ru } from 'date-fns/locale';
 import toast from 'react-hot-toast';
@@ -161,7 +161,7 @@ const Transactions = () => {
       {/* Header with Tab Toggle */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">{t('transactions.title')}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('transactions.title')}</h1>
           {/* Tab Toggle */}
           <div className="flex gap-2 mt-3">
             <button
@@ -188,11 +188,11 @@ const Transactions = () => {
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
           {viewMode === 'transactions' && (
-            <button onClick={handleExport} className="btn btn-secondary flex items-center justify-center gap-2">
-              <Download size={20} />
-              <span className="hidden sm:inline">{t('transactions.exportCSV')}</span>
-              <span className="sm:hidden">Export</span>
-            </button>
+          <button onClick={handleExport} className="btn btn-secondary flex items-center justify-center gap-2">
+            <Download size={20} />
+            <span className="hidden sm:inline">{t('transactions.exportCSV')}</span>
+            <span className="sm:hidden">Export</span>
+          </button>
           )}
           <button 
             onClick={() => {
@@ -213,11 +213,11 @@ const Transactions = () => {
 
       {/* Filters - Only show for transactions view */}
       {viewMode === 'transactions' && (
-        <div className="card">
-          <div className="flex items-center gap-2 mb-4">
-            <Filter size={20} className="text-gray-600 dark:text-gray-400" />
-            <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">{t('transactions.filters')}</h2>
-          </div>
+      <div className="card">
+        <div className="flex items-center gap-2 mb-4">
+          <Filter size={20} className="text-gray-600 dark:text-gray-400" />
+          <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">{t('transactions.filters')}</h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <select
             value={filters.type}
@@ -258,23 +258,23 @@ const Transactions = () => {
             placeholder={t('transactions.endDate')}
           />
         </div>
-          {(filters.type || filters.category_id || filters.start_date || filters.end_date) && (
-            <button
-              onClick={() => setFilters({ type: '', category_id: '', start_date: '', end_date: '' })}
-              className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              {t('transactions.clearFilters')}
-            </button>
-          )}
-        </div>
+        {(filters.type || filters.category_id || filters.start_date || filters.end_date) && (
+          <button
+            onClick={() => setFilters({ type: '', category_id: '', start_date: '', end_date: '' })}
+            className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            {t('transactions.clearFilters')}
+          </button>
+        )}
+      </div>
       )}
 
       {/* Transactions List - Only show for transactions view */}
       {viewMode === 'transactions' && (
-        <div className="card">
-          {loading ? (
+      <div className="card">
+        {loading ? (
             <TableSkeleton rows={10} />
-          ) : transactions.length > 0 ? (
+        ) : transactions.length > 0 ? (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -381,11 +381,11 @@ const Transactions = () => {
               </div>
             )}
           </>
-          ) : (
+        ) : (
             <div className="text-center py-12">
               <Wallet className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                {t('transactions.noTransactions')}
+            {t('transactions.noTransactions')}
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
                 💡 Start tracking your finances by adding your first transaction. Track income, expenses, and see where your money goes!
@@ -512,9 +512,9 @@ const Transactions = () => {
                   </div>
                 </div>
               ))}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
       )}
 
       {showModal && (
