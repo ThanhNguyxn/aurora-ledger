@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '../context/CurrencyContext';
-import Layout from '../components/Layout';
 import api from '../lib/api';
 import {
   TrendingUp, TrendingDown, AlertTriangle, Calendar,
