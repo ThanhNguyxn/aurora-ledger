@@ -375,33 +375,6 @@ const Transactions = () => {
       {/* Recurring List - Only show for recurring view */}
       {viewMode === 'recurring' && (
         <div className="space-y-4">
-          {/* Test Button - Manual Trigger */}
-          <div className="card bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Repeat className="text-blue-600 dark:text-blue-400" size={20} />
-                <div>
-                  <h3 className="font-semibold text-blue-900 dark:text-blue-100">{t('recurring.testRecurringNow')}</h3>
-                  <p className="text-sm text-blue-700 dark:text-blue-300">{t('recurring.testRecurringDesc')}</p>
-                </div>
-              </div>
-              <button
-                onClick={async () => {
-                  try {
-                    const response = await api.post('/admin/trigger-recurring');
-                    toast.success(response.data.message || t('recurring.processed'));
-                    fetchTransactions(); // Refresh to show new transactions
-                  } catch (error) {
-                    toast.error(error.response?.data?.error || 'Failed to process recurring');
-                  }
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                ▶️ {t('recurring.runNow')}
-              </button>
-            </div>
-          </div>
-
           {/* Recurring List */}
           {loading ? (
             <div className="card text-center py-12">
