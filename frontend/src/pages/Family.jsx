@@ -382,17 +382,6 @@ export default function Family() {
             </p>
           </div>
           <div className="flex gap-3">
-            {/* Debug button - remove in production */}
-            <button
-              onClick={() => {
-                debugAuthToken();
-                toast('Check console (F12) for auth debug info', { icon: '🔍' });
-              }}
-              className="flex items-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              title="Debug Authentication"
-            >
-              <Bug className="h-4 w-4" />
-            </button>
             <button
               onClick={() => setShowJoinFamilyModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"

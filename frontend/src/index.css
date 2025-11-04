@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 /* Smooth Transitions & Animations */
-* {
+/* Only apply to interactive elements, not everything */
+a, button, input, select, textarea, .card {
   @apply transition-colors duration-200;
 }
 
