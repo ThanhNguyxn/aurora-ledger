@@ -235,30 +235,32 @@ const Dashboard = () => {
           <h2 className="text-lg sm:text-xl font-bold mb-4">{t('dashboard.expenseBreakdown')}</h2>
           {expenseByCategoryConverted.length > 0 ? (
             <>
-              <ResponsiveContainer width="100%" height={280}>
-                <PieChart>
-                  <Pie
-                    data={expenseByCategoryConverted}
-                    dataKey="total"
-                    nameKey="category_name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={90}
-                    innerRadius={40}
-                    paddingAngle={2}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={true}
-                  >
-                    {expenseByCategoryConverted.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.category_color} stroke="#fff" strokeWidth={2} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    formatter={(value) => formatCurrency(value)}
-                    contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <div className="w-full" style={{ minHeight: '280px' }}>
+                <ResponsiveContainer width="100%" height={280}>
+                  <PieChart>
+                    <Pie
+                      data={expenseByCategoryConverted}
+                      dataKey="total"
+                      nameKey="category_name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={90}
+                      innerRadius={40}
+                      paddingAngle={2}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      labelLine={true}
+                    >
+                      {expenseByCategoryConverted.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.category_color || '#8884d8'} stroke="#fff" strokeWidth={2} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value) => formatCurrency(value)}
+                      contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
               <div className="mt-4 grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
                 {expenseByCategoryConverted.map((cat, index) => (
                   <div key={index} className="flex items-center gap-2 text-xs sm:text-sm">
