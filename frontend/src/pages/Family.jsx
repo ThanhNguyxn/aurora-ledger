@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useCurrency } from '../context/CurrencyContext';
 import Layout from '../components/Layout';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
 import {
   Users, Plus, Mail, Shield, Trash2, Settings,
   UserPlus, X, Check, Crown, UserCheck, Eye, AlertTriangle,
-  Copy, Link as LinkIcon, Ticket
+  Copy, Link as LinkIcon, Ticket, DollarSign, Target
 } from 'lucide-react';
 import { clearAuthAndReload } from '../utils/debugAuth';
 
 export default function Family() {
   const { t } = useTranslation();
+  const { currency, formatCurrency } = useCurrency();
   
   const [families, setFamilies] = useState([]);
   const [selectedFamily, setSelectedFamily] = useState(null);
@@ -24,6 +26,9 @@ export default function Family() {
   const [showGenerateCodeModal, setShowGenerateCodeModal] = useState(false);
   const [showJoinFamilyModal, setShowJoinFamilyModal] = useState(false);
   const [authError, setAuthError] = useState(false);
+  const [activeTab, setActiveTab] = useState('members'); // members, budgets, goals
+  const [sharedBudgets, setSharedBudgets] = useState([]);
+  const [sharedGoals, setSharedGoals] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -64,6 +69,9 @@ export default function Family() {
       setFamilyDetails(detailsRes.data);
       setSelectedFamily(familyId);
       
+      // Fetch shared data
+      await fetchSharedData(familyId);
+      
       // Only fetch invite codes if user is head or manager
       const userRole = detailsRes.data.currentUserRole;
       if (userRole === 'head' || userRole === 'manager') {
@@ -91,6 +99,21 @@ export default function Family() {
       } else {
         toast.error(errorMsg);
       }
+    }
+  };
+
+  const fetchSharedData = async (familyId) => {
+    try {
+      const [budgetsRes, goalsRes] = await Promise.all([
+        api.get(`/family/${familyId}/budgets?currency=${currency}`),
+        api.get(`/family/${familyId}/goals?currency=${currency}`)
+      ]);
+      setSharedBudgets(budgetsRes.data.budgets || []);
+      setSharedGoals(goalsRes.data.goals || []);
+    } catch (error) {
+      console.error('Error fetching shared data:', error);
+      setSharedBudgets([]);
+      setSharedGoals([]);
     }
   };
 
@@ -541,11 +564,68 @@ export default function Family() {
                   </div>
                 </div>
 
-                {/* Members List */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    {t('family.members')} ({familyDetails.members.length})
-                  </h3>
+                {/* Tabs */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+                  <div className="border-b border-gray-200 dark:border-gray-700">
+                    <nav className="flex -mb-px">
+                      <button
+                        onClick={() => setActiveTab('members')}
+                        className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+                          activeTab === 'members'
+                            ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4" />
+                          <span>{t('family.members')}</span>
+                          <span className="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-200 dark:bg-gray-700">
+                            {familyDetails.members.length}
+                          </span>
+                        </div>
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('budgets')}
+                        className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+                          activeTab === 'budgets'
+                            ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <DollarSign className="h-4 w-4" />
+                          <span>Ngân sách chung</span>
+                          <span className="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-200 dark:bg-gray-700">
+                            {sharedBudgets.length}
+                          </span>
+                        </div>
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('goals')}
+                        className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+                          activeTab === 'goals'
+                            ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Target className="h-4 w-4" />
+                          <span>Mục tiêu chung</span>
+                          <span className="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-200 dark:bg-gray-700">
+                            {sharedGoals.length}
+                          </span>
+                        </div>
+                      </button>
+                    </nav>
+                  </div>
+
+                  <div className="p-6">
+                    {/* Members Tab Content */}
+                    {activeTab === 'members' && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                          {t('family.members')} ({familyDetails.members.length})
+                        </h3>
                   <div className="space-y-3">
                     {familyDetails.members.map((member) => (
                       <div
@@ -743,6 +823,144 @@ export default function Family() {
                     )}
                   </div>
                 )}
+                      </div>
+                    )}
+
+                    {/* Budgets Tab Content */}
+                    {activeTab === 'budgets' && (
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Ngân sách chung ({sharedBudgets.length})
+                          </h3>
+                          {['head', 'manager', 'contributor'].includes(familyDetails.currentUserRole) && (
+                            <button
+                              onClick={() => toast.info('Chức năng đang phát triển')}
+                              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                            >
+                              <Plus className="h-4 w-4" />
+                              Tạo ngân sách
+                            </button>
+                          )}
+                        </div>
+                        {sharedBudgets.length === 0 ? (
+                          <div className="text-center py-12">
+                            <DollarSign className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                            <p className="text-gray-600 dark:text-gray-400 mb-2">
+                              Chưa có ngân sách chung
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-500">
+                              Tạo ngân sách để quản lý chi tiêu chung
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {sharedBudgets.map((budget) => (
+                              <div key={budget.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <h4 className="font-semibold text-gray-900 dark:text-white">{budget.name}</h4>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                      {budget.category_name || 'Không danh mục'}
+                                    </p>
+                                    <div className="mt-3">
+                                      <div className="flex items-center justify-between text-sm mb-1">
+                                        <span className="text-gray-600 dark:text-gray-400">Đã dùng</span>
+                                        <span className="font-semibold">
+                                          {formatCurrency(budget.spent || 0)} / {formatCurrency(budget.amount)}
+                                        </span>
+                                      </div>
+                                      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div
+                                          className="bg-blue-600 h-2 rounded-full"
+                                          style={{ width: `${Math.min((budget.spent / budget.amount) * 100, 100)}%` }}
+                                        ></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Goals Tab Content */}
+                    {activeTab === 'goals' && (
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Mục tiêu chung ({sharedGoals.length})
+                          </h3>
+                          {['head', 'manager', 'contributor'].includes(familyDetails.currentUserRole) && (
+                            <button
+                              onClick={() => toast.info('Chức năng đang phát triển')}
+                              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                            >
+                              <Plus className="h-4 w-4" />
+                              Tạo mục tiêu
+                            </button>
+                          )}
+                        </div>
+                        {sharedGoals.length === 0 ? (
+                          <div className="text-center py-12">
+                            <Target className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                            <p className="text-gray-600 dark:text-gray-400 mb-2">
+                              Chưa có mục tiêu chung
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-500">
+                              Tạo mục tiêu để tiết kiệm cùng nhau
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {sharedGoals.map((goal) => (
+                              <div key={goal.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-2xl">{goal.icon || '🎯'}</span>
+                                      <h4 className="font-semibold text-gray-900 dark:text-white">{goal.name}</h4>
+                                    </div>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                      {goal.category || 'Không danh mục'}
+                                    </p>
+                                    <div className="mt-3">
+                                      <div className="flex items-center justify-between text-sm mb-1">
+                                        <span className="text-gray-600 dark:text-gray-400">Tiến độ</span>
+                                        <span className="font-semibold">
+                                          {formatCurrency(goal.current_amount || 0)} / {formatCurrency(goal.target_amount)}
+                                        </span>
+                                      </div>
+                                      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div
+                                          className="bg-green-600 h-2 rounded-full"
+                                          style={{ width: `${Math.min((goal.current_amount / goal.target_amount) * 100, 100)}%` }}
+                                        ></div>
+                                      </div>
+                                    </div>
+                                    {goal.deadline && (
+                                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                                        Deadline: {new Date(goal.deadline).toLocaleDateString()}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <button
+                                    onClick={() => toast.info('Chức năng đóng góp đang phát triển')}
+                                    className="ml-4 px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                                  >
+                                    Đóng góp
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>
