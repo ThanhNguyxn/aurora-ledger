@@ -333,10 +333,10 @@ export default function Analytics() {
           <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
             <Calendar className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No Data Available
+              {t('analytics.noData')}
             </h3>
             <p className="text-gray-500 dark:text-gray-400">
-              Need at least 2 years of transaction data for year-over-year comparison.
+              {t('analytics.noYoyData')}
             </p>
           </div>
         )}
@@ -346,19 +346,19 @@ export default function Analytics() {
             {/* Velocity Summary */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Daily Average</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.dailyAverage')}</p>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                   {formatCurrency(velocity.averageDaily)}
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Monthly Projection</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.monthlyProjection')}</p>
                 <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                   {formatCurrency(velocity.projectedMonthly)}
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Velocity Trend</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.velocityTrend')}</p>
                 <div className="flex items-center gap-2">
                   {velocity.velocity.trend === 'increasing' ? (
                     <TrendingUp className="h-6 w-6 text-red-500" />
@@ -368,12 +368,12 @@ export default function Analytics() {
                     <Activity className="h-6 w-6 text-gray-500" />
                   )}
                   <span className="text-lg font-semibold capitalize text-gray-900 dark:text-white">
-                    {velocity.velocity.trend}
+                    {t(`analytics.${velocity.velocity.trend}`)}
                   </span>
                 </div>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Change (7d)</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.change7d')}</p>
                 <p className={`text-2xl font-bold ${
                   parseFloat(velocity.velocity.change) > 0
                     ? 'text-red-600 dark:text-red-400'
@@ -387,7 +387,7 @@ export default function Analytics() {
             {/* Daily Spending Chart */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Daily Spending Trend
+                {t('analytics.dailySpendingTrend')}
               </h3>
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={velocity.dailySpending.slice().reverse()}>
@@ -419,7 +419,7 @@ export default function Analytics() {
                     dataKey="amount" 
                     stroke="#3b82f6" 
                     fill="#93c5fd" 
-                    name="Spending"
+                    name={t('analytics.spending')}
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -432,10 +432,10 @@ export default function Analytics() {
           <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
             <Zap className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No Data Available
+              {t('analytics.noData')}
             </h3>
             <p className="text-gray-500 dark:text-gray-400">
-              Add transactions to see spending velocity trends.
+              {t('analytics.noVelocityData')}
             </p>
           </div>
         )}
@@ -445,37 +445,37 @@ export default function Analytics() {
             {/* Weekday vs Weekend */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Weekday vs Weekend Spending
+                {t('analytics.weekdayVsWeekend')}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Weekday Average</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('analytics.weekdayAverage')}</p>
                   <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                     {formatCurrency(patterns.weekdayVsWeekend.weekday.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {patterns.weekdayVsWeekend.weekday.count} transactions
+                    {patterns.weekdayVsWeekend.weekday.count} {t('analytics.transactions')}
                   </p>
                 </div>
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Weekend Average</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('analytics.weekendAverage')}</p>
                   <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                     {formatCurrency(patterns.weekdayVsWeekend.weekend.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {patterns.weekdayVsWeekend.weekend.count} transactions
+                    {patterns.weekdayVsWeekend.weekend.count} {t('analytics.transactions')}
                   </p>
                 </div>
               </div>
               <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                  Pattern: <span className="capitalize">{patterns.weekdayVsWeekend.pattern.replace('_', ' ')}</span>
+                  {t('analytics.pattern')}: <span className="capitalize">{patterns.weekdayVsWeekend.pattern.replace('_', ' ')}</span>
                 </p>
                 {patterns.weekdayVsWeekend.difference && (
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Weekend spending is {patterns.weekdayVsWeekend.difference}% {
-                      parseFloat(patterns.weekdayVsWeekend.difference) > 0 ? 'higher' : 'lower'
-                    } than weekday
+                    {t('analytics.weekendHigher')} {patterns.weekdayVsWeekend.difference}% {
+                      parseFloat(patterns.weekdayVsWeekend.difference) > 0 ? t('analytics.higher') : t('analytics.lower')
+                    } {t('analytics.thanWeekday')}
                   </p>
                 )}
               </div>
@@ -484,46 +484,46 @@ export default function Analytics() {
             {/* Monthly Period Patterns */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Spending by Period of Month
+                {t('analytics.spendingByPeriod')}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    Early Month (1-10)
+                    {t('analytics.earlyMonth')}
                   </p>
                   <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                     {formatCurrency(patterns.monthlyPeriods.earlyMonth.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {patterns.monthlyPeriods.earlyMonth.count} transactions
+                    {patterns.monthlyPeriods.earlyMonth.count} {t('analytics.transactions')}
                   </p>
                 </div>
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    Mid Month (11-20)
+                    {t('analytics.midMonth')}
                   </p>
                   <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
                     {formatCurrency(patterns.monthlyPeriods.midMonth.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {patterns.monthlyPeriods.midMonth.count} transactions
+                    {patterns.monthlyPeriods.midMonth.count} {t('analytics.transactions')}
                   </p>
                 </div>
                 <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    Late Month (21-31)
+                    {t('analytics.lateMonth')}
                   </p>
                   <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
                     {formatCurrency(patterns.monthlyPeriods.lateMonth.average)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {patterns.monthlyPeriods.lateMonth.count} transactions
+                    {patterns.monthlyPeriods.lateMonth.count} {t('analytics.transactions')}
                   </p>
                 </div>
               </div>
               <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mt-4">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                  Pattern: <span className="capitalize">{patterns.monthlyPeriods.pattern.replace('_', ' ')}</span>
+                  {t('analytics.pattern')}: <span className="capitalize">{patterns.monthlyPeriods.pattern.replace('_', ' ')}</span>
                 </p>
               </div>
             </div>
@@ -535,10 +535,10 @@ export default function Analytics() {
           <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
             <Activity className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No Data Available
+              {t('analytics.noData')}
             </h3>
             <p className="text-gray-500 dark:text-gray-400">
-              Need at least 6 months of transaction data to identify spending patterns.
+              {t('analytics.noPatternsData')}
             </p>
           </div>
         )}
