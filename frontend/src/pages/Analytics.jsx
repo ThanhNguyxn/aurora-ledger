@@ -106,7 +106,7 @@ export default function Analytics() {
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Spending Anomalies
+                  {t('analytics.spendingAnomalies')}
                 </h2>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   {anomalies.period}
@@ -115,25 +115,25 @@ export default function Analytics() {
               
               {anomalies.anomalies.length === 0 ? (
                 <p className="text-gray-600 dark:text-gray-400">
-                  No unusual spending detected. Your spending is consistent!
+                  {t('analytics.noAnomaliesDetected')}
                 </p>
               ) : (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Total Anomalies</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.totalAnomalies')}</p>
                       <p className="text-2xl font-bold text-red-600 dark:text-red-400">
                         {anomalies.anomaliesFound}
                       </p>
                     </div>
                     <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Total Transactions</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.totalTransactions')}</p>
                       <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                         {anomalies.totalTransactions}
                       </p>
                     </div>
                     <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Anomaly Rate</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.anomalyRate')}</p>
                       <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
                         {((anomalies.anomaliesFound / anomalies.totalTransactions) * 100).toFixed(1)}%
                       </p>
@@ -171,11 +171,11 @@ export default function Analytics() {
                               </span>
                               <span className="mx-2">•</span>
                               <span className="text-gray-500 dark:text-gray-400">
-                                {anomaly.deviationPercent}% above average
+                                {anomaly.deviationPercent}% {t('analytics.aboveAverage')}
                               </span>
                               <span className="mx-2">•</span>
                               <span className="text-gray-500 dark:text-gray-400">
-                                Avg: {formatCurrency(anomaly.averageForCategory)}
+                                {t('analytics.avg')}: {formatCurrency(anomaly.averageForCategory)}
                               </span>
                             </div>
                           </div>
@@ -184,7 +184,7 @@ export default function Analytics() {
                               ? 'bg-red-200 text-red-800 dark:bg-red-800 dark:text-red-200'
                               : 'bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200'
                           }`}>
-                            {anomaly.severity.toUpperCase()}
+                            {t(`analytics.${anomaly.severity}`)}
                           </span>
                         </div>
                       </div>
@@ -201,10 +201,10 @@ export default function Analytics() {
           <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
             <AlertTriangle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No Data Available
+              {t('analytics.noData')}
             </h3>
             <p className="text-gray-500 dark:text-gray-400">
-              Add some transactions to see spending anomalies analysis.
+              {t('analytics.noAnomaliesData')}
             </p>
           </div>
         )}
@@ -215,24 +215,24 @@ export default function Analytics() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  {yoyData.totals.currentYear.year} Total
+                  {yoyData.totals.currentYear.year} {t('analytics.yearlyTotal')}
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Income:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('analytics.income')}:</span>
                     <span className="font-semibold text-green-600 dark:text-green-400">
                       {/* Backend already converted */}
                       {formatCurrency(yoyData.totals.currentYear.income)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Expense:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('analytics.expense')}:</span>
                     <span className="font-semibold text-red-600 dark:text-red-400">
                       {formatCurrency(yoyData.totals.currentYear.expense)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t dark:border-gray-700">
-                    <span className="font-semibold text-gray-900 dark:text-white">Net:</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">{t('analytics.net')}:</span>
                     <span className={`font-bold ${
                       yoyData.totals.currentYear.net >= 0
                         ? 'text-green-600 dark:text-green-400'
@@ -246,23 +246,23 @@ export default function Analytics() {
 
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  {yoyData.totals.lastYear.year} Total
+                  {yoyData.totals.lastYear.year} {t('analytics.yearlyTotal')}
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Income:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('analytics.income')}:</span>
                     <span className="font-semibold text-green-600 dark:text-green-400">
                       {formatCurrency(yoyData.totals.lastYear.income)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Expense:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('analytics.expense')}:</span>
                     <span className="font-semibold text-red-600 dark:text-red-400">
                       {formatCurrency(yoyData.totals.lastYear.expense)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t dark:border-gray-700">
-                    <span className="font-semibold text-gray-900 dark:text-white">Net:</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">{t('analytics.net')}:</span>
                     <span className={`font-bold ${
                       yoyData.totals.lastYear.net >= 0
                         ? 'text-green-600 dark:text-green-400'
@@ -278,7 +278,7 @@ export default function Analytics() {
             {/* YoY Chart */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Monthly Comparison
+                {t('analytics.monthlyComparison')}
               </h3>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={yoyData.comparison}>
